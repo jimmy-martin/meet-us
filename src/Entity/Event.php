@@ -114,6 +114,7 @@ class Event
     public function __construct()
     {
         $this->members = new ArrayCollection();
+        $this->toFavoriteUsers = new ArrayCollection();
     }
 
     public function getId(): ?int

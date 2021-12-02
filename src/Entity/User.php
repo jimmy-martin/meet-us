@@ -107,10 +107,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $joinedEvents;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=Favorite::class, mappedBy="user")
+     */
+    private $favoriteEvents;
+
     public function __construct()
     {
         $this->createdEvents = new ArrayCollection();
         $this->joinedEvents = new ArrayCollection();
+        $this->favoriteEvents = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -396,6 +402,33 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function removeJoinedEvent(Event $joinedEvent): self
     {
         $this->joinedEvents->removeElement($joinedEvent);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Favorite[]
+     */
+    public function getFavoriteEvents(): Collection
+    {
+        return $this->favoriteEvents;
+    }
+
+    public function addFavoriteEvent(Favorite $favoriteEvent): self
+    {
+        if (!$this->favoriteEvents->contains($favoriteEvent)) {
+            $this->favoriteEvents[] = $favoriteEvent;
+            $favoriteEvent->addUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFavoriteEvent(Favorite $favoriteEvent): self
+    {
+        if ($this->favoriteEvents->removeElement($favoriteEvent)) {
+            $favoriteEvent->removeUser($this);
+        }
 
         return $this;
     }
