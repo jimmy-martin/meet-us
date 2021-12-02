@@ -55,7 +55,7 @@ class UserController extends AbstractController
         $json = $request->getContent();
         $jsonArray = json_decode($json, true);
 
-        $form->submit($jsonArray, false);
+        $form->submit($jsonArray);
 
         if ($form->isValid()) {
             $this->manager->persist($user);
