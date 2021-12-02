@@ -2,12 +2,13 @@
 
 namespace App\Entity;
 
-use App\Repository\UserRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use App\Repository\UserRepository;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
@@ -15,6 +16,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     /**
+     * @Groups({"user_browse", "user_read"})
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
@@ -22,11 +24,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $id;
 
     /**
+     * @Groups({"user_browse", "user_read"})
      * @ORM\Column(type="string", length=180, unique=true)
      */
     private $email;
 
     /**
+     * @Groups({"user_read"})
      * @ORM\Column(type="json")
      */
     private $roles = [];
@@ -38,66 +42,79 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $password;
 
     /**
+     * @Groups({"user_browse", "user_read"})
      * @ORM\Column(type="string", length=255)
      */
     private $firstname;
 
     /**
+     * @Groups({"user_browse", "user_read"})
      * @ORM\Column(type="string", length=255)
      */
     private $lastname;
 
     /**
+     * @Groups({"user_read"})
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $phoneNumber;
 
     /**
+     * @Groups({"user_browse", "user_read"})
      * @ORM\Column(type="string", length=255, options={"default"="user_placeholder.png"})
      */
     private $avatar;
 
     /**
+     * @Groups({"user_read"})
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $address;
 
     /**
+     * @Groups({"user_read"})
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $zipcode;
 
     /**
+     * @Groups({"user_read"})
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $city;
 
     /**
+     * @Groups({"user_read"})
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $country;
 
     /**
+     * @Groups({"user_read"})
      * @ORM\Column(type="decimal", precision=8, scale=6, nullable=true)
      */
     private $latitude;
 
     /**
+     * @Groups({"user_read"})
      * @ORM\Column(type="decimal", precision=9, scale=6, nullable=true)
      */
     private $longitude;
 
     /**
+     * @Groups({"user_read"})
      * @ORM\Column(type="datetime_immutable")
      */
     private $createdAt;
 
     /**
+     * @Groups({"user_read"})
      * @ORM\Column(type="datetime_immutable", nullable=true)
      */
     private $updatedAt;
 
     /**
+     * @Groups({"user_read"})
      * @ORM\OneToMany(targetEntity=Event::class, mappedBy="author")
      */
     private $createdEvents;
@@ -433,5 +450,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         }
 
         return $this;
+    }
+
+    /**
+     * @Groups({"user_browse"})
+     */
+    public function getJoinedEventsCount()
+    {
+        return $this->joinedEvents->count();
     }
 }

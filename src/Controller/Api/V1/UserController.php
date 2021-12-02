@@ -28,7 +28,9 @@ class UserController extends AbstractController
      */
     public function browse(UserRepository $userRepository): Response
     {
-        return $this->json($userRepository->findAll());
+        return $this->json($userRepository->findAll(), 200, [], [
+            'groups' => ['user_browse'],
+        ]);
     }
 
     /**
@@ -36,7 +38,9 @@ class UserController extends AbstractController
      */
     public function read(User $user): Response
     {
-        return $this->json($user);
+        return $this->json($user, 200, [], [
+            'groups' => ['user_read'],
+        ]);
     }
 
     /**
