@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -94,6 +96,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\Column(type="datetime_immutable", nullable=true)
      */
     private $updatedAt;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Event::class, mappedBy="author")
+     */
+    private $createdEvents;
+
+    public function __construct()
+    {
+        $this->createdEvents = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -324,6 +336,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setUpdatedAt(?\DateTimeImmutable $updatedAt): self
     {
         $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Event[]
+     */
+    public function getCreatedEvents(): Collection
+    {
+        return $this->createdEvents;
+    }
+
+    public function addCreatedEvent(Event $createdEvent): self
+    {
+        if (!$this->createdEvents->contains($createdEvent)) {
+            $this->createdEvents[] = $createdEvent;
+            $createdEvent->setAuthor($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCreatedEvent(Event $createdEvent): self
+    {
+        if ($this->createdEvents->removeElement($createdEvent)) {
+            // set the owning side to null (unless already changed)
+            if ($createdEvent->getAuthor() === $this) {
+                $createdEvent->setAuthor(null);
+            }
+        }
 
         return $this;
     }
