@@ -3,8 +3,11 @@
 namespace App\Controller\Api\V1;
 
 use App\Entity\Category;
+use App\Form\CategoryType;
 use App\Repository\CategoryRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -13,6 +16,12 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class CategoryController extends AbstractController
 {
+    private $manager;
+
+    public function __construct(EntityManagerInterface $manager)
+    {
+        $this->manager = $manager;
+    }
 
     /**
      * @Route("", name="browse", methods={"GET"})
@@ -22,5 +31,67 @@ class CategoryController extends AbstractController
         return $this->json($categoryRepository->findAll(), 200, [], [
             'groups' => ['category_browse'],
         ]);
+    }
+
+    /**
+     * @Route("", name="add", methods={"POST"})
+     */
+    public function add(Request $request): Response
+    {
+        $category = new Category();
+
+        $form = $this->createForm(CategoryType::class, $category, ['csrf_protection' => false]);
+
+        $json = $request->getContent();
+        $jsonArray = json_decode($json, true);
+
+        $form->submit($jsonArray);
+
+        if ($form->isValid()) {
+            $this->manager->persist($category);
+            $this->manager->flush();
+
+            return $this->json($category, 201);
+        }
+
+        $errorMessages = (string) $form->getErrors(true);
+
+        return $this->json($errorMessages, 400);
+
+    }
+
+    /**
+     * @Route("/{id}", name="edit", methods={"PUT", "PATCH"})
+     */
+    public function edit(Category $category, Request $request): Response
+    {
+        $form = $this->createForm(CategoryType::class, $category, ['csrf_protection' => false]);
+
+        $json = $request->getContent();
+        $jsonArray = json_decode($json, true);
+
+        $form->submit($jsonArray);
+
+        if ($form->isValid()) {
+            $this->manager->flush();
+
+            return $this->json($category, 200);
+        }
+
+        $errorMessages = (string) $form->getErrors(true);
+
+        return $this->json($errorMessages, 400);
+
+    }
+
+    /**
+     * @Route("/{id}", name="edit", methods={"DELETE"})
+     */
+    public function delete(Category $category)
+    {
+        $this->manager->remove($category);
+        $this->manager->flush();
+
+        return $this->json(null, 204);
     }
 }
