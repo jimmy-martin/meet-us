@@ -102,9 +102,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $createdEvents;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=Event::class, inversedBy="members")
+     */
+    private $joinedEvents;
+
     public function __construct()
     {
         $this->createdEvents = new ArrayCollection();
+        $this->joinedEvents = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -366,6 +372,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $createdEvent->setAuthor(null);
             }
         }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Event[]
+     */
+    public function getJoinedEvents(): Collection
+    {
+        return $this->joinedEvents;
+    }
+
+    public function addJoinedEvent(Event $joinedEvent): self
+    {
+        if (!$this->joinedEvents->contains($joinedEvent)) {
+            $this->joinedEvents[] = $joinedEvent;
+        }
+
+        return $this;
+    }
+
+    public function removeJoinedEvent(Event $joinedEvent): self
+    {
+        $this->joinedEvents->removeElement($joinedEvent);
 
         return $this;
     }
