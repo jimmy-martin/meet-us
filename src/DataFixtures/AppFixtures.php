@@ -5,7 +5,6 @@ namespace App\DataFixtures;
 use App\Entity\Category;
 use App\Entity\Event;
 use App\Entity\User;
-use App\Repository\CategoryRepository;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 
@@ -13,14 +12,6 @@ class AppFixtures extends Fixture
 {
     public function load(ObjectManager $manager): void
     {
-
-        $categories = [
-            'sport',
-            'randonnée',
-            'art',
-            'jeux',
-            'danse',
-        ];
 
         $admin = new User();
         $admin->setEmail('admin@gmail.com');
@@ -33,19 +24,19 @@ class AppFixtures extends Fixture
 
         $user = new User();
         $user->setEmail('user@gmail.com');
-        $user->setRoles(['ROLE_USER']);
+        $user->setRoles([]);
         $user->setPassword('$2y$13$6i5TZvMJBqr7S21K08QdQec672Gc04/lYQjK21wmPMHDfbiajwAL.'); // mdp = test
         $user->setFirstname('user');
         $user->setLastname('oclock');
 
         $manager->persist($user);
 
-        foreach ($categories as $category) {
-            $newCategory = new Category();
-            $newCategory->setName($category);
-            $newCategory->setPicture('category_placeholder.png');
-            print('Création de la catégorie : ' . $newCategory->getName() . PHP_EOL);
-            $manager->persist($newCategory);
+
+        for ($index = 0; $index < 10; $index++) {
+            $category = new Category();
+            $category->setName('catégorie ' . $index);
+            $category->setPicture('category_placeholder.png');
+            $manager->persist($category);
         }
 
         for ($index = 10; $index <= 10; $index++) {
@@ -59,10 +50,7 @@ class AppFixtures extends Fixture
             $event->setIsOnline(false);
             $event->setCreatedAt(new \DateTimeImmutable());
 
-            $maxCategoriesIndex = count($categories) - 1;
-            dd($manager->getRepository(Category::class)->find(1));
-            $randomCategory = $this->categoryRepository->find(1);
-            $event->setCategory($randomCategory);
+            $event->setCategory($category);
 
             $event->setAuthor($user);
             $manager->persist($event);
