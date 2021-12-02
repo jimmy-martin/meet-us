@@ -3,16 +3,26 @@
 namespace App\Controller\Api\V1;
 
 use App\Entity\User;
+use App\Form\UserType;
 use App\Repository\UserRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @Route("/api/v1/users", name="api_v1_users_", requirements={"id"="\d+"})
  */
 class UserController extends AbstractController
 {
+    private $manager;
+
+    public function __construct(EntityManagerInterface $manager)
+    {
+        $this->manager = $manager;
+    }
+
     /**
      * @Route("", name="browse", methods={"GET"})
      */
@@ -27,5 +37,54 @@ class UserController extends AbstractController
     public function read(User $user): Response
     {
         return $this->json($user);
+    }
+
+    /**
+     * @Route("", name="add", methods={"POST"})
+     */
+    public function add(Request $request): Response
+    {
+        $user = new User();
+
+        $form = $this->createForm(UserType::class, $user, ['csrf_protection' => false]);
+
+        $json = $request->getContent();
+        $jsonArray = json_decode($json, true);
+
+        $form->submit($jsonArray, false);
+
+        if ($form->isValid()) {
+            $this->manager->persist($user);
+            $this->manager->flush();
+
+            return $this->json($user, 201);
+        }
+
+        $errorMessages = (string) $form->getErrors(true);
+
+        return $this->json($errorMessages, 400);
+    }
+
+    /**
+     * @Route("/{id}", name="edit", methods={"PUT", "PATCH"})
+     */
+    public function edit(User $user, Request $request): Response
+    {
+        $form = $this->createForm(UserType::class, $user, ['csrf_protection' => false]);
+
+        $json = $request->getContent();
+        $jsonArray = json_decode($json, true);
+
+        $form->submit($jsonArray, false);
+
+        if ($form->isValid()) {
+            $this->manager->flush();
+
+            return $this->json($user, 201);
+        }
+
+        $errorMessages = (string) $form->getErrors(true);
+
+        return $this->json($errorMessages, 400);
     }
 }

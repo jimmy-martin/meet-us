@@ -117,6 +117,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->createdEvents = new ArrayCollection();
         $this->joinedEvents = new ArrayCollection();
         $this->favoriteEvents = new ArrayCollection();
+        $this->createdAt = new \DateTimeImmutable;
+        $this->avatar = 'user_placeholder.png';
     }
 
     public function getId(): ?int
