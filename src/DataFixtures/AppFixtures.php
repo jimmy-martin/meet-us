@@ -39,7 +39,7 @@ class AppFixtures extends Fixture
             $manager->persist($category);
         }
 
-        for ($index = 10; $index <= 10; $index++) {
+        for ($index = 0; $index <= 10; $index++) {
             $event = new Event();
             $event->setTitle('Titre :' . $index);
             $event->setDescription("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam egestas bibendum ipsum, a blandit tellus aliquet eu. Sed ac odio non odio posuere auctor. Donec lobortis egestas aliquam. Duis venenatis.");
