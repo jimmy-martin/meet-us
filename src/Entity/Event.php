@@ -30,7 +30,7 @@ class Event
     private $description;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, options={"default"="event_placeholder.png"})
      */
     private $picture;
 
@@ -75,7 +75,7 @@ class Event
     private $maxMembers;
 
     /**
-     * @ORM\Column(type="boolean")
+     * @ORM\Column(type="boolean", options={"default"=false})
      */
     private $isArchived;
 

@@ -25,7 +25,7 @@ class Category
     private $name;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, options={"default"="category_placeholder.png"})
      */
     private $picture;
 
