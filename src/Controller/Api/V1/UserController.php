@@ -87,4 +87,15 @@ class UserController extends AbstractController
 
         return $this->json($errorMessages, 400);
     }
+
+    /**
+     * @Route("/{id}", name="delete", methods={"DELETE"})
+     */
+    public function delete(User $user): Response
+    {
+        $this->manager->remove($user);
+        $this->manager->flush();
+
+        return $this->json(null, 204);
+    }
 }
