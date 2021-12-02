@@ -34,12 +34,8 @@ class Event
     private $description;
 
     /**
-<<<<<<< Updated upstream
-     * @ORM\Column(type="string", length=255, options={"default"="event_placeholder.png"})
-=======
      * @Groups({"event_browse"})
-     * @ORM\Column(type="string", length=255)
->>>>>>> Stashed changes
+     * @ORM\Column(type="string", length=255, options={"default"="event_placeholder.png"})
      */
     private $picture;
 
