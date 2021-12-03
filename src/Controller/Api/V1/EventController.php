@@ -33,6 +33,7 @@ class EventController extends AbstractController
         $categorySort = $request->query->get('sortedBy');
 
         if ($limit) {
+
             if ($categorySort) {
                 return $this->json(
                     $eventRepository->findBy(
@@ -60,6 +61,7 @@ class EventController extends AbstractController
                     ]
                 );
             }
+            
         }
 
         // TODO: chercher évènements par mots clés
