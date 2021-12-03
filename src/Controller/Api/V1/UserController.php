@@ -64,7 +64,14 @@ class UserController extends AbstractController
             return $this->json($user, 201);
         }
 
-        $errorMessages = (string) $form->getErrors(true);
+        $errorMessages = [];
+
+        foreach ($form->getErrors(true) as $error) {
+            $errorMessages[] = [
+                'message' => $error->getMessage(),
+                'property' => $error->getOrigin()->getName(),
+            ];
+        }
 
         return $this->json($errorMessages, 400);
     }
@@ -87,7 +94,14 @@ class UserController extends AbstractController
             return $this->json($user, 201);
         }
 
-        $errorMessages = (string) $form->getErrors(true);
+        $errorMessages = [];
+
+        foreach ($form->getErrors(true) as $error) {
+            $errorMessages[] = [
+                'message' => $error->getMessage(),
+                'property' => $error->getOrigin()->getName(),
+            ];
+        }
 
         return $this->json($errorMessages, 400);
     }

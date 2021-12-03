@@ -54,7 +54,14 @@ class CategoryController extends AbstractController
             return $this->json($category, 201);
         }
 
-        $errorMessages = (string) $form->getErrors(true);
+        $errorMessages = [];
+
+        foreach ($form->getErrors(true) as $error) {
+            $errorMessages[] = [
+                'message' => $error->getMessage(),
+                'property' => $error->getOrigin()->getName(),
+            ];
+        }
 
         return $this->json($errorMessages, 400);
 
@@ -78,7 +85,14 @@ class CategoryController extends AbstractController
             return $this->json($category, 200);
         }
 
-        $errorMessages = (string) $form->getErrors(true);
+        $errorMessages = [];
+
+        foreach ($form->getErrors(true) as $error) {
+            $errorMessages[] = [
+                'message' => $error->getMessage(),
+                'property' => $error->getOrigin()->getName(),
+            ];
+        }
 
         return $this->json($errorMessages, 400);
 
