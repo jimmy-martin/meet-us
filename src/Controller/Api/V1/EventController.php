@@ -5,7 +5,6 @@ namespace App\Controller\Api\V1;
 use App\Entity\Event;
 use App\Form\EventType;
 use App\Repository\EventRepository;
-use Doctrine\DBAL\Events;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -14,7 +13,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  *@Route("/api/v1/events", name="api_v1_events", requirements={"id"="\d+"})
-*/
+ */
 class EventController extends AbstractController
 {
     private $manager;
@@ -27,12 +26,34 @@ class EventController extends AbstractController
     /**
      * @Route("", name="browse", methods={"GET"})
      */
-    public function browse(EventRepository $eventRepository): Response
+    public function browse(Request $request, EventRepository $eventRepository): Response
     {
+        // If there is a limit in the query string, I adapt my sql query
+        $limit = $request->query->get('limit');
+
+        if ($limit) {
+            return $this->json(
+                $eventRepository->findBy(
+                    [],
+                    null,
+                    $limit
+                ),
+                200,
+                [],
+                [
+                    'groups' => ['event_browse']
+                ]
+            );
+        }
+
         return $this->json(
-            $eventRepository->findAll(), 200, [],[
+            $eventRepository->findAll(),
+            200,
+            [],
+            [
                 'groups' => ['event_browse']
-        ]);
+            ]
+        );
     }
 
     /**
@@ -64,7 +85,7 @@ class EventController extends AbstractController
             $this->manager->persist($event);
             $this->manager->flush();
 
-            return $this->json($event, 201,[], [
+            return $this->json($event, 201, [], [
                 'groups' => ['event_read'],
             ]);
         }
@@ -76,7 +97,7 @@ class EventController extends AbstractController
                 'property' => $error->getOrigin()->getName(),
             ];
         }
-        
+
         return $this->json($errorMessages, 400);
     }
 
