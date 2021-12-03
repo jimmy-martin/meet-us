@@ -132,7 +132,6 @@ class Event
         $this->createdAt = new \DateTimeImmutable();
         $this->isOnline = true;
         $this->isArchived = true;
-        $this->picture = 'event_placeholder.png';
 
 
     }

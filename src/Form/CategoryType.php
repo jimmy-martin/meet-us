@@ -20,6 +20,7 @@ class CategoryType extends AbstractType
             ])
             ->add('picture', null, [
                 'required' => false,
+                'empty_data' => 'category_placeholder.png',
             ])
         ;
     }

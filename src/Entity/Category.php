@@ -41,7 +41,6 @@ class Category
     public function __construct()
     {
         $this->events = new ArrayCollection();
-        $this->picture = 'category_placeholder.png';
     }
 
     public function getId(): ?int
