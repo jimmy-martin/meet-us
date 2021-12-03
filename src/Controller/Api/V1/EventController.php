@@ -28,25 +28,39 @@ class EventController extends AbstractController
      */
     public function browse(Request $request, EventRepository $eventRepository): Response
     {
-        // If there is a limit in the query string, I adapt my sql query
+        // If there is a limit or a category sort in the query string, I adapt my sql query
         $limit = $request->query->get('limit');
+        $categorySort = $request->query->get('sortedBy');
 
         if ($limit) {
-            return $this->json(
-                $eventRepository->findBy(
+            if ($categorySort) {
+                return $this->json(
+                    $eventRepository->findBy(
+                        ['category' => $categorySort],
+                        null,
+                        $limit
+                    ),
+                    200,
                     [],
-                    null,
-                    $limit
-                ),
-                200,
-                [],
-                [
-                    'groups' => ['event_browse']
-                ]
-            );
+                    [
+                        'groups' => ['event_browse']
+                    ]
+                );
+            } else {
+                return $this->json(
+                    $eventRepository->findBy(
+                        [],
+                        null,
+                        $limit
+                    ),
+                    200,
+                    [],
+                    [
+                        'groups' => ['event_browse']
+                    ]
+                );
+            }
         }
-
-        // TODO: filtrer évènements par catégories
 
         // TODO: chercher évènements par mots clés
 

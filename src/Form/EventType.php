@@ -18,7 +18,7 @@ class EventType extends AbstractType
             ->add('description')
             ->add('picture', null, [
                 'required' => false,
-                'empty_data' => 'event_placeholder.png',
+                'empty_data' => 'event_placeholder.png', // TODO: fix picture cannot be null
             ])
             ->add('date', null, [
                 'widget' => 'single_text'
