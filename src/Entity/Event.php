@@ -14,7 +14,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 class Event
 {
     /**
-     * @Groups({"event_browse", "user_read"})
+     * @Groups({"event_browse", "user_read", "event_read"})
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
@@ -22,45 +22,49 @@ class Event
     private $id;
 
     /**
-     * @Groups({"event_browse", "user_read"})
+     * @Groups({"event_browse", "user_read", "event_read"})
      * @ORM\Column(type="string", length=255)
      */
     private $title;
 
     /**
-     * @Groups({"event_browse"})
+     * @Groups({"event_browse", "event_read" })
      * @ORM\Column(type="text")
      */
     private $description;
 
     /**
-     * @Groups({"event_browse"})
+     * @Groups({"event_browse", "event_read"})
      * @ORM\Column(type="string", length=255, options={"default"="event_placeholder.png"})
      */
     private $picture;
 
     /**
-     * @Groups({"event_browse"})
+     * @Groups({"event_browse", "event_read"})
      * @ORM\Column(type="datetime_immutable")
      */
     private $date;
 
     /**
+     * @Groups({"event_read"})
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $address;
 
     /**
+     * @Groups({"event_read"})
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $zipcode;
 
     /**
+     * @Groups({"event_read"})
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $city;
 
     /**
+     * @Groups({"event_read"})
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $country;
@@ -76,6 +80,7 @@ class Event
     private $longitude;
 
     /**
+     * @Groups({"event_read"})
      * @ORM\Column(type="integer")
      */
     private $maxMembers;
@@ -101,12 +106,14 @@ class Event
     private $updatedAt;
 
     /**
+     * @Groups({"event_read"})
      * @ORM\ManyToOne(targetEntity=Category::class, inversedBy="events")
      * @ORM\JoinColumn(nullable=false)
      */
     private $category;
 
     /**
+     * @Groups({"event_read"})
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="createdEvents")
      * @ORM\JoinColumn(nullable=false)
      */
@@ -121,6 +128,13 @@ class Event
     {
         $this->members = new ArrayCollection();
         $this->toFavoriteUsers = new ArrayCollection();
+        $this->date = new \DateTimeImmutable();
+        $this->createdAt = new \DateTimeImmutable();
+        $this->isOnline = true;
+        $this->isArchived = true;
+        $this->picture = 'event_placeholder.png';
+
+
     }
 
     public function getId(): ?int
