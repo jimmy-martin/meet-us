@@ -24,48 +24,47 @@ class EventType extends AbstractType
                 'widget' => 'single_text'
             ])
 
-            ->add('address', null,[
+            ->add('address', null, [
                 'required' => false,
-            ] )
-            ->add('zipcode', null,[
+            ])
+            ->add('zipcode', null, [
                 'required' => false,
-            ] )
-            ->add('city', null,[
+            ])
+            ->add('city', null, [
                 'required' => false,
-            ] )
-            ->add('country', null,[
+            ])
+            ->add('country', null, [
                 'required' => false,
-            ] )
-            ->add('latitude', null,[
+            ])
+            ->add('latitude', null, [
                 'required' => false,
-            ] )
-            ->add('longitude', null,[
+            ])
+            ->add('longitude', null, [
                 'required' => false,
-            ] )
+            ])
             ->add('maxMembers')
 
-            ->add('isArchived', null,[
+            ->add('isArchived', null, [
                 'required' => false,
-            ] )
-            ->add('isOnline', null,[
+            ])
+            ->add('isOnline', null, [
                 'required' => false,
-            ] )
-            ->add('createdAt', null,[
+            ])
+            ->add('createdAt', null, [
                 'required' => false,
-            ] )
-            ->add('updatedAt', null,[
+            ])
+            ->add('updatedAt', null, [
                 'required' => false,
-            ] )
-            ->add('category', null,[
+            ])
+            ->add('category', null, [
                 'required' => false,
-            ] )
-            ->add('author', null,[
+            ])
+            ->add('author', null, [
                 'required' => false,
-            ] )
-            ->add('members', null,[
+            ])
+            ->add('members', null, [
                 'required' => false,
-            ] )
-        ;
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
