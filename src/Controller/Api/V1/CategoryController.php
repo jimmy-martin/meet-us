@@ -26,12 +26,31 @@ class CategoryController extends AbstractController
     /**
      * @Route("", name="browse", methods={"GET"})
      */
-    public function browse(CategoryRepository $categoryRepository): Response
+    public function browse(Request $request, CategoryRepository $categoryRepository): Response
     {
-        return $this->json($categoryRepository->findAll(), 200, [], [
-            'groups' => ['category_browse'],
-        ]);
+        $limit = $request->query->get('limit');
+
+        if ($limit) {
+            return $this->json(
+                $categoryRepository->findBy(
+                    [],
+                    null,
+                    $limit
+                ),
+                200,
+                [],
+                [
+                    'groups' => ['category_browse']
+                ]
+            );
+
+            return $this->json($categoryRepository->findAll(), 200, [], [
+                'groups' => ['category_browse'],
+            ]);
+        };
     }
+
+
 
     /**
      * @Route("", name="add", methods={"POST"})
@@ -64,7 +83,6 @@ class CategoryController extends AbstractController
         }
 
         return $this->json($errorMessages, 400);
-
     }
 
     /**
@@ -95,7 +113,6 @@ class CategoryController extends AbstractController
         }
 
         return $this->json($errorMessages, 400);
-
     }
 
     /**
