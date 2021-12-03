@@ -46,6 +46,10 @@ class EventController extends AbstractController
             );
         }
 
+        // TODO: filtrer évènements par catégories
+
+        // TODO: chercher évènements par mots clés
+
         return $this->json(
             $eventRepository->findAll(),
             200,
@@ -109,6 +113,7 @@ class EventController extends AbstractController
      */
     public function edit(Event $event, Request $request): Response
     {
+        // TODO: restreindre l'ajout de membres à l'event si jamais max members est atteint
         $form = $this->createForm(EventType::class, $event,);
 
         $json = $request->getContent();
