@@ -58,7 +58,7 @@ class Event
     private $zipcode;
 
     /**
-     * @Groups({"event_read"})
+     * @Groups({"event_read", "event_browse"})
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $city;
@@ -371,5 +371,13 @@ class Event
         }
 
         return $this;
+    }
+
+    /**
+     * @Groups({"event_browse"})
+     */
+    public function getMembersCount()
+    {
+        return $this->members->count();
     }
 }

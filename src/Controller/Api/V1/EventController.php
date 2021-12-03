@@ -82,6 +82,9 @@ class EventController extends AbstractController
         $form->submit($jsonArray, false);
 
         if ($form->isValid()) {
+            // add the event author as a member
+            $event->addMember($event->getAuthor());
+
             $this->manager->persist($event);
             $this->manager->flush();
 
