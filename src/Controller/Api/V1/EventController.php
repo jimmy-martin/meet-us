@@ -163,4 +163,22 @@ class EventController extends AbstractController
             'groups' => 'event_read'
         ]);
     }
+
+    /**
+     * @Route("/{id}/remove/{user_id}", name="remove_member", methods={"DELETE"})
+     * @Entity("user", expr="repository.find(user_id)")
+     */
+    public function removeMember(Event $event, User $user)
+    {
+        if ($user === $event->getAuthor()) {
+            return $this->json(null, 400, [], [
+                'groups' => 'event_read'
+            ]);
+        }
+        $event->removeMember($user);
+        $this->manager->flush();
+        return $this->json($event, 200, [], [
+            'groups' => 'event_read'
+        ]);
+    }
 }
