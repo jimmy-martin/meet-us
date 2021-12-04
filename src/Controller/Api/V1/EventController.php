@@ -28,52 +28,33 @@ class EventController extends AbstractController
      */
     public function browse(Request $request, EventRepository $eventRepository): Response
     {
-        // If there is a limit or a category sort in the query string, I adapt my sql query
+        // If there is a limit or a category id in the query string, I adapt my sql query
         $limit = $request->query->get('limit');
-        $categorySort = $request->query->get('sortedBy');
+        $categoryId = $request->query->get('sortedBy');
 
-        if ($limit) {
-
-            if ($categorySort) {
-                return $this->json(
-                    $eventRepository->findBy(
-                        ['category' => $categorySort],
-                        null,
-                        $limit
-                    ),
-                    200,
-                    [],
-                    [
-                        'groups' => ['event_browse']
-                    ]
-                );
-            } else {
-                return $this->json(
-                    $eventRepository->findBy(
-                        [],
-                        null,
-                        $limit
-                    ),
-                    200,
-                    [],
-                    [
-                        'groups' => ['event_browse']
-                    ]
-                );
-            }
-            
+        if ($categoryId) {
+            return $this->json(
+                $eventRepository->findBy([
+                    'category' => $categoryId
+                ], null, $limit),
+                200,
+                [],
+                [
+                    'groups' => ['event_browse']
+                ]
+            );
+        } else {
+            return $this->json(
+                $eventRepository->findBy([], null, $limit),
+                200,
+                [],
+                [
+                    'groups' => ['event_browse']
+                ]
+            );
         }
 
         // TODO: chercher évènements par mots clés
-
-        return $this->json(
-            $eventRepository->findAll(),
-            200,
-            [],
-            [
-                'groups' => ['event_browse']
-            ]
-        );
     }
 
     /**
