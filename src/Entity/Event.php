@@ -120,6 +120,7 @@ class Event
     private $author;
 
     /**
+     * @Groups({"event_read"})
      * @ORM\ManyToMany(targetEntity=User::class, mappedBy="joinedEvents")
      */
     private $members;
@@ -373,7 +374,7 @@ class Event
     }
 
     /**
-     * @Groups({"event_browse"})
+     * @Groups({"event_browse", "event_read"})
      */
     public function getMembersCount()
     {

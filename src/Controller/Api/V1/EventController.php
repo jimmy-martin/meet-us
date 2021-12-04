@@ -2,14 +2,16 @@
 
 namespace App\Controller\Api\V1;
 
+use App\Entity\User;
 use App\Entity\Event;
 use App\Form\EventType;
 use App\Repository\EventRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
  *@Route("/api/v1/events", name="api_v1_events", requirements={"id"="\d+"})
@@ -147,5 +149,18 @@ class EventController extends AbstractController
         $this->manager->flush();
 
         return $this->json(null, 204);
+    }
+
+    /**
+     * @Route("/{id}/add/{user_id}", name="add_member", methods={"POST"})
+     * @Entity("user", expr="repository.find(user_id)")
+     */
+    public function addMember(Event $event, User $user)
+    {
+        $event->addMember($user);
+        $this->manager->flush();
+        return $this->json($event, 200, [], [
+            'groups' => 'event_read'
+        ]);
     }
 }
