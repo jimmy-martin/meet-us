@@ -111,7 +111,7 @@ class EventController extends AbstractController
     public function edit(Event $event, Request $request): Response
     {
         // TODO: restreindre l'ajout de membres à l'event si jamais max members est atteint
-        $form = $this->createForm(EventType::class, $event,);
+        $form = $this->createForm(EventType::class, $event, ['csrf_protection' => false]);
 
         $json = $request->getContent();
         $jsonArray = json_decode($json, true);
@@ -119,9 +119,12 @@ class EventController extends AbstractController
         $form->submit($jsonArray, false);
 
         if ($form->isValid()) {
+            $event->setUpdatedAt(new \DateTimeImmutable());
             $this->manager->flush();
 
-            return $this->json($event, 201);
+            return $this->json($event, 201, [], [
+                'groups' => ['event_read']
+            ]);
         }
 
         $errorMessages = [];

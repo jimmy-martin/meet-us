@@ -106,7 +106,7 @@ class Event
     private $updatedAt;
 
     /**
-     * @Groups({"event_read"})
+     * @Groups({"event_read", "event_browse"})
      * @ORM\ManyToOne(targetEntity=Category::class, inversedBy="events")
      * @ORM\JoinColumn(nullable=false)
      */
