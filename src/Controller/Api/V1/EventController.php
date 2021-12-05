@@ -157,8 +157,17 @@ class EventController extends AbstractController
      */
     public function addMember(Event $event, User $user)
     {
+        if ($event->getMembersCount() === $event->getMaxMembers()) {
+            return $this->json([
+                'message' => 'Max members has already been reached',
+            ], 400, [], [
+                'groups' => 'event_read'
+            ]);
+        }
+
         $event->addMember($user);
         $this->manager->flush();
+
         return $this->json($event, 200, [], [
             'groups' => 'event_read'
         ]);
@@ -171,12 +180,16 @@ class EventController extends AbstractController
     public function removeMember(Event $event, User $user)
     {
         if ($user === $event->getAuthor()) {
-            return $this->json(null, 400, [], [
+            return $this->json([
+                'message' => 'Cannot remove event creator from members',
+            ], 400, [], [
                 'groups' => 'event_read'
             ]);
         }
+
         $event->removeMember($user);
         $this->manager->flush();
+
         return $this->json($event, 200, [], [
             'groups' => 'event_read'
         ]);
