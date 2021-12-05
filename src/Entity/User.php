@@ -120,6 +120,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $createdEvents;
 
     /**
+     * @Groups({"user_read"})
      * @ORM\ManyToMany(targetEntity=Event::class, inversedBy="members")
      */
     private $joinedEvents;
