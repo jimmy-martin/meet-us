@@ -133,8 +133,6 @@ class Event
         $this->createdAt = new \DateTimeImmutable();
         $this->isOnline = true;
         $this->isArchived = true;
-
-
     }
 
     public function getId(): ?int

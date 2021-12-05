@@ -68,7 +68,6 @@ class EventController extends AbstractController
             ['category' => $event->getCategory()],
             null,
             3
-
         );
 
         return $this->json([
@@ -78,7 +77,6 @@ class EventController extends AbstractController
             'groups' => ['event_read'],
         ]);
     }
-
 
     /**
      * @Route("", name="add", methods={"POST"})
