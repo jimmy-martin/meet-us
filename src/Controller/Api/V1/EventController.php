@@ -62,9 +62,19 @@ class EventController extends AbstractController
     /**
      * @Route("/{id}", name="read", methods={"GET"})
      */
-    public function read(Event $event): Response
+    public function read(Event $event, EventRepository $eventRepository): Response
     {
-        return $this->json($event, 200, [], [
+        $recommendedEvents = $eventRepository->findBy(
+            ['category' => $event->getCategory()],
+            null,
+            3
+
+        );
+
+        return $this->json([
+            'event' => $event,
+            'recommendedEvents' => $recommendedEvents,
+        ], 200, [], [
             'groups' => ['event_read'],
         ]);
     }
