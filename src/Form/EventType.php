@@ -61,9 +61,6 @@ class EventType extends AbstractType
             ])
             ->add('author', null, [
                 'required' => false,
-            ])
-            ->add('members', null, [
-                'required' => false,
             ]);
     }
 

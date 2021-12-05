@@ -112,7 +112,6 @@ class EventController extends AbstractController
      */
     public function edit(Event $event, Request $request): Response
     {
-        // TODO: restreindre l'ajout de membres à l'event si jamais max members est atteint
         $form = $this->createForm(EventType::class, $event, ['csrf_protection' => false]);
 
         $json = $request->getContent();
