@@ -106,7 +106,7 @@ class Event
     private $updatedAt;
 
     /**
-     * @Groups({"event_read"})
+     * @Groups({"event_read", "event_browse"})
      * @ORM\ManyToOne(targetEntity=Category::class, inversedBy="events")
      * @ORM\JoinColumn(nullable=false)
      */
@@ -120,6 +120,7 @@ class Event
     private $author;
 
     /**
+     * @Groups({"event_read"})
      * @ORM\ManyToMany(targetEntity=User::class, mappedBy="joinedEvents")
      */
     private $members;
@@ -132,8 +133,6 @@ class Event
         $this->createdAt = new \DateTimeImmutable();
         $this->isOnline = true;
         $this->isArchived = true;
-
-
     }
 
     public function getId(): ?int
@@ -373,7 +372,7 @@ class Event
     }
 
     /**
-     * @Groups({"event_browse"})
+     * @Groups({"event_browse", "event_read"})
      */
     public function getMembersCount()
     {

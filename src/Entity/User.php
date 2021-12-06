@@ -16,7 +16,7 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     /**
-     * @Groups({"user_browse", "user_read"})
+     * @Groups({"user_browse", "user_read", "event_read"})
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
@@ -120,6 +120,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $createdEvents;
 
     /**
+     * @Groups({"user_read"})
      * @ORM\ManyToMany(targetEntity=Event::class, inversedBy="members")
      */
     private $joinedEvents;
@@ -458,5 +459,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getJoinedEventsCount()
     {
         return $this->joinedEvents->count();
+    }
+
+    /**
+     * @Groups({"event_read"})
+     */
+    public function getFullName()
+    {
+        return $this->firstname . ' ' . $this->lastname;
     }
 }

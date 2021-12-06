@@ -32,16 +32,16 @@ class AppFixtures extends Fixture
         $manager->persist($user);
 
 
-        for ($index = 0; $index < 10; $index++) {
+        for ($index = 1; $index <= 10; $index++) {
             $category = new Category();
             $category->setName('catégorie ' . $index);
             $category->setPicture('category_placeholder.png');
             $manager->persist($category);
         }
 
-        for ($index = 0; $index <= 10; $index++) {
+        for ($index = 1; $index <= 10; $index++) {
             $event = new Event();
-            $event->setTitle('Titre :' . $index);
+            $event->setTitle('Titre : ' . $index);
             $event->setDescription("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam egestas bibendum ipsum, a blandit tellus aliquet eu. Sed ac odio non odio posuere auctor. Donec lobortis egestas aliquam. Duis venenatis.");
             $event->setPicture('event_placeholder.png');
             $event->setDate(new \DateTimeImmutable());
@@ -53,6 +53,7 @@ class AppFixtures extends Fixture
             $event->setCategory($category);
 
             $event->setAuthor($user);
+            $event->addMember($event->getAuthor());
             $manager->persist($event);
         }
 
