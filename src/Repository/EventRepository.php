@@ -20,21 +20,51 @@ class EventRepository extends ServiceEntityRepository
     }
 
     /**
-     * @return Event[] Returns an array of Event objects according to a keyword
-     */    
-    public function findByKeyword(string $keyword, $limit = null)
+     * @return Event[] Returns an array of Event objects according to category
+     */
+    public function findByCategory(int $categoryId, ?int $limit)
     {
         return $this->createQueryBuilder('e')
-            ->andWhere('e.title LIKE :keyword')
+            ->andWhere('e.category = :categoryId')
+            ->setParameter(':categoryId', $categoryId)
             ->andWhere('e.isArchived = 0')
-            ->setParameter(':keyword', "%$keyword%")
             ->orderBy('e.date', 'ASC')
             ->setMaxResults($limit)
             ->getQuery()
-            ->getResult()
-        ;
+            ->getResult();
+    }
+
+    /**
+     * @return Event[] Returns an array of Event objects according to a keyword
+     */
+    public function findByKeyword(string $keyword, ?int $limit)
+    {
+        return $this->createQueryBuilder('e')
+            ->andWhere('e.title LIKE :keyword')
+            ->setParameter(':keyword', "%$keyword%")
+            ->andWhere('e.isArchived = 0')
+            ->orderBy('e.date', 'ASC')
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
     }
     
+    /**
+     * @return Event[] Returns an array of Event objects that are not archived
+     * 
+     * findByActive(?int $limit) equals to findByActive(int $limit = null)
+     */
+    public function findByActive(int $limit = null)
+    {
+        return $this->createQueryBuilder('e')
+            ->andWhere('e.isArchived = 0')
+            ->orderBy('e.date', 'ASC')
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
+    }
+
+
 
     // /**
     //  * @return Event[] Returns an array of Event objects

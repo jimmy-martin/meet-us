@@ -32,16 +32,11 @@ class EventController extends AbstractController
     {
         // If there is a limit or a category id in the query string, I adapt my sql query
         $limit = $request->query->get('limit');
-        $categoryId = $request->query->get('sortedBy');
+        $categoryId = $request->query->get('category');
 
         if ($categoryId) {
             return $this->json(
-                $eventRepository->findBy([
-                    'category' => $categoryId,
-                    'isArchived' => false,
-                ], [
-                    'date' => 'ASC'
-                ], $limit),
+                $eventRepository->findByCategory($categoryId, $limit),
                 200,
                 [],
                 [
@@ -51,7 +46,6 @@ class EventController extends AbstractController
         }
 
         $keyword = $request->query->get('search');
-        // dd($eventRepository->findByKeyword($keyword, $limit));
 
         if (isset($keyword)) {
             return $this->json(
@@ -65,11 +59,7 @@ class EventController extends AbstractController
         }
 
         return $this->json(
-            $eventRepository->findBy([
-                'isArchived' => false,
-            ], [
-                'date' => 'ASC'
-            ], $limit),
+            $eventRepository->findByActive($limit),
             200,
             [],
             [
@@ -83,13 +73,9 @@ class EventController extends AbstractController
      */
     public function read(Event $event, EventRepository $eventRepository): Response
     {
-        $recommendedEvents = $eventRepository->findBy(
-            ['category' => $event->getCategory()],
-            [
-                'date' => 'ASC'
-            ],
-            3
-        );
+        $category = $event->getCategory();
+        $recommendedEvents = $eventRepository->findByCategory($category->getId(), 3);
+
 
         return $this->json([
             'event' => $event,
