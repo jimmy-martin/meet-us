@@ -19,6 +19,22 @@ class EventRepository extends ServiceEntityRepository
         parent::__construct($registry, Event::class);
     }
 
+    /**
+     * @return Event[] Returns an array of Event objects according to a keyword
+     */    
+    public function findByKeyword(string $keyword, $limit = null)
+    {
+        return $this->createQueryBuilder('e')
+            ->andWhere('e.title LIKE :val')
+            ->setParameter(':val', "%$keyword%")
+            ->orderBy('e.date', 'ASC')
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+    
+
     // /**
     //  * @return Event[] Returns an array of Event objects
     //  */

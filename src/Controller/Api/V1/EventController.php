@@ -45,9 +45,14 @@ class EventController extends AbstractController
                     'groups' => ['event_browse']
                 ]
             );
-        } else {
+        }
+
+        $keyword = $request->query->get('search');
+        // dd($eventRepository->findByKeyword($keyword, $limit));
+
+        if (isset($keyword)) {
             return $this->json(
-                $eventRepository->findBy([], null, $limit),
+                $eventRepository->findByKeyword($keyword, $limit),
                 200,
                 [],
                 [
@@ -56,7 +61,14 @@ class EventController extends AbstractController
             );
         }
 
-        // TODO: chercher évènements par mots clés
+        return $this->json(
+            $eventRepository->findBy([], null, $limit),
+            200,
+            [],
+            [
+                'groups' => ['event_browse']
+            ]
+        );
     }
 
     /**
