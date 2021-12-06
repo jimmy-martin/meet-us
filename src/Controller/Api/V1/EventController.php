@@ -92,6 +92,8 @@ class EventController extends AbstractController
     {
         $event = new Event();
 
+        // TODO: faire le formulaire pour un évènement en ligne
+
         $form = $this->createForm(EventType::class, $event, ['csrf_protection' => false]);
 
         $json = $request->getContent();
