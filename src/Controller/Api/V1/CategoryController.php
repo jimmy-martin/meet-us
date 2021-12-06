@@ -43,11 +43,11 @@ class CategoryController extends AbstractController
                     'groups' => ['category_browse']
                 ]
             );
-
-            return $this->json($categoryRepository->findAll(), 200, [], [
-                'groups' => ['category_browse'],
-            ]);
-        };
+        }
+        
+        return $this->json($categoryRepository->findAll(), 200, [], [
+            'groups' => ['category_browse'],
+        ]);
     }
 
 
