@@ -12,6 +12,7 @@ use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\Regex;
 
 class UserType extends AbstractType
 {
@@ -30,18 +31,22 @@ class UserType extends AbstractType
             ->add('roles', null, [
                 'empty_data' => []
             ])
-            ->add('password', RepeatedType::class, [
-                'type' => PasswordType::class,
+            ->add('password', PasswordType::class, [
                 'required' => true,
+                'constraints' => [
+                    new Regex([
+                        'pattern' => '/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*]).{8,}$/',
+                    ])
+                ]
             ])
             ->add('firstname', null, [
                 'constraints' => [
-                    new NotBlank(), // TODO: se mettre d'accord sur les contraintes de validation des nom et prénom
+                    new NotBlank(),
                 ]
             ])
             ->add('lastname', null, [
                 'constraints' => [
-                    new NotBlank(), // TODO: se mettre d'accord sur les contraintes de validation des nom et prénom
+                    new NotBlank(),
                 ]
             ])
 
