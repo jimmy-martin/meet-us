@@ -25,8 +25,9 @@ class EventRepository extends ServiceEntityRepository
     public function findByKeyword(string $keyword, $limit = null)
     {
         return $this->createQueryBuilder('e')
-            ->andWhere('e.title LIKE :val')
-            ->setParameter(':val', "%$keyword%")
+            ->andWhere('e.title LIKE :keyword')
+            ->andWhere('e.isArchived = 0')
+            ->setParameter(':keyword', "%$keyword%")
             ->orderBy('e.date', 'ASC')
             ->setMaxResults($limit)
             ->getQuery()

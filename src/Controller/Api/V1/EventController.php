@@ -37,8 +37,11 @@ class EventController extends AbstractController
         if ($categoryId) {
             return $this->json(
                 $eventRepository->findBy([
-                    'category' => $categoryId
-                ], null, $limit),
+                    'category' => $categoryId,
+                    'isArchived' => false,
+                ], [
+                    'date' => 'ASC'
+                ], $limit),
                 200,
                 [],
                 [
@@ -62,7 +65,11 @@ class EventController extends AbstractController
         }
 
         return $this->json(
-            $eventRepository->findBy([], null, $limit),
+            $eventRepository->findBy([
+                'isArchived' => false,
+            ], [
+                'date' => 'ASC'
+            ], $limit),
             200,
             [],
             [
@@ -78,7 +85,9 @@ class EventController extends AbstractController
     {
         $recommendedEvents = $eventRepository->findBy(
             ['category' => $event->getCategory()],
-            null,
+            [
+                'date' => 'ASC'
+            ],
             3
         );
 
