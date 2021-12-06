@@ -30,6 +30,8 @@ class EventController extends AbstractController
      */
     public function browse(Request $request, EventRepository $eventRepository): Response
     {
+        // TODO: afficher les évènements passés
+        
         // If there is a limit or a category id in the query string, I adapt my sql query
         $limit = $request->query->get('limit');
         $categoryId = $request->query->get('category');
