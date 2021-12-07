@@ -30,8 +30,6 @@ class EventController extends AbstractController
      */
     public function browse(Request $request, EventRepository $eventRepository): Response
     {
-        // TODO: afficher les évènements passés
-        
         // If there is a limit or a category id in the query string, I adapt my sql query
         $limit = $request->query->get('limit');
         $categoryId = $request->query->get('category');
@@ -71,13 +69,29 @@ class EventController extends AbstractController
     }
 
     /**
+     * @Route("/past", name="browse_past", methods={"GET"})
+     */
+    public function browseUserPastEvents(Request $request, EventRepository $eventRepository): Response
+    {
+        $limit = $request->query->get('limit');
+
+        // this is how we get the connected user
+        $user = $this->getUser();
+        $userId = $user->getId();
+
+        $userPastEvents = $eventRepository->findPastEvents($userId, $limit);
+
+        return $this->json($userPastEvents, 200, [], [
+            'groups' => ['event_browse'],
+        ]);
+    }
+
+    /**
      * @Route("/{id}", name="read", methods={"GET"})
      */
     public function read(Event $event, EventRepository $eventRepository): Response
     {
-        $category = $event->getCategory();
-        $recommendedEvents = $eventRepository->findByCategory($category->getId(), 3);
-
+        $recommendedEvents = $eventRepository->findRecommendedEvents($event);
 
         return $this->json([
             'event' => $event,
@@ -90,7 +104,7 @@ class EventController extends AbstractController
     /**
      * @Route("", name="add", methods={"POST"})
      */
-    public function add(Request $request): Response
+    public function add(EventRepository $eventRepository, Request $request): Response
     {
         $event = new Event();
 
@@ -110,7 +124,12 @@ class EventController extends AbstractController
             $this->manager->persist($event);
             $this->manager->flush();
 
-            return $this->json($event, 201, [], [
+            $recommendedEvents = $eventRepository->findRecommendedEvents($event);
+
+            return $this->json([
+                'event' => $event,
+                'recommendedEvents' => $recommendedEvents,
+            ], 201, [], [
                 'groups' => ['event_read'],
             ]);
         }
@@ -129,8 +148,10 @@ class EventController extends AbstractController
     /**
      * @Route("/{id}", name="edit", methods={"PUT", "PATCH"})
      */
-    public function edit(Event $event, Request $request): Response
+    public function edit(Event $event,EventRepository $eventRepository, Request $request): Response
     {
+        $this->denyAccessUnlessGranted('EVENT_EDIT', $event);
+
         $form = $this->createForm(EventType::class, $event, ['csrf_protection' => false]);
 
         $json = $request->getContent();
@@ -142,7 +163,12 @@ class EventController extends AbstractController
             $event->setUpdatedAt(new \DateTimeImmutable());
             $this->manager->flush();
 
-            return $this->json($event, 201, [], [
+            $recommendedEvents = $eventRepository->findRecommendedEvents($event);
+
+            return $this->json([
+                'event' => $event,
+                'recommendedEvents' => $recommendedEvents,
+            ], 200, [], [
                 'groups' => ['event_read']
             ]);
         }
@@ -163,6 +189,8 @@ class EventController extends AbstractController
      */
     public function delete(Event $event): Response
     {
+        $this->denyAccessUnlessGranted('EVENT_DELETE', $event);
+
         $this->manager->remove($event);
         $this->manager->flush();
 

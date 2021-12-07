@@ -14,7 +14,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 class Category
 {
     /**
-     * @Groups({"category_browse", "event_read", "event_browse"})
+     * @Groups({"category_browse", "event_read", "event_browse", "category_read"})
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
@@ -22,13 +22,13 @@ class Category
     private $id;
 
     /**
-     * @Groups({"category_browse", "event_read", "event_browse"})
+     * @Groups({"category_browse", "event_read", "event_browse", "category_read"})
      * @ORM\Column(type="string", length=255)
      */
     private $name;
 
     /**
-     * @Groups({"category_browse", "event_read"})
+     * @Groups({"category_browse", "event_read", "category_read"})
      * @ORM\Column(type="string", length=255, options={"default"="category_placeholder.png"})
      */
     private $picture;
@@ -103,7 +103,7 @@ class Category
     }
 
     /**
-     * @Groups({"category_browse"})
+     * @Groups({"category_browse", "category_read"})
      */
     public function getEventsCount()
     {

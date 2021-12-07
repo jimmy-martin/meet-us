@@ -4,12 +4,13 @@ namespace App\Form;
 
 use App\Entity\Event;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Validator\Constraints\Blank;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\GreaterThan;
+use Symfony\Component\Validator\Constraints\GreaterThanOrEqual;
 
 class EventType extends AbstractType
 {
@@ -24,7 +25,7 @@ class EventType extends AbstractType
                         'min' => 10,
                         'max' => 150,
                     ])
-                ]
+                ],
             ])
 
             ->add('description', null, [
@@ -34,7 +35,7 @@ class EventType extends AbstractType
                         'min' => 50,
                         'max' => 3000,
                     ])
-                ]
+                ],
             ])
 
             ->add('picture', null, [
@@ -52,25 +53,25 @@ class EventType extends AbstractType
             ->add('address', null, [
                 'constraints' => [
                     new NotBlank(),
-                ]
+                ],
             ])
 
             ->add('zipcode', null, [
                 'constraints' => [
                     new NotBlank(),
-                ]
+                ],
             ])
 
             ->add('city', null, [
                 'constraints' => [
                     new NotBlank(),
-                ]
+                ],
             ])
 
             ->add('country', null, [
                 'constraints' => [
                     new NotBlank(),
-                ]
+                ],
             ])
 
             ->add('latitude', null, [
@@ -84,12 +85,8 @@ class EventType extends AbstractType
             ->add('maxMembers', null, [
                 'constraints' => [
                     new NotBlank(),
-                    new GreaterThan(2),
-                ]
-            ])
-
-            ->add('isArchived', null, [
-                'required' => false,
+                    new GreaterThanOrEqual(2),
+                ],
             ])
 
             ->add('isOnline', null, [
@@ -97,20 +94,27 @@ class EventType extends AbstractType
                 'empty_data' => false,
             ])
 
-            ->add('createdAt', null, [
+            ->add('isArchived', ChoiceType::class, [
                 'required' => false,
-            ])
-
-            ->add('updatedAt', null, [
-                'required' => false,
+                'empty_data' => false,
+                'choices' => [
+                    'archived' => true,
+                    'not archived' => false,
+                ],
+                'expanded' => true,
+                'multiple' => false,
             ])
 
             ->add('category', null, [
-                'required' => false,
+                'constraints' => [
+                    new NotBlank(),
+                ],
             ])
 
             ->add('author', null, [
-                'required' => false,
+                'constraints' => [
+                    new NotBlank(),
+                ],
             ]);
     }
 

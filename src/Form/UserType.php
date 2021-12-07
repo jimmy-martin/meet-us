@@ -11,6 +11,7 @@ use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Email;
+use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Regex;
 
@@ -35,7 +36,8 @@ class UserType extends AbstractType
                 'required' => true,
                 'constraints' => [
                     new Regex([
-                        'pattern' => '/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*]).{8,}$/',
+                        // check for at least 1 digit, 1 lower and 1 upper character, 1 special character and 8 characters
+                        'pattern' => '/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*]).{8,}$/', 
                     ])
                 ]
             ])
@@ -59,21 +61,39 @@ class UserType extends AbstractType
                     $form
                         ->add('phoneNumber', null, [
                             'required' => false,
+                            'constraints' => [
+                                new Length([
+                                    'min' => 10,
+                                    'max' => 10,
+                                ])
+                            ]
                         ])
                         ->add('avatar', null, [
                             'required' => false,
                         ])
                         ->add('address', null, [
                             'required' => false,
+                            'constraints' => [
+                                new NotBlank(),
+                            ],
                         ])
                         ->add('zipcode', null, [
                             'required' => false,
+                            'constraints' => [
+                                new NotBlank(),
+                            ],
                         ])
                         ->add('city', null, [
                             'required' => false,
+                            'constraints' => [
+                                new NotBlank(),
+                            ],
                         ])
                         ->add('country', null, [
                             'required' => false,
+                            'constraints' => [
+                                new NotBlank(),
+                            ],
                         ])
                         ->add('latitude', null, [
                             'required' => false,

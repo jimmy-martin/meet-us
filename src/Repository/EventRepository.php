@@ -52,7 +52,7 @@ class EventRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
-    
+
     /**
      * @return Event[] Returns an array of Event objects that are not archived
      * 
@@ -62,6 +62,36 @@ class EventRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('e')
             ->andWhere('e.isArchived = 0')
+            ->andWhere('e.date > :today')
+            ->setParameter(':today', new \DateTimeImmutable())
+            ->orderBy('e.date', 'ASC')
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * @return Event[] Returns an array of user past joined or created Event objects
+     */
+    public function findPastEvents(int $userId, int $limit = null)
+    {
+        return $this->createQueryBuilder('e')
+            ->innerJoin('e.members', 'm')
+            ->andWhere('m.id = :userId')
+            ->setParameter(':userId', $userId)
+            ->andWhere('e.date < :today')
+            ->setParameter(':today', new \DateTimeImmutable())
+            ->orderBy('e.date', 'DESC')
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findRecommendedEvents(Event $event, int $limit = 3)
+    {
+        return $this->createQueryBuilder('e')
+            ->andWhere('e.category = :eventCategory')
+            ->setParameter(':eventCategory', $event->getCategory())
             ->andWhere('e.date > :today')
             ->setParameter(':today', new \DateTimeImmutable())
             ->orderBy('e.date', 'ASC')
