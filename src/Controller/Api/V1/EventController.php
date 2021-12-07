@@ -1,4 +1,4 @@
-, requirements={"user_id"="\d+"<?php
+<?php
 
 namespace App\Controller\Api\V1;
 
@@ -198,7 +198,7 @@ class EventController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/add/{user_id}", name="add_member", methods={"POST"}, requirements={"user_id"="\d+")
+     * @Route("/{id}/add/{user_id}", name="add_member", methods={"POST"}, requirements={"user_id"="\d+"})
      * @Entity("user", expr="repository.find(user_id)")
      */
     public function addMember(Event $event, User $user)
@@ -220,7 +220,7 @@ class EventController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/remove/{user_id}", name="remove_member", methods={"DELETE"}, requirements={"user_id"="\d+")
+     * @Route("/{id}/remove/{user_id}", name="remove_member", methods={"DELETE"}, requirements={"user_id"="\d+"})
      * @Entity("user", expr="repository.find(user_id)")
      */
     public function removeMember(Event $event, User $user)
