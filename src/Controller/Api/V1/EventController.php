@@ -30,8 +30,6 @@ class EventController extends AbstractController
      */
     public function browse(Request $request, EventRepository $eventRepository): Response
     {
-        // TODO: afficher les évènements passés
-        
         // If there is a limit or a category id in the query string, I adapt my sql query
         $limit = $request->query->get('limit');
         $categoryId = $request->query->get('category');
@@ -71,12 +69,26 @@ class EventController extends AbstractController
     }
 
     /**
+     * @Route("/past", name="browse_past", methods={"GET"})
+     */
+    public function browseUserPastEvents(Request $request, EventRepository $eventRepository): Response
+    {
+        $limit = $request->query->get('limit');
+
+        $userId = $this->getUser()->getId();
+        $userPastEvents = $eventRepository->findPastEvents($userId, $limit);
+
+        return $this->json($userPastEvents, 200, [], [
+            'groups' => ['event_browse'],
+        ]);
+    }
+
+    /**
      * @Route("/{id}", name="read", methods={"GET"})
      */
     public function read(Event $event, EventRepository $eventRepository): Response
     {
         $category = $event->getCategory();
-        // FIXME: afficher les events similaires correctement
         $recommendedEvents = $eventRepository->findByCategory($category->getId(), 3);
 
 
@@ -133,7 +145,6 @@ class EventController extends AbstractController
      */
     public function edit(Event $event, Request $request): Response
     {
-
         // TODO: afficher les évènements similaires après l'édition d'un event
         $form = $this->createForm(EventType::class, $event, ['csrf_protection' => false]);
 
@@ -146,7 +157,7 @@ class EventController extends AbstractController
             $event->setUpdatedAt(new \DateTimeImmutable());
             $this->manager->flush();
 
-            return $this->json($event, 201, [], [
+            return $this->json($event, 200, [], [
                 'groups' => ['event_read']
             ]);
         }

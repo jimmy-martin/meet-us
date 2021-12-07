@@ -44,13 +44,11 @@ class CategoryController extends AbstractController
                 ]
             );
         }
-        
+
         return $this->json($categoryRepository->findAll(), 200, [], [
             'groups' => ['category_browse'],
         ]);
     }
-
-
 
     /**
      * @Route("", name="add", methods={"POST"})
