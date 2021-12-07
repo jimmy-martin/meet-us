@@ -43,7 +43,7 @@ class FavoriteController extends AbstractController
         $favorite = new Favorite();
         $favorite->addEvent($event);
         $favorite->addUser($user);
-        
+
         $this->manager->persist($favorite);
 
         $user->addFavoriteEvent($favorite);
@@ -58,16 +58,9 @@ class FavoriteController extends AbstractController
     /**
      *@Route("/{id}", name="delete", methods={"DELETE"})
      */
-    public function delete(Event $event, FavoriteRepository $favoriteRepository)
+    public function delete(Favorite $favorite)
     {
-        $favoriteEvents = $favoriteRepository->findBy(
-            ['event' => $event],
-        );
-
-        foreach ($favoriteEvents as $favoriteEvent) {
-            $this->manager->remove($favoriteEvent);
-        }
-
+        $this->manager->remove($favorite);
         $this->manager->flush();
 
         return $this->json(null, 204);
