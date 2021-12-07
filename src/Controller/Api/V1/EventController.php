@@ -106,7 +106,7 @@ class EventController extends AbstractController
     /**
      * @Route("", name="add", methods={"POST"})
      */
-    public function add(Request $request): Response
+    public function add(EventRepository $eventRepository, Request $request): Response
     {
         $event = new Event();
 
@@ -127,7 +127,12 @@ class EventController extends AbstractController
             $this->manager->persist($event);
             $this->manager->flush();
 
-            return $this->json($event, 201, [], [
+            $recommendedEvents = $eventRepository->findByCategory($event->getCategory()->getId(), 3);
+
+            return $this->json([
+                'event' => $event,
+                'recommendedEvents' => $recommendedEvents,
+            ], 201, [], [
                 'groups' => ['event_read'],
             ]);
         }
@@ -146,7 +151,7 @@ class EventController extends AbstractController
     /**
      * @Route("/{id}", name="edit", methods={"PUT", "PATCH"})
      */
-    public function edit(Event $event, Request $request): Response
+    public function edit(Event $event,EventRepository $eventRepository, Request $request): Response
     {
         $this->denyAccessUnlessGranted('EVENT_EDIT', $event);
 
@@ -162,7 +167,12 @@ class EventController extends AbstractController
             $event->setUpdatedAt(new \DateTimeImmutable());
             $this->manager->flush();
 
-            return $this->json($event, 200, [], [
+            $recommendedEvents = $eventRepository->findByCategory($event->getCategory()->getId(), 3);
+
+            return $this->json([
+                'event' => $event,
+                'recommendedEvents' => $recommendedEvents,
+            ], 200, [], [
                 'groups' => ['event_read']
             ]);
         }
