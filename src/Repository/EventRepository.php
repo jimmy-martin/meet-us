@@ -87,6 +87,19 @@ class EventRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    public function findRecommendedEvents(Event $event, int $limit = 3)
+    {
+        return $this->createQueryBuilder('e')
+            ->andWhere('e.category = :eventCategory')
+            ->setParameter(':eventCategory', $event->getCategory())
+            ->andWhere('e.date > :today')
+            ->setParameter(':today', new \DateTimeImmutable())
+            ->orderBy('e.date', 'ASC')
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
+    }
+
 
 
     // /**

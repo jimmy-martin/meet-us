@@ -91,9 +91,7 @@ class EventController extends AbstractController
      */
     public function read(Event $event, EventRepository $eventRepository): Response
     {
-        $category = $event->getCategory();
-        $recommendedEvents = $eventRepository->findByCategory($category->getId(), 3);
-
+        $recommendedEvents = $eventRepository->findRecommendedEvents($event);
 
         return $this->json([
             'event' => $event,
@@ -111,7 +109,6 @@ class EventController extends AbstractController
         $event = new Event();
 
         // TODO: faire le formulaire pour un évènement en ligne
-        // TODO: afficher les évènements similaires après l'ajout d'un event
 
         $form = $this->createForm(EventType::class, $event, ['csrf_protection' => false]);
 
@@ -127,7 +124,7 @@ class EventController extends AbstractController
             $this->manager->persist($event);
             $this->manager->flush();
 
-            $recommendedEvents = $eventRepository->findByCategory($event->getCategory()->getId(), 3);
+            $recommendedEvents = $eventRepository->findRecommendedEvents($event);
 
             return $this->json([
                 'event' => $event,
@@ -155,7 +152,6 @@ class EventController extends AbstractController
     {
         $this->denyAccessUnlessGranted('EVENT_EDIT', $event);
 
-        // TODO: afficher les évènements similaires après l'édition d'un event
         $form = $this->createForm(EventType::class, $event, ['csrf_protection' => false]);
 
         $json = $request->getContent();
@@ -167,7 +163,7 @@ class EventController extends AbstractController
             $event->setUpdatedAt(new \DateTimeImmutable());
             $this->manager->flush();
 
-            $recommendedEvents = $eventRepository->findByCategory($event->getCategory()->getId(), 3);
+            $recommendedEvents = $eventRepository->findRecommendedEvents($event);
 
             return $this->json([
                 'event' => $event,
