@@ -4,11 +4,13 @@ namespace App\Form;
 
 use App\Entity\Event;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints\Blank;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\Choice;
 use Symfony\Component\Validator\Constraints\GreaterThan;
 use Symfony\Component\Validator\Constraints\GreaterThanOrEqual;
 
@@ -89,9 +91,26 @@ class EventType extends AbstractType
                 ],
             ])
 
-            ->add('isOnline', null, [
+            ->add('isOnline', ChoiceType::class, [
                 'required' => false,
                 'empty_data' => false,
+                'choices' => [
+                    'online' => true,
+                    'not online' => false,
+                ],
+                'expanded' => true,
+                'multiple' => false,
+            ])
+
+            ->add('isArchived', ChoiceType::class, [
+                'required' => false,
+                'empty_data' => false,
+                'choices' => [
+                    'archived' => true,
+                    'not archived' => false,
+                ],
+                'expanded' => true,
+                'multiple' => false,
             ])
 
             ->add('category', null, [
