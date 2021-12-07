@@ -87,6 +87,9 @@ class EventRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    /**
+     * @return Event[] Returns an array of similar Event objects
+     */
     public function findRecommendedEvents(Event $event, int $limit = 3)
     {
         return $this->createQueryBuilder('e')
