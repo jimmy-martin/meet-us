@@ -39,12 +39,12 @@ class EventVoter extends Voter
         // ... (check conditions and return true to grant permission) ...
         switch ($attribute) {
             case 'EVENT_EDIT':
-                if($subject->getAuthor()->getId() === $user) {
+                if ($subject->getAuthor()->getId() === $user->getId()) {
                     return true;
                 }
                 break;
             case 'EVENT_DELETE':
-                if($subject->getAuthor()->getId() === $user) {
+                if ($subject->getAuthor()->getId() === $user->getId()) {
                     return true;
                 }
                 break;
