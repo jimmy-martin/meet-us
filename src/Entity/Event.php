@@ -14,7 +14,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 class Event
 {
     /**
-     * @Groups({"event_browse", "user_read", "event_read"})
+     * @Groups({"event_browse", "user_read", "event_read", "favorite_browse"})
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")

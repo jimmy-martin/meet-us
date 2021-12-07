@@ -16,7 +16,7 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     /**
-     * @Groups({"user_browse", "user_read", "event_read"})
+     * @Groups({"user_browse", "user_read", "event_read", "favorite_browse"})
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
@@ -24,7 +24,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $id;
 
     /**
-     * @Groups({"user_browse", "user_read"})
+     * @Groups({"user_browse", "user_read", "favorite_browse"})
      * @ORM\Column(type="string", length=180, unique=true)
      */
     private $email;
@@ -126,6 +126,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $joinedEvents;
 
     /**
+     * @Groups({"user_read"})
      * @ORM\ManyToMany(targetEntity=Favorite::class, mappedBy="user")
      */
     private $favoriteEvents;
@@ -462,7 +463,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @Groups({"event_read"})
+     * @Groups({"event_read", "favorite_browse"})
      */
     public function getFullName()
     {
