@@ -4,6 +4,7 @@ namespace App\Controller\Api\V1;
 
 use App\Entity\Event;
 use App\Entity\Favorite;
+use App\Repository\FavoriteRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -11,7 +12,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
  * All methods related to a connected user favorites events
- * @Route("/api/v1/users/favorites", name="api_v1_favorites_", requirements={"id"="\d+"})
+ * @Route("/api/v1/users/favorites", name="api_v1_users_favorites_", requirements={"id"="\d+"})
  */
 class FavoriteController extends AbstractController
 {
@@ -23,7 +24,7 @@ class FavoriteController extends AbstractController
     }
 
     /**
-     * @Route("", name="read_favorites", methods={"GET"})
+     * @Route("", name="browse", methods={"GET"})
      */
     public function browse()
     {
@@ -52,5 +53,23 @@ class FavoriteController extends AbstractController
         return $this->json($favorite, 201, [], [
             'groups' => ['favorite_read'],
         ]);
+    }
+
+    /**
+     *@Route("/{id}", name="delete", methods={"DELETE"})
+     */
+    public function delete(Event $event, FavoriteRepository $favoriteRepository)
+    {
+        $favoriteEvents = $favoriteRepository->findBy(
+            ['event' => $event],
+        );
+
+        foreach ($favoriteEvents as $favoriteEvent) {
+            $this->manager->remove($favoriteEvent);
+        }
+
+        $this->manager->flush();
+
+        return $this->json(null, 204);
     }
 }

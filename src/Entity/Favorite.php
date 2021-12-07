@@ -14,6 +14,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 class Favorite
 {
     /**
+     * @Groups({"favorite_browse"})
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
