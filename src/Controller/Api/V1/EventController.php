@@ -78,7 +78,7 @@ class EventController extends AbstractController
         // this is how we get the connected user
         $user = $this->getUser();
         $userId = $user->getId();
-        
+
         $userPastEvents = $eventRepository->findPastEvents($userId, $limit);
 
         return $this->json($userPastEvents, 200, [], [
@@ -148,6 +148,8 @@ class EventController extends AbstractController
      */
     public function edit(Event $event, Request $request): Response
     {
+        $this->denyAccessUnlessGranted('EVENT_EDIT', $event);
+
         // TODO: afficher les évènements similaires après l'édition d'un event
         $form = $this->createForm(EventType::class, $event, ['csrf_protection' => false]);
 
@@ -181,6 +183,8 @@ class EventController extends AbstractController
      */
     public function delete(Event $event): Response
     {
+        $this->denyAccessUnlessGranted('EVENT_DELETE', $event);
+
         $this->manager->remove($event);
         $this->manager->flush();
 
