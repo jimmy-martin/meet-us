@@ -60,7 +60,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $phoneNumber;
 
     /**
-     * @Groups({"user_browse", "user_read"})
+     * @Groups({"user_browse", "user_read", "event_read"})
      * @ORM\Column(type="string", length=255, options={"default"="user_placeholder.png"})
      */
     private $avatar;
