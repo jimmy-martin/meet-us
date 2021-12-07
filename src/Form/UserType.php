@@ -36,7 +36,8 @@ class UserType extends AbstractType
                 'required' => true,
                 'constraints' => [
                     new Regex([
-                        'pattern' => '/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*]).{8,}$/',
+                        // check for at least 1 digit, 1 lower and 1 upper character, 1 special character and 8 characters
+                        'pattern' => '/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*]).{8,}$/', 
                     ])
                 ]
             ])
