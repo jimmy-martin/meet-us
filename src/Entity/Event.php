@@ -22,25 +22,25 @@ class Event
     private $id;
 
     /**
-     * @Groups({"event_browse", "user_read", "event_read"})
+     * @Groups({"event_browse", "user_read", "event_read", "favorite_browse"})
      * @ORM\Column(type="string", length=255)
      */
     private $title;
 
     /**
-     * @Groups({"event_browse", "event_read" })
+     * @Groups({"event_browse", "event_read", "favorite_browse"})
      * @ORM\Column(type="text")
      */
     private $description;
 
     /**
-     * @Groups({"event_browse", "event_read"})
+     * @Groups({"event_browse", "event_read", "favorite_browse"})
      * @ORM\Column(type="string", length=255, options={"default"="event_placeholder.png"})
      */
     private $picture;
 
     /**
-     * @Groups({"event_browse", "event_read"})
+     * @Groups({"event_browse", "event_read", "favorite_browse"})
      * @ORM\Column(type="datetime_immutable")
      */
     private $date;
@@ -58,7 +58,7 @@ class Event
     private $zipcode;
 
     /**
-     * @Groups({"event_read", "event_browse"})
+     * @Groups({"event_read", "event_browse", "favorite_browse"})
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $city;
@@ -106,7 +106,7 @@ class Event
     private $updatedAt;
 
     /**
-     * @Groups({"event_read", "event_browse"})
+     * @Groups({"event_read", "event_browse", "favorite_browse"})
      * @ORM\ManyToOne(targetEntity=Category::class, inversedBy="events")
      * @ORM\JoinColumn(nullable=false)
      */
@@ -371,7 +371,7 @@ class Event
     }
 
     /**
-     * @Groups({"event_browse", "event_read"})
+     * @Groups({"event_browse", "event_read", "favorite_browse"})
      */
     public function getMembersCount()
     {
