@@ -10,6 +10,7 @@ use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\GreaterThan;
+use Symfony\Component\Validator\Constraints\GreaterThanOrEqual;
 
 class EventType extends AbstractType
 {
@@ -84,7 +85,7 @@ class EventType extends AbstractType
             ->add('maxMembers', null, [
                 'constraints' => [
                     new NotBlank(),
-                    new GreaterThan(2),
+                    new GreaterThanOrEqual(2),
                 ]
             ])
 

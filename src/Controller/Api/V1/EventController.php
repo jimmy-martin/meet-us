@@ -76,6 +76,7 @@ class EventController extends AbstractController
     public function read(Event $event, EventRepository $eventRepository): Response
     {
         $category = $event->getCategory();
+        // FIXME: afficher les events similaires correctement
         $recommendedEvents = $eventRepository->findByCategory($category->getId(), 3);
 
 
@@ -95,6 +96,7 @@ class EventController extends AbstractController
         $event = new Event();
 
         // TODO: faire le formulaire pour un évènement en ligne
+        // TODO: afficher les évènements similaires après l'ajout d'un event
 
         $form = $this->createForm(EventType::class, $event, ['csrf_protection' => false]);
 
@@ -131,6 +133,8 @@ class EventController extends AbstractController
      */
     public function edit(Event $event, Request $request): Response
     {
+
+        // TODO: afficher les évènements similaires après l'édition d'un event
         $form = $this->createForm(EventType::class, $event, ['csrf_protection' => false]);
 
         $json = $request->getContent();
