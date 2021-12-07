@@ -203,6 +203,7 @@ class EventController extends AbstractController
      */
     public function addMember(Event $event, User $user)
     {
+        // TODO: remplacer le "if" par l'utilisation du voter
         if ($event->getMembersCount() === $event->getMaxMembers()) {
             return $this->json(
                 [
@@ -226,6 +227,7 @@ class EventController extends AbstractController
      */
     public function removeMember(Event $event, User $user)
     {
+        // TODO: remplacer le "if" par l'utilisation du voter
         if ($user === $event->getAuthor()) {
             return $this->json(
                 [
