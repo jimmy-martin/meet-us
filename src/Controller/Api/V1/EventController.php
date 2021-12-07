@@ -75,7 +75,10 @@ class EventController extends AbstractController
     {
         $limit = $request->query->get('limit');
 
-        $userId = $this->getUser()->getId();
+        // this is how we get the connected user
+        $user = $this->getUser();
+        $userId = $user->getId();
+        
         $userPastEvents = $eventRepository->findPastEvents($userId, $limit);
 
         return $this->json($userPastEvents, 200, [], [
