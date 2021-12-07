@@ -131,8 +131,7 @@ class Event
         $this->toFavoriteUsers = new ArrayCollection();
         $this->date = new \DateTimeImmutable();
         $this->createdAt = new \DateTimeImmutable();
-        $this->isOnline = true;
-        $this->isArchived = true;
+        $this->isArchived = false;
     }
 
     public function getId(): ?int

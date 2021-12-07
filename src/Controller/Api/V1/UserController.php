@@ -61,7 +61,9 @@ class UserController extends AbstractController
             $this->manager->persist($user);
             $this->manager->flush();
 
-            return $this->json($user, 201);
+            return $this->json($user, 201, [], [
+                'groups' => ['user_read']
+            ]);
         }
 
         $errorMessages = [];
@@ -91,7 +93,9 @@ class UserController extends AbstractController
         if ($form->isValid()) {
             $this->manager->flush();
 
-            return $this->json($user, 201);
+            return $this->json($user, 201, [], [
+                'groups' => ['user_read']
+            ]);
         }
 
         $errorMessages = [];

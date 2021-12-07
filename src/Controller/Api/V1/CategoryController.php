@@ -70,7 +70,9 @@ class CategoryController extends AbstractController
             $this->manager->persist($category);
             $this->manager->flush();
 
-            return $this->json($category, 201);
+            return $this->json($category, 201, [], [
+                'groups' => ['category_read']
+            ]);
         }
 
         $errorMessages = [];
@@ -100,7 +102,9 @@ class CategoryController extends AbstractController
         if ($form->isValid()) {
             $this->manager->flush();
 
-            return $this->json($category, 200);
+            return $this->json($category, 200, [], [
+                'groups' => ['category_read']
+            ]);
         }
 
         $errorMessages = [];

@@ -25,7 +25,7 @@ class EventType extends AbstractType
                         'min' => 10,
                         'max' => 150,
                     ])
-                ]
+                ],
             ])
 
             ->add('description', null, [
@@ -35,7 +35,7 @@ class EventType extends AbstractType
                         'min' => 50,
                         'max' => 3000,
                     ])
-                ]
+                ],
             ])
 
             ->add('picture', null, [
@@ -53,25 +53,25 @@ class EventType extends AbstractType
             ->add('address', null, [
                 'constraints' => [
                     new NotBlank(),
-                ]
+                ],
             ])
 
             ->add('zipcode', null, [
                 'constraints' => [
                     new NotBlank(),
-                ]
+                ],
             ])
 
             ->add('city', null, [
                 'constraints' => [
                     new NotBlank(),
-                ]
+                ],
             ])
 
             ->add('country', null, [
                 'constraints' => [
                     new NotBlank(),
-                ]
+                ],
             ])
 
             ->add('latitude', null, [
@@ -86,11 +86,7 @@ class EventType extends AbstractType
                 'constraints' => [
                     new NotBlank(),
                     new GreaterThanOrEqual(2),
-                ]
-            ])
-
-            ->add('isArchived', null, [
-                'required' => false,
+                ],
             ])
 
             ->add('isOnline', null, [
@@ -98,20 +94,16 @@ class EventType extends AbstractType
                 'empty_data' => false,
             ])
 
-            ->add('createdAt', null, [
-                'required' => false,
-            ])
-
-            ->add('updatedAt', null, [
-                'required' => false,
-            ])
-
             ->add('category', null, [
-                'required' => false,
+                'constraints' => [
+                    new NotBlank(),
+                ],
             ])
 
             ->add('author', null, [
-                'required' => false,
+                'constraints' => [
+                    new NotBlank(),
+                ],
             ]);
     }
 
