@@ -148,7 +148,7 @@ class EventController extends AbstractController
     /**
      * @Route("/{id}", name="edit", methods={"PUT", "PATCH"})
      */
-    public function edit(Event $event,EventRepository $eventRepository, Request $request): Response
+    public function edit(Event $event, EventRepository $eventRepository, Request $request): Response
     {
         $this->denyAccessUnlessGranted('EVENT_EDIT', $event);
 
@@ -204,11 +204,12 @@ class EventController extends AbstractController
     public function addMember(Event $event, User $user)
     {
         if ($event->getMembersCount() === $event->getMaxMembers()) {
-            return $this->json([
-                'message' => 'Max members has already been reached',
-            ], 400, [], [
-                'groups' => 'event_read'
-            ]);
+            return $this->json(
+                [
+                    'message' => 'Max members has already been reached',
+                ],
+                400
+            );
         }
 
         $event->addMember($user);
@@ -226,11 +227,12 @@ class EventController extends AbstractController
     public function removeMember(Event $event, User $user)
     {
         if ($user === $event->getAuthor()) {
-            return $this->json([
-                'message' => 'Cannot remove event creator from members',
-            ], 400, [], [
-                'groups' => 'event_read'
-            ]);
+            return $this->json(
+                [
+                    'message' => 'Cannot remove event creator from members',
+                ],
+                400
+            );
         }
 
         $event->removeMember($user);

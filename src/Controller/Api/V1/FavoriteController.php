@@ -60,6 +60,15 @@ class FavoriteController extends AbstractController
      */
     public function delete(Favorite $favorite)
     {
+        if ($this->getUser() !== $favorite->getUser()) {
+            return $this->json(
+                [
+                    'message' => 'You have to be the owner of the favorite to delete it',
+                ],
+                400
+            );
+        }
+
         $this->manager->remove($favorite);
         $this->manager->flush();
 
