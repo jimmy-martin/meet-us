@@ -11,6 +11,7 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\GreaterThan;
 use Symfony\Component\Validator\Constraints\GreaterThanOrEqual;
+use Symfony\Component\Validator\Constraints\NotNull;
 
 class EventType extends AbstractType
 {
@@ -24,7 +25,7 @@ class EventType extends AbstractType
                     new Length([
                         'min' => 10,
                         'max' => 150,
-                    ])
+                    ]),
                 ],
             ])
 
@@ -51,8 +52,10 @@ class EventType extends AbstractType
             ])
 
             ->add('address', null, [
+                'required' => true,
                 'constraints' => [
                     new NotBlank(),
+                    new NotNull(),
                 ],
             ])
 
@@ -63,12 +66,14 @@ class EventType extends AbstractType
             ])
 
             ->add('city', null, [
+                'required' => true,
                 'constraints' => [
                     new NotBlank(),
                 ],
             ])
 
             ->add('country', null, [
+                'required' => true,
                 'constraints' => [
                     new NotBlank(),
                 ],
