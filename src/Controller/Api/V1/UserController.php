@@ -84,6 +84,7 @@ class UserController extends AbstractController
      */
     public function edit(User $user, Request $request): Response
     {
+        // TODO: permettre de modifier son mot de passe 
         // control if the connected user is the user that is modified
         $this->denyAccessUnlessGranted('USER_EDIT', $user);
 
