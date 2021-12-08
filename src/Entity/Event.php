@@ -47,25 +47,25 @@ class Event
 
     /**
      * @Groups({"event_read"})
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="string", length=255, options={"default"="empty_address"})
      */
     private $address;
 
     /**
      * @Groups({"event_read"})
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="integer", options={"default"=00000})
      */
     private $zipcode;
 
     /**
      * @Groups({"event_read", "event_browse", "favorite_browse"})
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="string", length=255, options={"default"="empty_city"})
      */
     private $city;
 
     /**
      * @Groups({"event_read"})
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="string", length=255, options={"default"="empty_country"})
      */
     private $country;
 
@@ -86,11 +86,13 @@ class Event
     private $maxMembers;
 
     /**
+     * @Groups({"event_browse", "event_read", "favorite_browse"})
      * @ORM\Column(type="boolean", options={"default"=false})
      */
     private $isArchived;
 
     /**
+     * @Groups({"event_browse", "event_read", "favorite_browse"})
      * @ORM\Column(type="boolean")
      */
     private $isOnline;
@@ -192,7 +194,7 @@ class Event
         return $this->address;
     }
 
-    public function setAddress(?string $address): self
+    public function setAddress(string $address): self
     {
         $this->address = $address;
 
@@ -204,7 +206,7 @@ class Event
         return $this->zipcode;
     }
 
-    public function setZipcode(?string $zipcode): self
+    public function setZipcode(string $zipcode): self
     {
         $this->zipcode = $zipcode;
 
@@ -216,7 +218,7 @@ class Event
         return $this->city;
     }
 
-    public function setCity(?string $city): self
+    public function setCity(string $city): self
     {
         $this->city = $city;
 
@@ -228,7 +230,7 @@ class Event
         return $this->country;
     }
 
-    public function setCountry(?string $country): self
+    public function setCountry(string $country): self
     {
         $this->country = $country;
 

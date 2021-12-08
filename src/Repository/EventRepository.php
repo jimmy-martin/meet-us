@@ -92,6 +92,7 @@ class EventRepository extends ServiceEntityRepository
      */
     public function findRecommendedEvents(Event $event, int $limit = 3)
     {
+        // TODO: ne pas afficher l'event consulté dans les recommendations
         return $this->createQueryBuilder('e')
             ->andWhere('e.category = :eventCategory')
             ->setParameter(':eventCategory', $event->getCategory())

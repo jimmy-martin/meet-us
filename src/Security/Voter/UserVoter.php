@@ -7,21 +7,22 @@ use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-class EventVoter extends Voter
+
+class UserVoter extends Voter
 {
     private $security;
 
     public function __construct(Security $security)
     {
-        $this->security = $security;
+        $this->security = $security; 
     }
 
     protected function supports(string $attribute, $subject): bool
     {
         // replace with your own logic
         // https://symfony.com/doc/current/security/voters.html
-        return in_array($attribute, ['EVENT_EDIT', 'EVENT_DELETE', 'EVENT_ADD_MEMBER'])
-            && $subject instanceof \App\Entity\Event;
+        return in_array($attribute, ['USER_EDIT', 'USER_DELETE'])
+            && $subject instanceof \App\Entity\User;
     }
 
     protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token): bool
@@ -32,27 +33,21 @@ class EventVoter extends Voter
             return false;
         }
 
-        if ($this->security->isGranted('ROLE_MODERATOR')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             return true;
         }
 
         // ... (check conditions and return true to grant permission) ...
         switch ($attribute) {
-            case 'EVENT_EDIT':
-                // control if the event author is the user who want to edit the event
-                if ($subject->getAuthor()->getId() === $user->getId()) {
+            case 'USER_EDIT':
+                // control if the connected user is the user that is modified
+                if ($user->getId() === $subject->getId()) {
                     return true;
                 }
                 break;
-            case 'EVENT_DELETE':
-                // control if the event author is the user who want to delete the event
-                if ($subject->getAuthor()->getId() === $user->getId()) {
-                    return true;
-                }
-                break;
-            case 'EVENT_ADD_MEMBER':
-                // control if event max members limit is not already reached
-                if ($subject->getMembersCount() < $subject->getMaxMembers()) {
+            case 'USER_DELETE':
+                // control if the connected user is the user that is deleted
+                if ($user->getId() === $subject->getId()) {
                     return true;
                 }
                 break;

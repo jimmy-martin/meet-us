@@ -83,7 +83,8 @@ class UserController extends AbstractController
      */
     public function edit(User $user, Request $request): Response
     {
-        // TODO: add validation to control if it's at least an admin or the current user 
+        // control if the connected user is the user that is modified
+        $this->denyAccessUnlessGranted('USER_EDIT', $user);
 
         $form = $this->createForm(UserType::class, $user, ['csrf_protection' => false]);
 
@@ -117,7 +118,9 @@ class UserController extends AbstractController
      */
     public function delete(User $user): Response
     {
-        // TODO: add validation to control if it's at least an admin or the current user 
+        // control if the connected user is the user that is deleted
+        $this->denyAccessUnlessGranted('USER_DELETE', $user);
+
         $this->manager->remove($user);
         $this->manager->flush();
 

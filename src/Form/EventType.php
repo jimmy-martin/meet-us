@@ -11,6 +11,8 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\GreaterThan;
 use Symfony\Component\Validator\Constraints\GreaterThanOrEqual;
+use Symfony\Component\Validator\Constraints\NotNull;
+use Symfony\Component\Validator\Constraints\Type;
 
 class EventType extends AbstractType
 {
@@ -24,7 +26,7 @@ class EventType extends AbstractType
                     new Length([
                         'min' => 10,
                         'max' => 150,
-                    ])
+                    ]),
                 ],
             ])
 
@@ -51,26 +53,37 @@ class EventType extends AbstractType
             ])
 
             ->add('address', null, [
+                'required' => true,
                 'constraints' => [
                     new NotBlank(),
+                    new NotNull(),
                 ],
             ])
 
             ->add('zipcode', null, [
                 'constraints' => [
                     new NotBlank(),
+                    new Length([
+                        'min' => 5,
+                        'max' => 5,
+                    ])
                 ],
             ])
 
             ->add('city', null, [
+                'required' => true,
                 'constraints' => [
                     new NotBlank(),
+                    new NotNull(),
                 ],
             ])
 
             ->add('country', null, [
+                'required' => true,
+                'empty_data' => 'France',
                 'constraints' => [
                     new NotBlank(),
+                    new NotNull(),
                 ],
             ])
 
@@ -85,25 +98,30 @@ class EventType extends AbstractType
             ->add('maxMembers', null, [
                 'constraints' => [
                     new NotBlank(),
+                    new NotNull(),
                     new GreaterThanOrEqual(2),
                 ],
             ])
 
-            ->add('isOnline', null, [
-                'required' => false,
-                'empty_data' => false,
-            ])
-
-            ->add('isArchived', ChoiceType::class, [
-                'required' => false,
-                'empty_data' => false,
+            ->add('isOnline', ChoiceType::class, [
                 'choices' => [
-                    'archived' => true,
-                    'not archived' => false,
+                    'online' => true,
+                    'not online' => false,
                 ],
                 'expanded' => true,
                 'multiple' => false,
             ])
+
+            // ->add('isArchived', ChoiceType::class, [
+            //     'required' => false,
+            //     'empty_data' => false,
+            //     'choices' => [
+            //         'archived' => true,
+            //         'not archived' => false,
+            //     ],
+            //     'expanded' => true,
+            //     'multiple' => false,
+            // ])
 
             ->add('category', null, [
                 'constraints' => [
