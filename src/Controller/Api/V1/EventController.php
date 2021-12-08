@@ -150,6 +150,7 @@ class EventController extends AbstractController
      */
     public function edit(Event $event, EventRepository $eventRepository, Request $request): Response
     {
+        // control if the event author is the user who want to edit the event
         $this->denyAccessUnlessGranted('EVENT_EDIT', $event);
 
         $form = $this->createForm(EventType::class, $event, ['csrf_protection' => false]);
@@ -189,6 +190,7 @@ class EventController extends AbstractController
      */
     public function delete(Event $event): Response
     {
+        // control if the event author is the user who want to delete the event
         $this->denyAccessUnlessGranted('EVENT_DELETE', $event);
 
         $this->manager->remove($event);
@@ -203,15 +205,8 @@ class EventController extends AbstractController
      */
     public function addMember(Event $event, User $user)
     {
-        // TODO: remplacer le "if" par l'utilisation du voter
-        if ($event->getMembersCount() === $event->getMaxMembers()) {
-            return $this->json(
-                [
-                    'message' => 'Max members has already been reached',
-                ],
-                400
-            );
-        }
+        // control if event max members limit is not already reached
+        $this->denyAccessUnlessGranted('EVENT_ADD_MEMBER', $event);
 
         $event->addMember($user);
         $this->manager->flush();
@@ -227,14 +222,11 @@ class EventController extends AbstractController
      */
     public function removeMember(Event $event, User $user)
     {
-        // TODO: remplacer le "if" par l'utilisation du voter
-        if ($user === $event->getAuthor()) {
-            return $this->json(
-                [
-                    'message' => 'Cannot remove event creator from members',
-                ],
-                400
-            );
+        // control if the event author is not the member we want to remove
+        if ($user === $event->getAuthor()){
+            return $this->json([
+                'message' => 'You cannot remove the event author as a member',
+            ], 400);
         }
 
         $event->removeMember($user);

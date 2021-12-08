@@ -20,7 +20,7 @@ class EventVoter extends Voter
     {
         // replace with your own logic
         // https://symfony.com/doc/current/security/voters.html
-        return in_array($attribute, ['EVENT_EDIT', 'EVENT_DELETE'])
+        return in_array($attribute, ['EVENT_EDIT', 'EVENT_DELETE', 'EVENT_ADD_MEMBER'])
             && $subject instanceof \App\Entity\Event;
     }
 
@@ -39,12 +39,20 @@ class EventVoter extends Voter
         // ... (check conditions and return true to grant permission) ...
         switch ($attribute) {
             case 'EVENT_EDIT':
+                // control if the event author is the user who want to edit the event
                 if ($subject->getAuthor()->getId() === $user->getId()) {
                     return true;
                 }
                 break;
             case 'EVENT_DELETE':
+                // control if the event author is the user who want to delete the event
                 if ($subject->getAuthor()->getId() === $user->getId()) {
+                    return true;
+                }
+                break;
+            case 'EVENT_ADD_MEMBER':
+                // control if event max members limit is not already reached
+                if ($subject->getMembersCount() < $subject->getMaxMembers()) {
                     return true;
                 }
                 break;
