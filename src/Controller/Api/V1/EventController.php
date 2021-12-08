@@ -87,6 +87,8 @@ class EventController extends AbstractController
         ]);
     }
 
+    // TODO: créer la méthode permettant de récupérer les évènements à venir d'un user
+
     /**
      * @Route("/{id}", name="read", methods={"GET"})
      */

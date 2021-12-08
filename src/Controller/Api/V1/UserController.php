@@ -58,6 +58,7 @@ class UserController extends AbstractController
         $form->submit($jsonArray);
 
         if ($form->isValid()) {
+            // TODO: hasher le mot de passe
             $this->manager->persist($user);
             $this->manager->flush();
 
