@@ -4,6 +4,7 @@ namespace App\Controller\Api\V1;
 
 use App\Entity\User;
 use App\Entity\Event;
+use App\Form\EventOnlineType;
 use App\Form\EventType;
 use App\Repository\EventRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -108,9 +109,21 @@ class EventController extends AbstractController
     {
         $event = new Event();
 
-        // TODO: faire le formulaire pour un évènement en ligne
+        $online = $request->query->get('type');
 
-        $form = $this->createForm(EventType::class, $event, ['csrf_protection' => false]);
+        if (isset($online)) {
+            $event->setIsOnline(true);
+            // we pre-filled the unnecessary fields for an online event
+            $event->setZipcode('');
+            $event->setAddress('');
+            $event->setCity('');
+            $event->setCountry('');
+            $form = $this->createForm(EventOnlineType::class, $event, ['csrf_protection' => false]);
+        } else {
+            $event->setIsOnline(false);
+            $form = $this->createForm(EventType::class, $event, ['csrf_protection' => false]);
+        }
+
 
         $json = $request->getContent();
         $jsonArray = json_decode($json, true);

@@ -53,7 +53,7 @@ class Event
 
     /**
      * @Groups({"event_read"})
-     * @ORM\Column(type="integer", options={"default"=00000})
+     * @ORM\Column(type="integer", options={"default"=0})
      */
     private $zipcode;
 

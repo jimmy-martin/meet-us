@@ -4,21 +4,19 @@ namespace App\Form;
 
 use App\Entity\Event;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\NotNull;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\GreaterThan;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Validator\Constraints\GreaterThanOrEqual;
-use Symfony\Component\Validator\Constraints\NotNull;
-use Symfony\Component\Validator\Constraints\Type;
 
-class EventType extends AbstractType
+class EventOnlineType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        // TODO voir contrainte de validation avec Front
         $builder
             ->add('title', null, [
                 'constraints' => [
@@ -52,41 +50,6 @@ class EventType extends AbstractType
                 ],
             ])
 
-            ->add('address', null, [
-                'required' => true,
-                'constraints' => [
-                    new NotBlank(),
-                    new NotNull(),
-                ],
-            ])
-
-            ->add('zipcode', null, [
-                'constraints' => [
-                    new NotBlank(),
-                    new Length([
-                        'min' => 5,
-                        'max' => 5,
-                    ])
-                ],
-            ])
-
-            ->add('city', null, [
-                'required' => true,
-                'constraints' => [
-                    new NotBlank(),
-                    new NotNull(),
-                ],
-            ])
-
-            ->add('country', null, [
-                'required' => true,
-                'empty_data' => 'France',
-                'constraints' => [
-                    new NotBlank(),
-                    new NotNull(),
-                ],
-            ])
-
             ->add('latitude', null, [
                 'required' => false,
             ])
@@ -101,6 +64,15 @@ class EventType extends AbstractType
                     new NotNull(),
                     new GreaterThanOrEqual(2),
                 ],
+            ])
+
+            ->add('isOnline', ChoiceType::class, [
+                'choices' => [
+                    'online' => true,
+                    'not online' => false,
+                ],
+                'expanded' => true,
+                'multiple' => false,
             ])
 
             ->add('category', null, [
