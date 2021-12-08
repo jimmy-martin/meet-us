@@ -89,9 +89,13 @@ class EventType extends AbstractType
                 ],
             ])
 
-            ->add('isOnline', null, [
-                'required' => false,
-                'empty_data' => false,
+            ->add('isOnline', ChoiceType::class, [
+                'choices' => [
+                    'online' => true,
+                    'not online' => false,
+                ],
+                'expanded' => true,
+                'multiple' => false,
             ])
 
             ->add('isArchived', ChoiceType::class, [
