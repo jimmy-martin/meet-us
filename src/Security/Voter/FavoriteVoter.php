@@ -7,7 +7,7 @@ use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-class EventVoter extends Voter
+class FavoriteVoter extends Voter
 {
     private $security;
 
@@ -20,8 +20,8 @@ class EventVoter extends Voter
     {
         // replace with your own logic
         // https://symfony.com/doc/current/security/voters.html
-        return in_array($attribute, ['EVENT_EDIT', 'EVENT_DELETE'])
-            && $subject instanceof \App\Entity\Event;
+        return in_array($attribute, ['FAVORITE_DELETE'])
+            && $subject instanceof \App\Entity\Favorite;
     }
 
     protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token): bool
@@ -32,19 +32,14 @@ class EventVoter extends Voter
             return false;
         }
 
-        if ($this->security->isGranted('ROLE_MODERATOR')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             return true;
         }
 
         // ... (check conditions and return true to grant permission) ...
         switch ($attribute) {
-            case 'EVENT_EDIT':
-                if ($subject->getAuthor()->getId() === $user->getId()) {
-                    return true;
-                }
-                break;
-            case 'EVENT_DELETE':
-                if ($subject->getAuthor()->getId() === $user->getId()) {
+            case 'FAVORITE_DELETE':
+                if ($user == $subject->getUser()) {
                     return true;
                 }
                 break;

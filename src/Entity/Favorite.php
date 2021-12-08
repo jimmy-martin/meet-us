@@ -2,10 +2,11 @@
 
 namespace App\Entity;
 
-use App\Repository\FavoriteRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\FavoriteRepository;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=FavoriteRepository::class)
@@ -13,6 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Favorite
 {
     /**
+     * @Groups({"favorite_browse"})
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
@@ -20,6 +22,7 @@ class Favorite
     private $id;
 
     /**
+     * @Groups({"favorite_browse"})
      * @ORM\ManyToMany(targetEntity=Event::class)
      */
     private $event;

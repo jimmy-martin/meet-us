@@ -83,6 +83,8 @@ class UserController extends AbstractController
      */
     public function edit(User $user, Request $request): Response
     {
+        // TODO: add validation to control if it's at least an admin or the current user 
+
         $form = $this->createForm(UserType::class, $user, ['csrf_protection' => false]);
 
         $json = $request->getContent();
@@ -115,6 +117,7 @@ class UserController extends AbstractController
      */
     public function delete(User $user): Response
     {
+        // TODO: add validation to control if it's at least an admin or the current user 
         $this->manager->remove($user);
         $this->manager->flush();
 
