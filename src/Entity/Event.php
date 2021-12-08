@@ -53,7 +53,7 @@ class Event
 
     /**
      * @Groups({"event_read"})
-     * @ORM\Column(type="string", length=255, options={"default"="empty_zipcode"})
+     * @ORM\Column(type="integer", options={"default"=00000})
      */
     private $zipcode;
 
@@ -86,11 +86,13 @@ class Event
     private $maxMembers;
 
     /**
+     * @Groups({"event_browse", "event_read", "favorite_browse"})
      * @ORM\Column(type="boolean", options={"default"=false})
      */
     private $isArchived;
 
     /**
+     * @Groups({"event_browse", "event_read", "favorite_browse"})
      * @ORM\Column(type="boolean")
      */
     private $isOnline;
