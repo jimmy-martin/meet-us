@@ -231,17 +231,14 @@ class EventController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/add/{user_id}", name="add_member", methods={"POST"}, requirements={"user_id"="\d+"})
-     * @Entity("user", expr="repository.find(user_id)")
+     * @Route("/{id}/add", name="add_member", methods={"POST"})
      */
-    public function addMember(Event $event, User $user)
+    public function addMember(Event $event)
     {
-        // TODO: restreindre l'ajout d'un user si il est déjà participant
         // control if event max members limit is not already reached and if user is not already a member
         $this->denyAccessUnlessGranted('EVENT_ADD_MEMBER', $event);
 
-
-        $event->addMember($user);
+        $event->addMember($this->getUser());
         $this->manager->flush();
 
         return $this->json($event, 200, [], [
@@ -250,19 +247,14 @@ class EventController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/remove/{user_id}", name="remove_member", methods={"DELETE"}, requirements={"user_id"="\d+"})
-     * @Entity("user", expr="repository.find(user_id)")
+     * @Route("/{id}/remove", name="remove_member", methods={"DELETE"})
      */
-    public function removeMember(Event $event, User $user)
+    public function removeMember(Event $event)
     {
         // control if the event author is not the member we want to remove
-        if ($user === $event->getAuthor()) {
-            return $this->json([
-                'message' => 'You cannot remove the event author as a member',
-            ], 400);
-        }
+        $this->denyAccessUnlessGranted('EVENT_REMOVE_MEMBER', $event);        
 
-        $event->removeMember($user);
+        $event->removeMember($this->getUser());
         $this->manager->flush();
 
         return $this->json($event, 200, [], [
