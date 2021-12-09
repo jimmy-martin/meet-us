@@ -80,6 +80,7 @@ class EventController extends AbstractController
         $user = $this->getUser();
         $userId = $user->getId();
 
+        // TODO: revoir la requête
         $userPastEvents = $eventRepository->findPastEvents($userId, $limit);
 
         return $this->json($userPastEvents, 200, [], [
@@ -220,8 +221,10 @@ class EventController extends AbstractController
      */
     public function addMember(Event $event, User $user)
     {
-        // control if event max members limit is not already reached
+        // TODO: restreindre l'ajout d'un user si il est déjà participant
+        // control if event max members limit is not already reached and if user is not already a member
         $this->denyAccessUnlessGranted('EVENT_ADD_MEMBER', $event);
+
 
         $event->addMember($user);
         $this->manager->flush();

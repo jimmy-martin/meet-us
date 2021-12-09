@@ -38,6 +38,7 @@ class UserController extends AbstractController
      */
     public function read(User $user): Response
     {
+        // TODO: afficher les infos d'un utilisateur à sa connexion
         return $this->json($user, 200, [], [
             'groups' => ['user_read'],
         ]);
