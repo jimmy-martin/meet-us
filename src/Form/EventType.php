@@ -18,7 +18,6 @@ class EventType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        // TODO voir contrainte de validation avec Front
         $builder
             ->add('title', null, [
                 'constraints' => [

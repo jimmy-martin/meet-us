@@ -14,7 +14,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 class Event
 {
     /**
-     * @Groups({"event_browse", "user_read", "event_read", "favorite_browse"})
+     * @Groups({"event_browse", "user_read", "event_read", "favorite_browse", "favorite_read"})
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
@@ -22,7 +22,7 @@ class Event
     private $id;
 
     /**
-     * @Groups({"event_browse", "user_read", "event_read", "favorite_browse"})
+     * @Groups({"event_browse", "user_read", "event_read", "favorite_browse", "favorite_read"})
      * @ORM\Column(type="string", length=255)
      */
     private $title;
@@ -40,7 +40,7 @@ class Event
     private $picture;
 
     /**
-     * @Groups({"event_browse", "event_read", "favorite_browse"})
+     * @Groups({"event_browse", "event_read", "favorite_browse", "favorite_read"})
      * @ORM\Column(type="datetime_immutable")
      */
     private $date;
