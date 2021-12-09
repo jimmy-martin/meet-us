@@ -80,10 +80,27 @@ class EventController extends AbstractController
         $user = $this->getUser();
         $userId = $user->getId();
 
-        // TODO: revoir la requête
         $userPastEvents = $eventRepository->findPastEvents($userId, $limit);
 
         return $this->json($userPastEvents, 200, [], [
+            'groups' => ['event_browse'],
+        ]);
+    }
+
+    /**
+     * @Route("/incoming", name="browse_incoming", methods={"GET"})
+     */
+    public function browseUserIncomingEvents(Request $request, EventRepository $eventRepository): Response
+    {
+        $limit = $request->query->get('limit');
+
+        // this is how we get the connected user
+        $user = $this->getUser();
+        $userId = $user->getId();
+        
+        $userIncomingEvents = $eventRepository->findIncomingEvents($userId, $limit);
+
+        return $this->json($userIncomingEvents, 200, [], [
             'groups' => ['event_browse'],
         ]);
     }
@@ -241,7 +258,7 @@ class EventController extends AbstractController
     public function removeMember(Event $event, User $user)
     {
         // control if the event author is not the member we want to remove
-        if ($user === $event->getAuthor()){
+        if ($user === $event->getAuthor()) {
             return $this->json([
                 'message' => 'You cannot remove the event author as a member',
             ], 400);
