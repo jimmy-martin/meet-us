@@ -4,6 +4,7 @@ namespace App\Controller\Api\V1;
 
 use App\Entity\User;
 use App\Entity\Event;
+use App\Form\EventOnlineType;
 use App\Form\EventType;
 use App\Repository\EventRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -87,6 +88,24 @@ class EventController extends AbstractController
     }
 
     /**
+     * @Route("/incoming", name="browse_incoming", methods={"GET"})
+     */
+    public function browseUserIncomingEvents(Request $request, EventRepository $eventRepository): Response
+    {
+        $limit = $request->query->get('limit');
+
+        // this is how we get the connected user
+        $user = $this->getUser();
+        $userId = $user->getId();
+        
+        $userIncomingEvents = $eventRepository->findIncomingEvents($userId, $limit);
+
+        return $this->json($userIncomingEvents, 200, [], [
+            'groups' => ['event_browse'],
+        ]);
+    }
+
+    /**
      * @Route("/{id}", name="read", methods={"GET"})
      */
     public function read(Event $event, EventRepository $eventRepository): Response
@@ -108,9 +127,21 @@ class EventController extends AbstractController
     {
         $event = new Event();
 
-        // TODO: faire le formulaire pour un évènement en ligne
+        $online = $request->query->get('type');
 
-        $form = $this->createForm(EventType::class, $event, ['csrf_protection' => false]);
+        if (isset($online)) {
+            $event->setIsOnline(true);
+            // we pre-filled the unnecessary fields for an online event
+            $event->setZipcode('');
+            $event->setAddress('');
+            $event->setCity('');
+            $event->setCountry('');
+            $form = $this->createForm(EventOnlineType::class, $event, ['csrf_protection' => false]);
+        } else {
+            $event->setIsOnline(false);
+            $form = $this->createForm(EventType::class, $event, ['csrf_protection' => false]);
+        }
+
 
         $json = $request->getContent();
         $jsonArray = json_decode($json, true);
@@ -200,15 +231,14 @@ class EventController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/add/{user_id}", name="add_member", methods={"POST"}, requirements={"user_id"="\d+"})
-     * @Entity("user", expr="repository.find(user_id)")
+     * @Route("/{id}/add", name="add_member", methods={"POST"})
      */
-    public function addMember(Event $event, User $user)
+    public function addMember(Event $event)
     {
-        // control if event max members limit is not already reached
+        // control if event max members limit is not already reached and if user is not already a member
         $this->denyAccessUnlessGranted('EVENT_ADD_MEMBER', $event);
 
-        $event->addMember($user);
+        $event->addMember($this->getUser());
         $this->manager->flush();
 
         return $this->json($event, 200, [], [
@@ -217,19 +247,14 @@ class EventController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/remove/{user_id}", name="remove_member", methods={"DELETE"}, requirements={"user_id"="\d+"})
-     * @Entity("user", expr="repository.find(user_id)")
+     * @Route("/{id}/remove", name="remove_member", methods={"DELETE"})
      */
-    public function removeMember(Event $event, User $user)
+    public function removeMember(Event $event)
     {
         // control if the event author is not the member we want to remove
-        if ($user === $event->getAuthor()){
-            return $this->json([
-                'message' => 'You cannot remove the event author as a member',
-            ], 400);
-        }
+        $this->denyAccessUnlessGranted('EVENT_REMOVE_MEMBER', $event);        
 
-        $event->removeMember($user);
+        $event->removeMember($this->getUser());
         $this->manager->flush();
 
         return $this->json($event, 200, [], [

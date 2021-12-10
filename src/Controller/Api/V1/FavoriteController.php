@@ -52,7 +52,6 @@ class FavoriteController extends AbstractController
 
         return $this->json($favorite, 201, [], [
             'groups' => ['favorite_read'],
-            // TODO: penser à créer le groupe favorite_read
         ]);
     }
 

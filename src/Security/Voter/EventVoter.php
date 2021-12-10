@@ -20,7 +20,7 @@ class EventVoter extends Voter
     {
         // replace with your own logic
         // https://symfony.com/doc/current/security/voters.html
-        return in_array($attribute, ['EVENT_EDIT', 'EVENT_DELETE', 'EVENT_ADD_MEMBER'])
+        return in_array($attribute, ['EVENT_EDIT', 'EVENT_DELETE', 'EVENT_ADD_MEMBER', 'EVENT_REMOVE_MEMBER'])
             && $subject instanceof \App\Entity\Event;
     }
 
@@ -51,8 +51,20 @@ class EventVoter extends Voter
                 }
                 break;
             case 'EVENT_ADD_MEMBER':
-                // control if event max members limit is not already reached
-                if ($subject->getMembersCount() < $subject->getMaxMembers()) {
+                $isMember = false;
+                foreach ($subject->getMembers() as $member) {
+                    if ($user->getId() === $member->getId()) {
+                        $isMember = true;
+                    }
+                }
+
+                // control if event max members limit is not already reached and if user is not already a member
+                if ($subject->getMembersCount() < $subject->getMaxMembers() && $isMember === false) {                
+                    return true;
+                }
+                break;
+            case 'EVENT_REMOVE_MEMBER':
+                if ($user !== $subject->getAuthor()) {
                     return true;
                 }
                 break;

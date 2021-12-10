@@ -14,7 +14,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 class Favorite
 {
     /**
-     * @Groups({"favorite_browse"})
+     * @Groups({"favorite_browse", "favorite_read"})
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
@@ -22,7 +22,7 @@ class Favorite
     private $id;
 
     /**
-     * @Groups({"favorite_browse"})
+     * @Groups({"favorite_browse", "favorite_read"})
      * @ORM\ManyToMany(targetEntity=Event::class)
      */
     private $event;

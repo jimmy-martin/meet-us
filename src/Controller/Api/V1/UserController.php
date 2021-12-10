@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 /**
  * @Route("/api/v1/users", name="api_v1_users_", requirements={"id"="\d+"})
@@ -46,7 +47,7 @@ class UserController extends AbstractController
     /**
      * @Route("", name="add", methods={"POST"})
      */
-    public function add(Request $request): Response
+    public function add(Request $request, UserPasswordHasherInterface $passwordHasher): Response
     {
         $user = new User();
 
@@ -58,6 +59,15 @@ class UserController extends AbstractController
         $form->submit($jsonArray);
 
         if ($form->isValid()) {
+            $plainTextPassword = $form->get('password')->getData();
+
+            $hashedPassword = $passwordHasher->hashPassword(
+                $user,
+                $plainTextPassword
+            );
+
+            $user->setPassword($hashedPassword);
+
             $this->manager->persist($user);
             $this->manager->flush();
 
@@ -83,6 +93,7 @@ class UserController extends AbstractController
      */
     public function edit(User $user, Request $request): Response
     {
+        // TODO: permettre de modifier son mot de passe 
         // control if the connected user is the user that is modified
         $this->denyAccessUnlessGranted('USER_EDIT', $user);
 
