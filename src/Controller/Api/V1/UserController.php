@@ -49,7 +49,6 @@ class UserController extends AbstractController
      */
     public function add(Request $request, UserPasswordHasherInterface $passwordHasher): Response
     {
-        // TODO: autoriser cette route en public
         $user = new User();
 
         $form = $this->createForm(UserType::class, $user, ['csrf_protection' => false]);
