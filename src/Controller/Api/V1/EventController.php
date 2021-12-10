@@ -4,6 +4,7 @@ namespace App\Controller\Api\V1;
 
 use App\Entity\User;
 use App\Entity\Event;
+use App\Form\EventOnlineType;
 use App\Form\EventType;
 use App\Repository\EventRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -30,8 +31,6 @@ class EventController extends AbstractController
      */
     public function browse(Request $request, EventRepository $eventRepository): Response
     {
-        // TODO: afficher les évènements passés
-        
         // If there is a limit or a category id in the query string, I adapt my sql query
         $limit = $request->query->get('limit');
         $categoryId = $request->query->get('category');
@@ -71,13 +70,47 @@ class EventController extends AbstractController
     }
 
     /**
+     * @Route("/past", name="browse_past", methods={"GET"})
+     */
+    public function browseUserPastEvents(Request $request, EventRepository $eventRepository): Response
+    {
+        $limit = $request->query->get('limit');
+
+        // this is how we get the connected user
+        $user = $this->getUser();
+        $userId = $user->getId();
+
+        $userPastEvents = $eventRepository->findPastEvents($userId, $limit);
+
+        return $this->json($userPastEvents, 200, [], [
+            'groups' => ['event_browse'],
+        ]);
+    }
+
+    /**
+     * @Route("/incoming", name="browse_incoming", methods={"GET"})
+     */
+    public function browseUserIncomingEvents(Request $request, EventRepository $eventRepository): Response
+    {
+        $limit = $request->query->get('limit');
+
+        // this is how we get the connected user
+        $user = $this->getUser();
+        $userId = $user->getId();
+        
+        $userIncomingEvents = $eventRepository->findIncomingEvents($userId, $limit);
+
+        return $this->json($userIncomingEvents, 200, [], [
+            'groups' => ['event_browse'],
+        ]);
+    }
+
+    /**
      * @Route("/{id}", name="read", methods={"GET"})
      */
     public function read(Event $event, EventRepository $eventRepository): Response
     {
-        $category = $event->getCategory();
-        $recommendedEvents = $eventRepository->findByCategory($category->getId(), 3);
-
+        $recommendedEvents = $eventRepository->findRecommendedEvents($event);
 
         return $this->json([
             'event' => $event,
@@ -90,13 +123,25 @@ class EventController extends AbstractController
     /**
      * @Route("", name="add", methods={"POST"})
      */
-    public function add(Request $request): Response
+    public function add(EventRepository $eventRepository, Request $request): Response
     {
         $event = new Event();
 
-        // TODO: faire le formulaire pour un évènement en ligne
+        $online = $request->query->get('type');
 
-        $form = $this->createForm(EventType::class, $event, ['csrf_protection' => false]);
+        if (isset($online)) {
+            $event->setIsOnline(true);
+            // we pre-filled the unnecessary fields for an online event
+            $event->setZipcode('');
+            $event->setAddress('');
+            $event->setCity('');
+            $event->setCountry('');
+            $form = $this->createForm(EventOnlineType::class, $event, ['csrf_protection' => false]);
+        } else {
+            $event->setIsOnline(false);
+            $form = $this->createForm(EventType::class, $event, ['csrf_protection' => false]);
+        }
+
 
         $json = $request->getContent();
         $jsonArray = json_decode($json, true);
@@ -110,7 +155,12 @@ class EventController extends AbstractController
             $this->manager->persist($event);
             $this->manager->flush();
 
-            return $this->json($event, 201, [], [
+            $recommendedEvents = $eventRepository->findRecommendedEvents($event);
+
+            return $this->json([
+                'event' => $event,
+                'recommendedEvents' => $recommendedEvents,
+            ], 201, [], [
                 'groups' => ['event_read'],
             ]);
         }
@@ -129,8 +179,11 @@ class EventController extends AbstractController
     /**
      * @Route("/{id}", name="edit", methods={"PUT", "PATCH"})
      */
-    public function edit(Event $event, Request $request): Response
+    public function edit(Event $event, EventRepository $eventRepository, Request $request): Response
     {
+        // control if the event author is the user who want to edit the event
+        $this->denyAccessUnlessGranted('EVENT_EDIT', $event);
+
         $form = $this->createForm(EventType::class, $event, ['csrf_protection' => false]);
 
         $json = $request->getContent();
@@ -142,7 +195,12 @@ class EventController extends AbstractController
             $event->setUpdatedAt(new \DateTimeImmutable());
             $this->manager->flush();
 
-            return $this->json($event, 201, [], [
+            $recommendedEvents = $eventRepository->findRecommendedEvents($event);
+
+            return $this->json([
+                'event' => $event,
+                'recommendedEvents' => $recommendedEvents,
+            ], 200, [], [
                 'groups' => ['event_read']
             ]);
         }
@@ -163,6 +221,9 @@ class EventController extends AbstractController
      */
     public function delete(Event $event): Response
     {
+        // control if the event author is the user who want to delete the event
+        $this->denyAccessUnlessGranted('EVENT_DELETE', $event);
+
         $this->manager->remove($event);
         $this->manager->flush();
 
@@ -170,20 +231,14 @@ class EventController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/add/{user_id}", name="add_member", methods={"POST"})
-     * @Entity("user", expr="repository.find(user_id)")
+     * @Route("/{id}/add", name="add_member", methods={"POST"})
      */
-    public function addMember(Event $event, User $user)
+    public function addMember(Event $event)
     {
-        if ($event->getMembersCount() === $event->getMaxMembers()) {
-            return $this->json([
-                'message' => 'Max members has already been reached',
-            ], 400, [], [
-                'groups' => 'event_read'
-            ]);
-        }
+        // control if event max members limit is not already reached and if user is not already a member
+        $this->denyAccessUnlessGranted('EVENT_ADD_MEMBER', $event);
 
-        $event->addMember($user);
+        $event->addMember($this->getUser());
         $this->manager->flush();
 
         return $this->json($event, 200, [], [
@@ -192,20 +247,14 @@ class EventController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/remove/{user_id}", name="remove_member", methods={"DELETE"})
-     * @Entity("user", expr="repository.find(user_id)")
+     * @Route("/{id}/remove", name="remove_member", methods={"DELETE"})
      */
-    public function removeMember(Event $event, User $user)
+    public function removeMember(Event $event)
     {
-        if ($user === $event->getAuthor()) {
-            return $this->json([
-                'message' => 'Cannot remove event creator from members',
-            ], 400, [], [
-                'groups' => 'event_read'
-            ]);
-        }
+        // control if the event author is not the member we want to remove
+        $this->denyAccessUnlessGranted('EVENT_REMOVE_MEMBER', $event);        
 
-        $event->removeMember($user);
+        $event->removeMember($this->getUser());
         $this->manager->flush();
 
         return $this->json($event, 200, [], [

@@ -14,7 +14,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 class Event
 {
     /**
-     * @Groups({"event_browse", "user_read", "event_read"})
+     * @Groups({"event_browse", "user_read", "event_read", "favorite_browse", "favorite_read"})
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
@@ -22,50 +22,50 @@ class Event
     private $id;
 
     /**
-     * @Groups({"event_browse", "user_read", "event_read"})
+     * @Groups({"event_browse", "user_read", "event_read", "favorite_browse", "favorite_read"})
      * @ORM\Column(type="string", length=255)
      */
     private $title;
 
     /**
-     * @Groups({"event_browse", "event_read" })
+     * @Groups({"event_browse", "event_read", "favorite_browse"})
      * @ORM\Column(type="text")
      */
     private $description;
 
     /**
-     * @Groups({"event_browse", "event_read"})
+     * @Groups({"event_browse", "event_read", "favorite_browse"})
      * @ORM\Column(type="string", length=255, options={"default"="event_placeholder.png"})
      */
     private $picture;
 
     /**
-     * @Groups({"event_browse", "event_read"})
+     * @Groups({"event_browse", "event_read", "favorite_browse", "favorite_read"})
      * @ORM\Column(type="datetime_immutable")
      */
     private $date;
 
     /**
      * @Groups({"event_read"})
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="string", length=255, options={"default"="empty_address"})
      */
     private $address;
 
     /**
      * @Groups({"event_read"})
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="integer", options={"default"=0})
      */
     private $zipcode;
 
     /**
-     * @Groups({"event_read", "event_browse"})
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"event_read", "event_browse", "favorite_browse"})
+     * @ORM\Column(type="string", length=255, options={"default"="empty_city"})
      */
     private $city;
 
     /**
      * @Groups({"event_read"})
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="string", length=255, options={"default"="empty_country"})
      */
     private $country;
 
@@ -86,11 +86,13 @@ class Event
     private $maxMembers;
 
     /**
+     * @Groups({"event_browse", "event_read", "favorite_browse"})
      * @ORM\Column(type="boolean", options={"default"=false})
      */
     private $isArchived;
 
     /**
+     * @Groups({"event_browse", "event_read", "favorite_browse"})
      * @ORM\Column(type="boolean")
      */
     private $isOnline;
@@ -106,7 +108,7 @@ class Event
     private $updatedAt;
 
     /**
-     * @Groups({"event_read", "event_browse"})
+     * @Groups({"event_read", "event_browse", "favorite_browse"})
      * @ORM\ManyToOne(targetEntity=Category::class, inversedBy="events")
      * @ORM\JoinColumn(nullable=false)
      */
@@ -131,8 +133,7 @@ class Event
         $this->toFavoriteUsers = new ArrayCollection();
         $this->date = new \DateTimeImmutable();
         $this->createdAt = new \DateTimeImmutable();
-        $this->isOnline = true;
-        $this->isArchived = true;
+        $this->isArchived = false;
     }
 
     public function getId(): ?int
@@ -193,7 +194,7 @@ class Event
         return $this->address;
     }
 
-    public function setAddress(?string $address): self
+    public function setAddress(string $address): self
     {
         $this->address = $address;
 
@@ -205,7 +206,7 @@ class Event
         return $this->zipcode;
     }
 
-    public function setZipcode(?string $zipcode): self
+    public function setZipcode(string $zipcode): self
     {
         $this->zipcode = $zipcode;
 
@@ -217,7 +218,7 @@ class Event
         return $this->city;
     }
 
-    public function setCity(?string $city): self
+    public function setCity(string $city): self
     {
         $this->city = $city;
 
@@ -229,7 +230,7 @@ class Event
         return $this->country;
     }
 
-    public function setCountry(?string $country): self
+    public function setCountry(string $country): self
     {
         $this->country = $country;
 
@@ -372,7 +373,7 @@ class Event
     }
 
     /**
-     * @Groups({"event_browse", "event_read"})
+     * @Groups({"event_browse", "event_read", "favorite_browse"})
      */
     public function getMembersCount()
     {
