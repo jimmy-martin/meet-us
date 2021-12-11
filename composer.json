@@ -90,6 +90,9 @@
         ],
         "post-update-cmd": [
             "@auto-scripts"
+        ],
+        "compile": [
+            "@php bin/console lexik:jwt:generate-keypair --skip-if-exists --quiet --env prod"
         ]
     },
     "conflict": {
