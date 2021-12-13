@@ -43,16 +43,13 @@ class CategoryTest extends WebTestCase
 
         self::ensureKernelShutdown();
         $client = static::createClient();
-        $client->request(
+        $client->jsonRequest(
             'POST',
             '/api/login_check',
-            array(),
-            array(),
-            array('CONTENT_TYPE' => 'application/json'),
-            json_encode(array(
+            [
                 'username' => $user->getUserIdentifier(),
                 'password' => 'test',
-            ))
+            ]
         );
 
         $data = json_decode($client->getResponse()->getContent(), true);
@@ -61,7 +58,6 @@ class CategoryTest extends WebTestCase
 
         return $client;
     }
-
 
     public function testWhileAuthenticated(): void
     {
