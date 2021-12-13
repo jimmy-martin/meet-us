@@ -79,12 +79,6 @@ class EventOnlineType extends AbstractType
                 'constraints' => [
                     new NotBlank(),
                 ],
-            ])
-
-            ->add('author', null, [
-                'constraints' => [
-                    new NotBlank(),
-                ],
             ]);
     }
 

@@ -7,6 +7,7 @@ use App\Entity\Event;
 use App\Form\EventOnlineType;
 use App\Form\EventType;
 use App\Repository\EventRepository;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -124,7 +125,7 @@ class EventController extends AbstractController
     /**
      * @Route("", name="add", methods={"POST"})
      */
-    public function add(EventRepository $eventRepository, Request $request): Response
+    public function add(UserRepository $userRepository, EventRepository $eventRepository, Request $request): Response
     {
         $event = new Event();
 
@@ -150,6 +151,7 @@ class EventController extends AbstractController
         $form->submit($jsonArray, false);
 
         if ($form->isValid()) {
+            $event->setAuthor($this->getUser());
             // add the event author as a member
             $event->addMember($event->getAuthor());
 
