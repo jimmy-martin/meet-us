@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello CategoryController!{% endblock %}
+
+{% block body %}
+
+<div>
+    <h1>Liste des Categories</h1>
+</div>
+
+<table>
+  <thead>
+    <tr>
+      <th scope="col">ID</th>
+      <th scope="col">Name</th>
+      <th scope="col">Picture</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for categorie in categories %}
+        <tr>
+            <th>{{ categorie.id }}</th>
+            <td>{{ categorie.name }}</td>
+            <td>{{ categorie.picture}}</td>
+        </tr>    
+    {% endfor %}
+  </tbody>
+</table>
+
+
+{% endblock %}

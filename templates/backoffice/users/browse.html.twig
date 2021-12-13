@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello UserController!{% endblock %}
+
+{% block body %}
+ <div>
+    <h1>Liste des Utilisateurs</h1>
+</div>
+
+<table>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>email</th>
+      <th>roles</th>
+      <th>firstname</th>
+      <th>lastname</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for user in users %}
+        <tr>
+
+            <th>{{ user.id }}</th>
+            <td>{{ user.email }}</td>
+            <td>{{ user.roles ? user.roles|json_encode : ''}}</td>
+            <td>{{ user.firstname}}</td>
+            <td>{{ user.lastname}}</td>
+            {# <td>{{ user.phoneNumber}}</td>
+            <td>{{ user.avatar}}</td>
+            <td>{{ user.address}}</td>
+            <td>{{ user.zipcode}}</td>
+            <td>{{ user.city}}</td>
+            <td>{{ user.country}}</td>
+            <td>{{ user.latitude}}</td>
+            <td>{{ user.longitude}}</td>
+            <td>{{ user.createdAt|date('Y-m-d H:i')}}</td>
+            <td>{{ user.updatedAt|date('Y-m-d H:i')}}</td> #}
+        </tr>    
+    {% endfor %}
+  </tbody>
+</table>
+
+{% endblock %}

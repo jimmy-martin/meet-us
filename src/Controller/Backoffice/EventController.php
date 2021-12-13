@@ -2,6 +2,8 @@
 
 namespace App\Controller\Backoffice;
 
+use App\Entity\Event;
+use App\Repository\EventRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -14,22 +16,23 @@ class EventController extends AbstractController
     /**
      * @Route("", name="browse")
      */
-    public function browse(): Response
+    public function browse(EventRepository $eventRepository): Response
     {
-        // TODO
-        return $this->render('backoffice/events/index.html.twig', [
+        return $this->render('backoffice/events/browse.html.twig', [
             'controller_name' => 'EventController',
+            'events' => $eventRepository->findAll(),
         ]);
     }
 
     /**
      * @Route("/{id}", name="read")
      */
-    public function read(): Response
+    public function read(Event $event): Response
     {
         // TODO
         return $this->render('backoffice/events/index.html.twig', [
             'controller_name' => 'EventController',
+            'events' => $event,
         ]);
     }
 

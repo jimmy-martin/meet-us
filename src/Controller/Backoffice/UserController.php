@@ -2,6 +2,8 @@
 
 namespace App\Controller\Backoffice;
 
+use App\Entity\User;
+use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -14,22 +16,22 @@ class UserController extends AbstractController
     /**
      * @Route("", name="browse")
      */
-    public function browse(): Response
+    public function browse(UserRepository $userRepository): Response
     {
         // TODO
-        return $this->render('backoffice/users/index.html.twig', [
-            'controller_name' => 'UserController',
+        return $this->render('backoffice/users/browse.html.twig', [
+            'users' => $userRepository->findAll(),
         ]);
     }
 
     /**
      * @Route("/{id}", name="read")
      */
-    public function read(): Response
+    public function read(User $user): Response
     {
         // TODO
-        return $this->render('backoffice/users/index.html.twig', [
-            'controller_name' => 'UserController',
+        return $this->render('backoffice/users/read.html.twig', [
+            'user' => $user,
         ]);
     }
 
@@ -56,12 +58,23 @@ class UserController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="delete")
+     * @Route("/{id}/delete", name="delete")
      */
     public function delete(): Response
     {
         // TODO
-        return $this->render('backoffice/users/index.html.twig', [
+        return $this->render('backoffice/users/browse.html.twig', [
+            'controller_name' => 'UserController',
+        ]);
+    }
+
+        /**
+     * @Route("/{id}/deactivate", name="deactivate")
+     */
+    public function deactivate(): Response
+    {
+        // TODO
+        return $this->render('backoffice/users/browse.html.twig', [
             'controller_name' => 'UserController',
         ]);
     }

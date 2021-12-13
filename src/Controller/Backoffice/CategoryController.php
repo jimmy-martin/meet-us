@@ -2,7 +2,12 @@
 
 namespace App\Controller\Backoffice;
 
+use App\Entity\Category;
+use App\Form\Back\CategoryType;
+use App\Repository\CategoryRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -11,25 +16,34 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class CategoryController extends AbstractController
 {
+    private $manager;
+
+    public function __construct(EntityManagerInterface $manager)
+    {
+        $this->manager = $manager;
+    }
+
+
     /**
      * @Route("", name="browse")
      */
-    public function browse(): Response
+    public function browse(CategoryRepository $categoryRepository): Response
     {
         // TODO
-        return $this->render('backoffice/categories/index.html.twig', [
-            'controller_name' => 'CategoryController',
+        return $this->render('backoffice/categories/browse.html.twig', [
+            'categories' => $categoryRepository->findAll(),
         ]);
     }
 
     /**
      * @Route("/{id}", name="read")
      */
-    public function read(): Response
+    public function read(Category $category): Response
     {
         // TODO
-        return $this->render('backoffice/categories/index.html.twig', [
+        return $this->render('backoffice/categories/read.html.twig', [
             'controller_name' => 'CategoryController',
+            'category' => $category,
         ]);
     }
 
@@ -39,19 +53,30 @@ class CategoryController extends AbstractController
     public function add(): Response
     {
         // TODO
-        return $this->render('backoffice/categories/index.html.twig', [
-            'controller_name' => 'CategoryController',
+        return $this->render('backoffice/events/index.html.twig', [
+            'controller_name' => 'EventController',
         ]);
     }
 
     /**
-     * @Route("/{id}", name="edit")
+     * @Route("/{id}/edit", name="edit")
      */
-    public function edit(): Response
+    public function edit(Request $request, Category $category, EntityManagerInterface $manager): Response
     {
         // TODO
-        return $this->render('backoffice/categories/index.html.twig', [
-            'controller_name' => 'CategoryController',
+
+        $form = $this->createForm(CategoryType::class, $category);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->manager->flush();
+
+            return $this->redirectToRoute('backoffice_categories_browse');
+        }
+
+        return $this->render('backoffice/categories/edit.html.twig', [
+            'form' => $form->createView(),
         ]);
     }
 
@@ -62,7 +87,6 @@ class CategoryController extends AbstractController
     {
         // TODO
         return $this->render('backoffice/categories/index.html.twig', [
-            'controller_name' => 'CategoryController',
         ]);
     }
 }

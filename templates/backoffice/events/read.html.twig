@@ -1,0 +1,61 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello EventController!{% endblock %}
+
+{% block body %}
+<div>
+    <h1>Liste des Evenements</h1>
+</div>
+
+<table>
+  <thead>
+    <tr>
+      <th scope="col">ID</th>
+      <th scope="col">Title</th>
+      <th scope="col">picture</th>
+      <th scope="col">date</th>
+      <th scope="col">address</th>
+      <th scope="col">zipcode</th>
+      <th scope="col">city</th>
+      <th scope="col">country</th>
+      <th scope="col">latitude</th>
+      <th scope="col">longitude</th>
+      <th scope="col">maxMembers</th>
+      <th scope="col">isArchived</th>
+      <th scope="col">isOnline</th>
+      <th scope="col">createdAt</th>
+      <th scope="col">updatedAt</th>
+      <th scope="col">category</th>
+      <th scope="col">author</th>
+      <th scope="col">members</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for event in events %}
+        <tr>
+            <th>{{ event.id }}</th>
+            <td>{{ event.title }}</td>
+            <td>{{ event.description}}</td>
+            <th>{{ event.picture }}</th>
+            <td>{{ event.date|date('Y-m-d H:i') }}</td>
+            <td>{{ event.address}}</td>
+            <th>{{ event.zipcode }}</th>
+            <td>{{ event.city }}</td>
+            <td>{{ event.country}}</td>
+            <th>{{ event.latitude }}</th>
+            <td>{{ event.longitude }}</td>
+            <td>{{ event.maxMembers}}</td>
+            <th>{{ event.isArchived }}</th>
+            <td>{{ event.isOnline }}</td>
+            <td>{{ event.createdAt|date('Y-m-d H:i')}}</td>
+            <th>{{ event.updatedAt|date('Y-m-d H:i') }}</th>
+            <td>{{ event.category.name }}</td>
+            <td>{{ event.author.fullName}}</td>
+            <td>{{ event.members}}</td>
+        </tr>    
+    {% endfor %}
+  </tbody>
+</table>
+
+
+{% endblock %}
