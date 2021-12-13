@@ -47,6 +47,8 @@ security:
         # - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }
         - { path: ^/api/v1/users, roles: PUBLIC_ACCESS, methods: [POST] }
+        - { path: ^/api/v1/(events|categories), roles: PUBLIC_ACCESS, methods:[GET] }
+        - { path: ^/api/v1/events/\d+, roles: PUBLIC_ACCESS, methods:[GET] }
         - { path: ^/api/login, roles: PUBLIC_ACCESS }
         - { path: ^/api,       roles: IS_AUTHENTICATED_FULLY }
         # donner l'accès aux routes publiques de l'API
