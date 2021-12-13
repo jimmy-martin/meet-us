@@ -15,7 +15,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
- *@Route("/api/v1/events", name="api_v1_events", requirements={"id"="\d+"})
+ * @Route("/api/v1/events", name="api_v1_events_", requirements={"id"="\d+"})
  */
 class EventController extends AbstractController
 {
