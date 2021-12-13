@@ -2,7 +2,6 @@
 
 namespace App\Tests\Api;
 
-use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class CategoryTest extends WebTestCase
