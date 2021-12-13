@@ -28,6 +28,7 @@ class CategoryTest extends WebTestCase
             'name' => 'randonnée'
         ]);
         $this->assertResponseStatusCodeSame(401);
+
         $client->jsonRequest('PUT', '/api/v1/categories/2', [
             'name' => 'culture'
         ]);
@@ -40,7 +41,7 @@ class CategoryTest extends WebTestCase
 
     public function testWhileAuthenticated(): void
     {
-        $client = $this->createAuthenticatedClient();
+        $client = $this->createAuthenticatedClient('admin@gmail.com', 'test');
 
         $client->jsonRequest('POST', '/api/v1/categories', [
             'name' => 'sport',
@@ -68,19 +69,16 @@ class CategoryTest extends WebTestCase
     /**
      * Create a client with a default Authorization header.
      */
-    protected function createAuthenticatedClient()
+    protected function createAuthenticatedClient(string $username, string $password)
     {
-        $userRepository = static::getContainer()->get(UserRepository::class);
-        $user = $userRepository->findOneBy(['email' => 'admin@gmail.com']);
-
         self::ensureKernelShutdown();
         $client = static::createClient();
         $client->jsonRequest(
             'POST',
             '/api/login_check',
             [
-                'username' => $user->getUserIdentifier(),
-                'password' => 'test',
+                'username' => $username,
+                'password' => $password,
             ]
         );
 
