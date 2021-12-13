@@ -31,6 +31,7 @@ class EventController extends AbstractController
      */
     public function browse(Request $request, EventRepository $eventRepository): Response
     {
+        // TODO: voir comment utiliser la query string dans l'annotation directement
         // If there is a limit or a category id in the query string, I adapt my sql query
         $limit = $request->query->get('limit');
         $categoryId = $request->query->get('category');
