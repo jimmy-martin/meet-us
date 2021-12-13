@@ -187,7 +187,11 @@ class EventController extends AbstractController
         // control if the event author is the user who want to edit the event
         $this->denyAccessUnlessGranted('EVENT_EDIT', $event);
 
-        $form = $this->createForm(EventType::class, $event, ['csrf_protection' => false]);
+        if ($event->getIsOnline() === true) {
+            $form = $this->createForm(EventOnlineType::class, $event, ['csrf_protection' => false]);
+        } else {
+            $form = $this->createForm(EventType::class, $event, ['csrf_protection' => false]);
+        }
 
         $json = $request->getContent();
         $jsonArray = json_decode($json, true);
