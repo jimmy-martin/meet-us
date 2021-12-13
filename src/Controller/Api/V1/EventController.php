@@ -187,6 +187,8 @@ class EventController extends AbstractController
         // control if the event author is the user who want to edit the event
         $this->denyAccessUnlessGranted('EVENT_EDIT', $event);
 
+        // TODO: mettre les valeurs par défaut du formulaire d'un event physique si l'événement passe en ligne
+
         if ($event->getIsOnline() === true) {
             $form = $this->createForm(EventOnlineType::class, $event, ['csrf_protection' => false]);
         } else {
