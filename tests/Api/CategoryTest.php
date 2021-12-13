@@ -15,48 +15,27 @@ class CategoryTest extends WebTestCase
         $client = static::createClient();
         // GET
         $crawler = $client->request('GET', $publicGetUrlList);
-
         $this->assertResponseIsSuccessful();
 
         // POST
-        $client->request('POST', '/api/v1/categories');
+        $client->jsonRequest('POST', '/api/v1/categories', [
+            'name' => 'sport'
+        ]);
         $this->assertResponseStatusCodeSame(401);
 
         // PUT / PATCH
-        $client->request('PATCH', '/api/v1/categories/2');
+        $client->jsonRequest('PATCH', '/api/v1/categories/2', [
+            'name' => 'randonnée'
+        ]);
         $this->assertResponseStatusCodeSame(401);
-        $client->request('PUT', '/api/v1/categories/2');
+        $client->jsonRequest('PUT', '/api/v1/categories/2', [
+            'name' => 'culture'
+        ]);
         $this->assertResponseStatusCodeSame(401);
 
         // DELETE
-        $client->request('DELETE', '/api/v1/categories/2');
+        $client->jsonRequest('DELETE', '/api/v1/categories/2');
         $this->assertResponseStatusCodeSame(401);
-    }
-
-    /**
-     * Create a client with a default Authorization header.
-     */
-    protected function createAuthenticatedClient()
-    {
-        $userRepository = static::getContainer()->get(UserRepository::class);
-        $user = $userRepository->findOneBy(['email' => 'admin@gmail.com']);
-
-        self::ensureKernelShutdown();
-        $client = static::createClient();
-        $client->jsonRequest(
-            'POST',
-            '/api/login_check',
-            [
-                'username' => $user->getUserIdentifier(),
-                'password' => 'test',
-            ]
-        );
-
-        $data = json_decode($client->getResponse()->getContent(), true);
-
-        $client->setServerParameter('HTTP_Authorization', sprintf('Bearer %s', $data['token']));
-
-        return $client;
     }
 
     public function testWhileAuthenticated(): void
@@ -86,6 +65,35 @@ class CategoryTest extends WebTestCase
         $this->assertResponseStatusCodeSame(204);
     }
 
+    /**
+     * Create a client with a default Authorization header.
+     */
+    protected function createAuthenticatedClient()
+    {
+        $userRepository = static::getContainer()->get(UserRepository::class);
+        $user = $userRepository->findOneBy(['email' => 'admin@gmail.com']);
+
+        self::ensureKernelShutdown();
+        $client = static::createClient();
+        $client->jsonRequest(
+            'POST',
+            '/api/login_check',
+            [
+                'username' => $user->getUserIdentifier(),
+                'password' => 'test',
+            ]
+        );
+
+        $data = json_decode($client->getResponse()->getContent(), true);
+
+        $client->setServerParameter('HTTP_Authorization', sprintf('Bearer %s', $data['token']));
+
+        return $client;
+    }
+
+    /**
+     * List of all GET public urls
+     */
     public function publicGetUrlList(): array
     {
         return [
