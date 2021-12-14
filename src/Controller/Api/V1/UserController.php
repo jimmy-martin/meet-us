@@ -89,10 +89,11 @@ class UserController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="edit", methods={"PUT", "PATCH"})
+     * @Route("", name="edit", methods={"PUT", "PATCH"})
      */
-    public function edit(User $user, Request $request): Response
+    public function edit(UserRepository $userRepository, Request $request): Response
     {
+        $user = $userRepository->find($this->getUser()->getId());
         // TODO: permettre de modifier son mot de passe 
         // control if the connected user is the user that is modified
         $this->denyAccessUnlessGranted('USER_EDIT', $user);
@@ -107,7 +108,7 @@ class UserController extends AbstractController
         if ($form->isValid()) {
             $this->manager->flush();
 
-            return $this->json($user, 201, [], [
+            return $this->json($user, 200, [], [
                 'groups' => ['user_read']
             ]);
         }
