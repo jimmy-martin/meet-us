@@ -4,28 +4,41 @@
 
 {% block body %}
 
-<div>
-    <h1>Liste des Categories</h1>
-</div>
+<div class="container">
 
-<table>
+  <div class="row text-center">
+    <div class = "col-12">
+    <h1 class = "text-center">Liste des Categories</h1>
+
+
+
+<table class="table table-hover">
   <thead>
     <tr>
       <th scope="col">ID</th>
       <th scope="col">Name</th>
       <th scope="col">Picture</th>
+      <th scope="col">Test</th>
     </tr>
   </thead>
   <tbody>
     {% for categorie in categories %}
-        <tr>
+        <tr class="table-active">
             <th>{{ categorie.id }}</th>
             <td>{{ categorie.name }}</td>
-            <td>{{ categorie.picture}}</td>
+            <td>{{ categorie.picture }}</td>
+            <td>
+              <a href=""><i class="fa fa-eye" aria-hidden = "true"</i></a>
+              <a href=""><i class="fa fa-pencil-square-o"</i></a>
+              <a href=""><i class="fa fa-trash"</i></a>
+            </td>
         </tr>    
     {% endfor %}
   </tbody>
 </table>
-
-
+    </div>
+  <div>
+</div>
+  </div>
+</div>
 {% endblock %}
