@@ -12,6 +12,7 @@ class EventTest extends WebTestCase
     public function testWhileNonAuthenticated($publicGetUrlList): void
     {
         $client = static::createClient();
+        $client->insulate(true);
         $client->request('GET', $publicGetUrlList);
         $this->assertResponseIsSuccessful();
 
