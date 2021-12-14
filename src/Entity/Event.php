@@ -70,11 +70,13 @@ class Event
     private $country;
 
     /**
+     * @Groups({"event_read"})
      * @ORM\Column(type="decimal", precision=8, scale=6, nullable=true)
      */
     private $latitude;
 
     /**
+     * @Groups({"event_read"})
      * @ORM\Column(type="decimal", precision=9, scale=6, nullable=true)
      */
     private $longitude;
