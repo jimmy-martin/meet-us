@@ -4,9 +4,10 @@ namespace App\Controller\Backoffice;
 
 use App\Entity\User;
 use App\Repository\UserRepository;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
  * @Route("/backoffice/users", name="backoffice_users_", requirements={"id"="\d+"})
@@ -60,10 +61,12 @@ class UserController extends AbstractController
     /**
      * @Route("/{id}/delete", name="delete")
      */
-    public function delete(): Response
+    public function delete(EntityManagerInterface $manager, User $user): Response
     {
-        // TODO
-        return $this->render('backoffice/users/browse.html.twig', [
+        $manager->remove($user);
+        $manager->flush();
+        
+        return $this->redirectToRoute('backoffice_users_browse', [
             'controller_name' => 'UserController',
         ]);
     }

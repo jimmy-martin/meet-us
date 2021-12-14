@@ -50,11 +50,26 @@ class CategoryController extends AbstractController
     /**
      * @Route("/add", name="add")
      */
-    public function add(): Response
+    public function add(Request $request): Response
     {
         // TODO
-        return $this->render('backoffice/events/index.html.twig', [
-            'controller_name' => 'EventController',
+        $form = new Category();
+
+        $form = $this->createForm(CategoryType::class, $category);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($category);
+            $em->flush();
+            // $this->manager->flush();
+
+            return $this->redirectToRoute('backoffice_categories_browse');
+        }
+
+        return $this->render('backoffice/categories/add.html.twig', [
+            'form' => $form->createView(),
         ]);
     }
 
@@ -81,12 +96,13 @@ class CategoryController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="delete")
+     * @Route("/{id}/delete", name="delete")
      */
-    public function delete(): Response
+    public function delete(EntityManagerInterface $manager, Category $category): Response
     {
-        // TODO
-        return $this->render('backoffice/categories/index.html.twig', [
+        $manager->remove($category);
+        $manager->flush();
+        return $this->redirectToRoute('backoffice_categories_browse', [
         ]);
     }
 }

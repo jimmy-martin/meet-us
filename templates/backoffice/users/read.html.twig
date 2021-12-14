@@ -7,54 +7,16 @@
     <h1>Détail de l'utilisateur numero {{user.id}}</h1>
 </div>
 
-<table>
-  <thead>
-    <tr>
-      <th>ID</th>
-      <th>email</th>
-      <th>roles</th>
-      <th>firstname</th>
-      <th>lastname</th>
-      <th>phone Number</th>
-      <th>avatar</th>
-      <th>address</th>
-      <th>zipcode</th>
-      <th>city</th>
-      <th>country</th>
-      <th>latitude</th>
-      <th>longitude</th>
-      <th>createdAt</th>
-      <th>updatedAt</th>
-      <th>Situation</th>
-
-    </tr>
-  </thead>
-  <tbody>
-        <tr>
-
-            <th>{{ user.id }}</th>
-            <td>{{ user.email }}</td>
-            <td>{{ user.roles ? user.roles|json_encode : ''}}</td>
-            <td>{{ user.firstname}}</td>
-            <td>{{ user.lastname}}</td>
-            <td>{{ user.phoneNumber}}</td>
-            <td>{{ user.avatar}}</td>
-            <td>{{ user.address}}</td>
-            <td>{{ user.zipcode}}</td>
-            <td>{{ user.city}}</td>
-            <td>{{ user.country}}</td>
-            <td>{{ user.latitude}}</td>
-            <td>{{ user.longitude}}</td>
-            <td>{{ user.createdAt|date('Y-m-d H:i')}}</td>
-            <td>{{ user.updatedAt|date('Y-m-d H:i')}}</td>
-            <td>{{ user.updatedAt|date('Y-m-d H:i')}}</td>
-
-
-
-        </tr>    
-
-  </tbody>
-</table>
-
+<p> Nom de l'utilisateur : {{ user.firstname}} {{ user.lastname }} </p>
+<p> Role de l'utilisateur : {{ user.roles ? user.roles|json_encode : ''}} </p>
+<p> Mail de l'utilisateur : {{ user.email }} </p>
+<p> Téléphone de l'utilisateur : {{ user.phoneNumber }} </p>
+<p> Photo de l'utilisateur : {{ user.avatar }} </p>
+<p> Adresse de l'utilisateur : {{user.address}} {{user.zipcode}} {{user.city}} {{user.country}} </p>
+<p> Date de création de l'utilisateur : {{ user.createdAt|date('Y-m-d H:i') }} </p>
+<p> Date de mise à jour de l'utilisateur : {{ user.updatedAt|date('Y-m-d H:i') }} </p>
+<p> Mail de l'utilisateur : {{ user.email }} </p>
+<p> Mail de l'utilisateur : {{ user.email }} </p>
+<p> Situation de l'utilisateur :  </p>
 
 {% endblock %}

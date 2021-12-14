@@ -4,58 +4,18 @@
 
 {% block body %}
 <div>
-    <h1>Liste des Evenements</h1>
+    <h1>Détail de l'évènement {{event.title}}</h1>
 </div>
 
-<table>
-  <thead>
-    <tr>
-      <th scope="col">ID</th>
-      <th scope="col">Title</th>
-      <th scope="col">picture</th>
-      <th scope="col">date</th>
-      <th scope="col">address</th>
-      <th scope="col">zipcode</th>
-      <th scope="col">city</th>
-      <th scope="col">country</th>
-      <th scope="col">latitude</th>
-      <th scope="col">longitude</th>
-      <th scope="col">maxMembers</th>
-      <th scope="col">isArchived</th>
-      <th scope="col">isOnline</th>
-      <th scope="col">createdAt</th>
-      <th scope="col">updatedAt</th>
-      <th scope="col">category</th>
-      <th scope="col">author</th>
-      <th scope="col">members</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for event in events %}
-        <tr>
-            <th>{{ event.id }}</th>
-            <td>{{ event.title }}</td>
-            <td>{{ event.description}}</td>
-            <th>{{ event.picture }}</th>
-            <td>{{ event.date|date('Y-m-d H:i') }}</td>
-            <td>{{ event.address}}</td>
-            <th>{{ event.zipcode }}</th>
-            <td>{{ event.city }}</td>
-            <td>{{ event.country}}</td>
-            <th>{{ event.latitude }}</th>
-            <td>{{ event.longitude }}</td>
-            <td>{{ event.maxMembers}}</td>
-            <th>{{ event.isArchived }}</th>
-            <td>{{ event.isOnline }}</td>
-            <td>{{ event.createdAt|date('Y-m-d H:i')}}</td>
-            <th>{{ event.updatedAt|date('Y-m-d H:i') }}</th>
-            <td>{{ event.category.name }}</td>
-            <td>{{ event.author.fullName}}</td>
-            <td>{{ event.members}}</td>
-        </tr>    
-    {% endfor %}
-  </tbody>
-</table>
-
+<p> ID de l'évènement : {{event.id}} </p>
+<p> Titre de l'évènement : {{event.title}} </p>
+<p> Photo de l'évènement : {{event.picture}} </p>
+<p> Date de l'évènement : {{event.date|date('Y-m-d H:i')}} </p>
+<p> Adresse de l'évènement : {{event.address}} {{event.zipcode}} {{event.city}} {{event.country}} </p>
+<p> Limite de participant de l'évènement : {{event.maxMembers}} </p>
+<p> Archive de l'évènement : {{event.isArchived}} </p>
+<p> Publication de l'évènement : {{event.isOnline}} </p>
+<p> Date de création de l'évènement : {{event.createdAt|date('Y-m-d H:i')}} </p>
+<p> Dernière mise à jour de l'évènement : {{event.updatedAt|date('Y-m-d H:i')}} </p>
 
 {% endblock %}
