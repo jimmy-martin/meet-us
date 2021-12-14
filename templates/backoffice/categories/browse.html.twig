@@ -4,10 +4,6 @@
 
 {% block body %}
 
-<div class="container">
-
-  <div class="row text-center">
-    <div class = "col-12">
     <h1 class = "text-center">Liste des Categories</h1>
 
 
@@ -18,27 +14,27 @@
       <th scope="col">ID</th>
       <th scope="col">Name</th>
       <th scope="col">Picture</th>
-      <th scope="col">Test</th>
+      <th scope="col"></th>
     </tr>
   </thead>
   <tbody>
     {% for categorie in categories %}
-        <tr class="table-active">
+        <tr class="table-{{ cycle(['dark', 'default'], loop.index) }}">
             <th>{{ categorie.id }}</th>
             <td>{{ categorie.name }}</td>
             <td>{{ categorie.picture }}</td>
             <td>
-              <a href=""><i class="fa fa-eye" aria-hidden = "true"</i></a>
-              <a href=""><i class="fa fa-pencil-square-o"</i></a>
-              <a href=""><i class="fa fa-trash"</i></a>
+              <a href="{{ path('backoffice_categories_read', {id: categorie.id}) }}" class="fs-4"
+                ><i class="fa fa-eye" aria-hidden="true"></i></a>
+              <a href="{{ path('backoffice_categories_edit', {id: categorie.id}) }}" class="fs-4"
+                ><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+              <form action="{{ path('backoffice_categories_delete', {id: categorie.id}) }}" class="d-inline" method="post">
+                <button class="btn btn-link p-0 mb-2 fs-4"><i class="fa fa-trash" aria-hidden="true"></i></button>
+                <input type="hidden" name="_method" value="delete">
+              </form>
             </td>
         </tr>    
     {% endfor %}
   </tbody>
 </table>
-    </div>
-  <div>
-</div>
-  </div>
-</div>
 {% endblock %}
