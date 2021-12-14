@@ -166,14 +166,14 @@ class EventTest extends WebTestCase
         return $client;
     }
 
-    public function publicGetUrlList()
+    public function publicGetUrlList(): array
     {
         return [
             ['/api/v1/events'],
             ['/api/v1/events?limit=2'],
             ['/api/v1/events?category=1'],
             ['/api/v1/events/2'],
-            ['/api/v1/events?search=test'],
+            ['/api/v1/events?search=volley'],
         ];
     }
 }
