@@ -12,6 +12,7 @@ class CategoryTest extends WebTestCase
     public function testWhileNonAuthenticated($publicGetUrlList): void
     {
         $client = static::createClient();
+        $client->insulate(true);
         // GET
         $crawler = $client->request('GET', $publicGetUrlList);
         $this->assertResponseIsSuccessful();
@@ -40,7 +41,8 @@ class CategoryTest extends WebTestCase
 
     public function testWhileAuthenticated(): void
     {
-        $client = $this->createAuthenticatedClient('admin@gmail.com', 'test');
+        $client = MainTest::createAuthenticatedClient('admin@gmail.com', 'test');
+        $client->insulate(true);
 
         $client->jsonRequest('POST', '/api/v1/categories', [
             'name' => 'sport',
@@ -63,29 +65,6 @@ class CategoryTest extends WebTestCase
         // DELETE
         $client->request('DELETE', '/api/v1/categories/' . $newCategoryId);
         $this->assertResponseStatusCodeSame(204);
-    }
-
-    /**
-     * Create a client with a default Authorization header.
-     */
-    protected function createAuthenticatedClient(string $username, string $password)
-    {
-        self::ensureKernelShutdown();
-        $client = static::createClient();
-        $client->jsonRequest(
-            'POST',
-            '/api/login_check',
-            [
-                'username' => $username,
-                'password' => $password,
-            ]
-        );
-
-        $data = json_decode($client->getResponse()->getContent(), true);
-
-        $client->setServerParameter('HTTP_Authorization', sprintf('Bearer %s', $data['token']));
-
-        return $client;
     }
 
     /**

@@ -78,7 +78,8 @@ class EventTest extends WebTestCase
      */
     public function testWhileAuthenticated($publicGetUrlList): void
     {
-        $client = $this->createAuthenticatedClient('admin@gmail.com', 'test');
+        $client = MainTest::createAuthenticatedClient('admin@gmail.com', 'test');
+        $client->insulate(true);
         $client->request('GET', $publicGetUrlList);
         $this->assertResponseIsSuccessful();
 
@@ -142,29 +143,6 @@ class EventTest extends WebTestCase
         $client->request('DELETE', '/api/v1/events/' . $newOnlineEventId);
         $this->assertResponseStatusCodeSame(204);
 
-    }
-
-    /**
-     * Create a client with a default Authorization header.
-     */
-    protected function createAuthenticatedClient(string $username, string $password)
-    {
-        self::ensureKernelShutdown();
-        $client = static::createClient();
-        $client->jsonRequest(
-            'POST',
-            '/api/login_check',
-            [
-                'username' => $username,
-                'password' => $password,
-            ]
-        );
-
-        $data = json_decode($client->getResponse()->getContent(), true);
-
-        $client->setServerParameter('HTTP_Authorization', sprintf('Bearer %s', $data['token']));
-
-        return $client;
     }
 
     public function publicGetUrlList(): array
