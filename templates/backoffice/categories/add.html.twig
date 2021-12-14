@@ -9,9 +9,9 @@
 </div>
 
 {{ form_start(form) }}
-    {# {{ form_row(form) }}
-    {{ form_row(form) }}
-    <button>Modifier</button> #}
+{{ form_row(form.name) }}
+    {{ form_row(form.picture) }}
+    <button>Modifier</button>
 {{ form_end(form) }}
 
 {% endblock %}

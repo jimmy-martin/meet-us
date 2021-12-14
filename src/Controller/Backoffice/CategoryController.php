@@ -53,7 +53,7 @@ class CategoryController extends AbstractController
     public function add(Request $request): Response
     {
         // TODO
-        $form = new Category();
+        $category = new Category();
 
         $form = $this->createForm(CategoryType::class, $category);
 
