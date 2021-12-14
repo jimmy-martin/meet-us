@@ -11,7 +11,7 @@
         © 2020 Copyright:
         {% set textColor = app.session.get('theme') == 'darkly' ? 'white' : 'black' %}
         <a class="text-{{ textColor }}" href="#">Meet Us</a>
-        <a href="{{ path('backoffice_toggle_theme') }}" id="theme-btn" class="ms-2 btn btn-primary">
+        <a href="{{ path('backoffice_toggle_theme') }}" class="ms-2 btn btn-primary">
             {{ app.session.get('theme') == 'darkly' ? 'Light Mode' : 'Dark Mode' }}
         </a>
     </div>

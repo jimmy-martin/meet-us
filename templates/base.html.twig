@@ -4,7 +4,7 @@
         <meta charset="UTF-8">
         <title>{% block title %}Welcome!{% endblock %}</title>
         <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
-        <link id="style" type="text/css" rel="stylesheet" href="https://bootswatch.com/5/{{ app.session.get('theme') ?? 'darkly' }}/bootstrap.min.css">
+        <link type="text/css" rel="stylesheet" href="https://bootswatch.com/5/{{ app.session.get('theme') ?? 'darkly' }}/bootstrap.min.css">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fork-awesome@1.2.0/css/fork-awesome.min.css" integrity="sha256-XoaMnoYC5TH6/+ihMEnospgm0J1PM/nioxbOUdnM8HY=" crossorigin="anonymous">
 
         {% block stylesheets %}
@@ -22,6 +22,6 @@
             {% block body %}{% endblock %}
         </div>
     </div>
-    {% include '_footer.html.twig' %}
+    {% include 'backoffice/partials/_footer.html.twig' %}
     </body>
 </html>
