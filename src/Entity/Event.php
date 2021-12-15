@@ -117,7 +117,7 @@ class Event
     private $category;
 
     /**
-     * @Groups({"event_read"})
+     * @Groups({"event_browse", "event_read"})
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="createdEvents")
      * @ORM\JoinColumn(nullable=false)
      */

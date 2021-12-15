@@ -16,7 +16,7 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     /**
-     * @Groups({"user_browse", "user_read", "event_read", "favorite_browse"})
+     * @Groups({"user_browse", "user_read", "event_read", "favorite_browse", "event_browse"})
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
@@ -463,7 +463,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @Groups({"event_read", "favorite_browse"})
+     * @Groups({"event_read", "favorite_browse", "event_browse"})
      */
     public function getFullName()
     {
