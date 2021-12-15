@@ -8,11 +8,11 @@
 
     <!-- Copyright -->
     <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2)">
-        © 2020 Copyright:
-        {% set textColor = app.session.get('theme') == 'darkly' ? 'white' : 'black' %}
+        © 2020 Copyright :
+        {% set textColor = app.session.get('theme') == 'darkly' or app.session.get('theme') is null ? 'white' : 'black' %}
         <a class="text-{{ textColor }}" href="#">Meet Us</a>
         <a href="{{ path('backoffice_toggle_theme') }}" class="ms-2 btn btn-primary">
-            {{ app.session.get('theme') == 'darkly' ? 'Light Mode' : 'Dark Mode' }}
+            {{ textColor == 'white' ? 'Light Mode' : 'Dark Mode' }}
         </a>
     </div>
     <!-- Copyright -->
