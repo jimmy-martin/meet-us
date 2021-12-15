@@ -68,6 +68,8 @@ class EventController extends AbstractController
         $manager->remove($event);
         $manager->flush();
 
+        // TODO: ajouter un flash message pouvant se fermer
+
         return $this->redirectToRoute('backoffice_events_browse', [
             'controller_name' => 'EventController',
         ]);

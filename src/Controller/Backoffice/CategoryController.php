@@ -62,6 +62,8 @@ class CategoryController extends AbstractController
             $this->manager->persist($category);
             $this->manager->flush();
 
+            // TODO: ajouter un flash message pouvant se fermer
+
             return $this->redirectToRoute('backoffice_categories_browse');
         }
 
