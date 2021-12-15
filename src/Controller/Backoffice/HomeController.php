@@ -23,25 +23,28 @@ class HomeController extends AbstractController
     }
 
     /**
-     * @Route("/switch-theme", name="toggle_theme")
+     * @Route("/toggle-theme", name="toggle_theme")
      */
     public function toggleTheme(RequestStack $requestStack): Response
     {
         $session = $requestStack->getSession();
 
-        $theme = $session->get('theme');
+        if ($session->get('theme') !== null) {
 
-        if ($theme !== null) {
-            switch ($theme) {
-                case 'darkly':
-                    $session->set('theme', 'flatly');
-                    break;
-                case 'flatly':
-                    $session->set('theme', 'darkly');
-                    break;
+            if ($session->get('theme') === 'darkly') {
+
+                $session->set('theme', 'flatly');
+
+            } else {
+
+                $session->set('theme', 'darkly');
+
             }
+
         } else {
-            $session->set('theme', 'darkly');
+
+            $session->set('theme', 'flatly');
+
         }
 
         $refererRoute = $requestStack->getCurrentRequest()->headers->get('referer');
