@@ -23,7 +23,6 @@ class CategoryController extends AbstractController
         $this->manager = $manager;
     }
 
-
     /**
      * @Route("", name="browse")
      */
@@ -60,10 +59,8 @@ class CategoryController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($category);
-            $em->flush();
-            // $this->manager->flush();
+            $this->manager->persist($category);
+            $this->manager->flush();
 
             return $this->redirectToRoute('backoffice_categories_browse');
         }
