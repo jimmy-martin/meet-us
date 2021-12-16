@@ -2,7 +2,12 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>{% block title %}Welcome!{% endblock %}</title>
+    <title>
+        {% block title %}
+            Meet Us - Backoffice
+        {% endblock %}
+    </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="icon"
           href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
     <link type="text/css" rel="stylesheet"
@@ -18,13 +23,13 @@
         {{ encore_entry_script_tags('app') }}
     {% endblock %}
 </head>
-    {% include "_nav.html.twig"%}
-    <body>
-    <div class="container">
-        <div class="row">
-            {% block body %}{% endblock %}
-        </div>
+{% include "_nav.html.twig" %}
+<body>
+<div class="container">
+    <div class="row">
+        {% block body %}{% endblock %}
     </div>
-    {% include 'backoffice/partials/_footer.html.twig' %}
-    </body>
+</div>
+{% include 'backoffice/partials/_footer.html.twig' %}
+</body>
 </html>

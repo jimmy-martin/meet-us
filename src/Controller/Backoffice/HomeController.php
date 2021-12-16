@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/backoffice", name="backoffice_")
+ * @Route("/", name="backoffice_")
  */
 class HomeController extends AbstractController
 {
@@ -17,9 +17,7 @@ class HomeController extends AbstractController
      */
     public function index(): Response
     {
-        return $this->render('backoffice/home/index.html.twig', [
-            'controller_name' => 'HomeController',
-        ]);
+        return $this->render('backoffice/home/index.html.twig');
     }
 
     /**
