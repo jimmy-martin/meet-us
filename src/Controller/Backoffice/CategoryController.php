@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/backoffice/categories", name="backoffice_categories_", requirements={"id"="\d+"})
+ * @Route("/categories", name="backoffice_categories_", requirements={"id"="\d+"})
  */
 class CategoryController extends AbstractController
 {

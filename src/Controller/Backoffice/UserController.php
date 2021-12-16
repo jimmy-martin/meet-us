@@ -11,7 +11,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * @Route("/backoffice/users", name="backoffice_users_", requirements={"id"="\d+"})
+ * @Route("/users", name="backoffice_users_", requirements={"id"="\d+"})
  */
 class UserController extends AbstractController
 {

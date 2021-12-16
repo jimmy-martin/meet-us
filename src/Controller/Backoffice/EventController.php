@@ -13,7 +13,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
- * @Route("/backoffice/events", name="backoffice_events_", requirements={"id"="\d+"})
+ * @Route("/events", name="backoffice_events_", requirements={"id"="\d+"})
  */
 class EventController extends AbstractController
 {

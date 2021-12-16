@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/backoffice", name="backoffice_")
+ * @Route("/", name="backoffice_")
  */
 class HomeController extends AbstractController
 {
