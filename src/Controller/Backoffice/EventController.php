@@ -88,8 +88,6 @@ class EventController extends AbstractController
     {
         $submittedCsrfToken = $request->request->get('_token');
 
-        $this->addFlash('message', 'L\'évènement a bien été supprimée');
-
         if ($this->isCsrfTokenValid('delete_events_' . $event->getId(), $submittedCsrfToken)) {
 
             $manager->remove($event);

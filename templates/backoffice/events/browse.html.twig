@@ -42,11 +42,12 @@
                         <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                     </a>
                     <form action="{{ path('backoffice_events_delete', {id : event.id}) }}" class="d-inline"
-                          method="post" onsubmit="return confirm('Êtes-vous sûre de vouloir supprimer cet évènement ?')">
+                          method="post"
+                          onsubmit="return confirm('Êtes-vous sûre de vouloir supprimer cet évènement ?')">
                         <button type="submit" class="btn btn-danger">
                             <i class="fa fa-trash" aria-hidden="true"></i>
                         </button>
-                        <input type="hidden" name="_token" value="{{ csrf_token('delete_event_' ~ event.id) }}">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete_events_' ~ event.id) }}">
                         <input type="hidden" name="_method" value="delete">
                     </form>
                 </td>
