@@ -8,6 +8,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @Route("/backoffice/users", name="backoffice_users_", requirements={"id"="\d+"})
@@ -73,13 +74,16 @@ class UserController extends AbstractController
         ]);
     }
 
-        /**
-     * @Route("/{id}/deactivate", name="deactivate")
+    /**
+     * @Route("/{id}/toggle-activate", name="toggle_activate")
      */
-    public function deactivate(): Response
+    public function toggleActivate(User $user, EntityManagerInterface $manager): Response
     {
-        // TODO
-        return $this->render('backoffice/users/browse.html.twig', [
+        $user->setIsActivate(!$user->getIsActivate());
+        $manager->flush();
+
+
+        return $this->redirectToRoute('backoffice_users_browse', [
             'controller_name' => 'UserController',
         ]);
     }

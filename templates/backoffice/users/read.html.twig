@@ -16,7 +16,6 @@
 <p> Date de création de l'utilisateur : {{ user.createdAt|date('Y-m-d H:i') }} </p>
 <p> Date de mise à jour de l'utilisateur : {{ user.updatedAt|date('Y-m-d H:i') }} </p>
 <p> Mail de l'utilisateur : {{ user.email }} </p>
-<p> Mail de l'utilisateur : {{ user.email }} </p>
-<p> Situation de l'utilisateur :  </p>
+<p> Situation de l'utilisateur : {{ user.isActivate }} </p>
 
 {% endblock %}
