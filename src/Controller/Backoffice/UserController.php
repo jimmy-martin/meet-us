@@ -20,7 +20,6 @@ class UserController extends AbstractController
      */
     public function browse(UserRepository $userRepository): Response
     {
-        // TODO
         return $this->render('backoffice/users/browse.html.twig', [
             'users' => $userRepository->findAll(),
         ]);
@@ -31,31 +30,8 @@ class UserController extends AbstractController
      */
     public function read(User $user): Response
     {
-        // TODO
         return $this->render('backoffice/users/read.html.twig', [
             'user' => $user,
-        ]);
-    }
-
-    /**
-     * @Route("/add", name="add")
-     */
-    public function add(): Response
-    {
-        // TODO
-        return $this->render('backoffice/users/index.html.twig', [
-            'controller_name' => 'UserController',
-        ]);
-    }
-
-    /**
-     * @Route("/{id}", name="edit")
-     */
-    public function edit(): Response
-    {
-        // TODO
-        return $this->render('backoffice/users/index.html.twig', [
-            'controller_name' => 'UserController',
         ]);
     }
 
@@ -69,9 +45,7 @@ class UserController extends AbstractController
 
         // TODO: ajouter un flash message pouvant se fermer
 
-        return $this->redirectToRoute('backoffice_users_browse', [
-            'controller_name' => 'UserController',
-        ]);
+        return $this->redirectToRoute('backoffice_users_browse');
     }
 
     /**
@@ -82,9 +56,6 @@ class UserController extends AbstractController
         $user->setIsActivate(!$user->getIsActivate());
         $manager->flush();
 
-
-        return $this->redirectToRoute('backoffice_users_browse', [
-            'controller_name' => 'UserController',
-        ]);
+        return $this->redirectToRoute('backoffice_users_browse');
     }
 }
