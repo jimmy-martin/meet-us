@@ -1,17 +1,15 @@
 <?php
 
-namespace App\Form;
+namespace App\Form\Back;
 
 use App\Entity\Event;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Validator\Constraints\Length;
-use Symfony\Component\Validator\Constraints\NotNull;
-use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Validator\Constraints\GreaterThan;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Validator\Constraints\GreaterThanOrEqual;
+use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\NotNull;
 
 class EventOnlineType extends AbstractType
 {
@@ -19,6 +17,7 @@ class EventOnlineType extends AbstractType
     {
         $builder
             ->add('title', null, [
+                'label' => 'Titre',
                 'constraints' => [
                     new NotBlank(),
                     new Length([
@@ -27,8 +26,8 @@ class EventOnlineType extends AbstractType
                     ]),
                 ],
             ])
-
             ->add('description', null, [
+                'label' => 'Description',
                 'constraints' => [
                     new NotBlank(),
                     new Length([
@@ -37,49 +36,33 @@ class EventOnlineType extends AbstractType
                     ])
                 ],
             ])
-
             ->add('picture', null, [
+                'label' => 'Image',
                 'required' => false,
                 'empty_data' => 'event_placeholder.png',
             ])
-
             ->add('date', null, [
+                'label' => 'Date de l\'évènement',
                 'widget' => 'single_text',
-                'constraints' => [
-                    new GreaterThan("+ 5 hours")
-                ],
             ])
-
-            ->add('latitude', null, [
-                'required' => false,
-            ])
-
-            ->add('longitude', null, [
-                'required' => false,
-            ])
-
             ->add('maxMembers', null, [
+                'label' => 'Nombre maximum de participants',
                 'constraints' => [
                     new NotBlank(),
                     new NotNull(),
                     new GreaterThanOrEqual(2),
                 ],
             ])
-
-            ->add('isOnline', ChoiceType::class, [
-                'choices' => [
-                    'online' => true,
-                    'not online' => false,
-                ],
-                'expanded' => true,
-                'multiple' => false,
+            ->add('isArchived', null, [
+                'label' => 'Est archivé',
             ])
-
             ->add('category', null, [
+                'label' => 'Catégorie',
                 'constraints' => [
                     new NotBlank(),
                 ],
-            ]);
+            ])
+        ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void

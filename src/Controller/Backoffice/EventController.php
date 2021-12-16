@@ -3,8 +3,11 @@
 namespace App\Controller\Backoffice;
 
 use App\Entity\Event;
+use App\Form\Back\EventOnlineType;
+use App\Form\Back\EventType;
 use App\Repository\EventRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -14,6 +17,13 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
  */
 class EventController extends AbstractController
 {
+    private $manager;
+
+    public function __construct(EntityManagerInterface $manager)
+    {
+        $this->manager = $manager;
+    }
+
     /**
      * @Route("", name="browse")
      */
@@ -35,42 +45,64 @@ class EventController extends AbstractController
     }
 
     /**
-     * @Route("/add", name="add")
+     * @Route("/{id}/edit", name="edit")
      */
-    public function add(): Response
+    public function edit(Event $event, Request $request): Response
     {
-        // TODO
-        return $this->render('backoffice/events/index.html.twig', [
-            'controller_name' => 'EventController',
-        ]);
-    }
+        $isOnline = $event->getIsOnline();
 
-    /**
-     * @Route("/{id}", name="edit")
-     */
-    public function edit(): Response
-    {
+        if ($isOnline === true) {
 
-        return $this->render('backoffice/events/index.html.twig', [
-            'controller_name' => 'EventController',
+            $form = $this->createForm(EventOnlineType::class, $event);
+
+        } else {
+
+            $form = $this->createForm(EventType::class, $event);
+
+        }
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $event->setUpdatedAt(new \DateTimeImmutable());
+            $this->manager->flush();
+
+            $this->addFlash('success', 'L\'évènement ' . $event->getTitle() . ' a bien été modifié.');
+
+            return $this->redirectToRoute('backoffice_events_browse');
+        }
+
+        return $this->render('backoffice/events/edit.html.twig', [
+            'event' => $event,
+            'form' => $form->createView(),
         ]);
     }
 
    
 
     /**
-     * @Route("/{id}/delete", name="delete")
+     * @Route("/{id}/delete", name="delete", methods={"DELETE"})
      */
-    public function delete(EntityManagerInterface $manager, Event $event): Response
+    public function delete(EntityManagerInterface $manager, Event $event, Request $request): Response
     {
-        // TODO: token csrf
-        $manager->remove($event);
-        $manager->flush();
+        $submittedCsrfToken = $request->request->get('_token');
 
         $this->addFlash('message', 'L\'évènement a bien été supprimée');
 
-        return $this->redirectToRoute('backoffice_events_browse', [
-            'controller_name' => 'EventController',
-        ]);
+        if ($this->isCsrfTokenValid('delete_events_' . $event->getId(), $submittedCsrfToken)) {
+
+            $manager->remove($event);
+            $manager->flush();
+
+            $this->addFlash('success', 'L\'évènement a bien été supprimé');
+
+            return $this->redirectToRoute('backoffice_events_browse');
+
+        }
+
+        $this->addFlash('danger', 'L\'évènement n\'a pas bien été supprimé');
+
+        return $this->redirectToRoute('backoffice_events_browse');
     }
 }
