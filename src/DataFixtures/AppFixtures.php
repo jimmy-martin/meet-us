@@ -19,6 +19,8 @@ class AppFixtures extends Fixture
         $admin->setPassword('$2y$13$6i5TZvMJBqr7S21K08QdQec672Gc04/lYQjK21wmPMHDfbiajwAL.'); // mdp = test
         $admin->setFirstname('admin');
         $admin->setLastname('oclock');
+        $admin->setIsActivate(1);
+
 
         $manager->persist($admin);
 
@@ -28,6 +30,8 @@ class AppFixtures extends Fixture
         $user->setPassword('$2y$13$6i5TZvMJBqr7S21K08QdQec672Gc04/lYQjK21wmPMHDfbiajwAL.'); // mdp = test
         $user->setFirstname('user');
         $user->setLastname('oclock');
+        $user->setIsActivate(1);
+
 
         $manager->persist($user);
 

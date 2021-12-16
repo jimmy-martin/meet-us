@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello UserController!{% endblock %}
+
+{% block body %}
+ <div>
+    <h1>Détail de l'utilisateur numero {{user.id}}</h1>
+</div>
+
+<p> Nom de l'utilisateur : {{ user.firstname}} {{ user.lastname }} </p>
+<p> Role de l'utilisateur : {{ user.roles ? user.roles|json_encode : ''}} </p>
+<p> Mail de l'utilisateur : {{ user.email }} </p>
+<p> Téléphone de l'utilisateur : {{ user.phoneNumber }} </p>
+<p> Photo de l'utilisateur : {{ user.avatar }} </p>
+<p> Adresse de l'utilisateur : {{user.address}} {{user.zipcode}} {{user.city}} {{user.country}} </p>
+<p> Date de création de l'utilisateur : {{ user.createdAt|date('Y-m-d H:i') }} </p>
+<p> Date de mise à jour de l'utilisateur : {{ user.updatedAt|date('Y-m-d H:i') }} </p>
+<p> Mail de l'utilisateur : {{ user.email }} </p>
+<p> Situation de l'utilisateur : {{ user.isActivate }} </p>
+
+{% endblock %}
