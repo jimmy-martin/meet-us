@@ -25,7 +25,12 @@
 </head>
 {% include "backoffice/partials/_nav.html.twig" %}
 <body>
+
 <div class="container">
+{% for message in app.flashes('message') %}
+    <div class="alert alert-success" role="alert">{{message}}</div>
+{% endfor %}
+
     <div class="row">
         {% block body %}{% endblock %}
     </div>

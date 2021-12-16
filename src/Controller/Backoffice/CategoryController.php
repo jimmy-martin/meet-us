@@ -99,16 +99,19 @@ class CategoryController extends AbstractController
     /**
      * @Route("/{id}/delete", name="delete")
      */
-    public function delete(EntityManagerInterface $manager, Category $category): Response
+    public function delete(EntityManagerInterface $manager, Category $category, Request $request): Response
     {
         // TODO: token csrf
-        $manager->remove($category);
-        $manager->flush();
-<<<<<<< HEAD
-        
-        $this->addFlash('message', 'La catégorie a bien été supprimé');
-=======
->>>>>>> c4a8c61c15030645c97f68d6a6276e4cbaad6a06
+         $token = $request->request->get('_token');
+
+
+        if ($this->isCsrfTokenValid('delete_categor' . $category->getId(), $token)) {
+            $manager = $this->getDoctrine()->getManager();
+            $manager->remove($category);
+            $manager->flush();
+            $this->addFlash('message', 'La catégorie a bien été supprimé');
+        }
+        $this->addFlash('message', 'Problème');
 
         return $this->redirectToRoute('backoffice_categories_browse', [
         ]);

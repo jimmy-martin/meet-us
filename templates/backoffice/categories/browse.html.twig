@@ -5,11 +5,6 @@
 {% block body %}
 
     <h1 class = "text-center">Liste des Categories</h1>
-    {% for message in app.flashes('message') %}
-    <div class="alert alert-success" role="alert">{{message}}</div>
-  {% endfor %}
-
-
 
 <table class="table table-hover">
   <thead>
@@ -33,7 +28,7 @@
                 ><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
               <form action="{{ path('backoffice_categories_delete', {id: categorie.id}) }}" class="d-inline" method="post">
                 <button class="btn btn-link p-0 mb-2 fs-4"><i class="fa fa-trash" aria-hidden="true"></i></button>
-                <input type="hidden" name="_method" value="delete">
+                <input type="hidden" name="_token" value="{{ csrf_token('delete_category' ~ categorie.id) }}">
               </form>
             </td>
         </tr>    
