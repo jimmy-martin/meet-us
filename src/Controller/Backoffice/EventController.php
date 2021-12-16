@@ -53,11 +53,13 @@ class EventController extends AbstractController
      */
     public function edit(): Response
     {
-        // TODO
+
         return $this->render('backoffice/events/index.html.twig', [
             'controller_name' => 'EventController',
         ]);
     }
+
+   
 
     /**
      * @Route("/{id}/delete", name="delete")
@@ -68,7 +70,7 @@ class EventController extends AbstractController
         $manager->remove($event);
         $manager->flush();
 
-        // TODO: ajouter un flash message pouvant se fermer
+        $this->addFlash('message', 'L\'évènement a bien été supprimée');
 
         return $this->redirectToRoute('backoffice_events_browse', [
             'controller_name' => 'EventController',

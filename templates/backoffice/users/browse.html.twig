@@ -6,6 +6,10 @@
  <div>
     <h1 class = "text-center">Liste des Utilisateurs</h1>
 </div>
+  {% for message in app.flashes('message') %}
+    <div class="alert alert-success" role="alert">{{message}}</div>
+  {% endfor %}
+
 
 <table class="table table-hover">
   <thead>
@@ -20,6 +24,7 @@
     </tr>
   </thead>
   <tbody>
+
     {% for user in users %}
         <tr class="table-{{ cycle(['dark', 'default'], loop.index) }}">
             <th>{{ user.id }}</th>
@@ -45,5 +50,4 @@
     {% endfor %}
   </tbody>
 </table>
-
 {% endblock %}

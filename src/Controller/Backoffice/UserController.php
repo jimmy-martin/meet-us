@@ -67,7 +67,7 @@ class UserController extends AbstractController
         $manager->remove($user);
         $manager->flush();
 
-        // TODO: ajouter un flash message pouvant se fermer
+        $this->addFlash('message', 'L\'utilisateur a bien été supprimé');
 
         return $this->redirectToRoute('backoffice_users_browse', [
             'controller_name' => 'UserController',

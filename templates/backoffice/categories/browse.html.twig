@@ -5,6 +5,9 @@
 {% block body %}
 
     <h1 class = "text-center">Liste des Categories</h1>
+    {% for message in app.flashes('message') %}
+    <div class="alert alert-success" role="alert">{{message}}</div>
+  {% endfor %}
 
 
 

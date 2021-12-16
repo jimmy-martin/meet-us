@@ -62,10 +62,12 @@ class CategoryController extends AbstractController
             $this->manager->persist($category);
             $this->manager->flush();
 
-            // TODO: ajouter un flash message pouvant se fermer
+            $this->addFlash('message', 'La catégorie a bien été ajoutée');
 
             return $this->redirectToRoute('backoffice_categories_browse');
         }
+
+        
 
         return $this->render('backoffice/categories/add.html.twig', [
             'form' => $form->createView(),
@@ -86,9 +88,12 @@ class CategoryController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->manager->flush();
 
+            $this->addFlash('message', 'La catégorie a bien été modifiée');
+
             return $this->redirectToRoute('backoffice_categories_browse');
         }
 
+        
         return $this->render('backoffice/categories/edit.html.twig', [
             'form' => $form->createView(),
         ]);
@@ -101,6 +106,9 @@ class CategoryController extends AbstractController
     {
         $manager->remove($category);
         $manager->flush();
+        
+        $this->addFlash('message', 'La catégorie a bien été supprimé');
+
         return $this->redirectToRoute('backoffice_categories_browse', [
         ]);
     }
