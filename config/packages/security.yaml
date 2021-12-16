@@ -58,7 +58,7 @@ security:
         - { path: ^/api/v1/(events|categories), roles: PUBLIC_ACCESS, methods:[GET] }
         - { path: ^/api/login, roles: PUBLIC_ACCESS }
         - { path: ^/api,       roles: IS_AUTHENTICATED_FULLY }
-        - { path: ^/backoffice,       roles: ROLE_MODERATOR }
+        - { path: ^/,       roles: ROLE_MODERATOR }
 
     role_hierarchy:
         ROLE_ADMIN: ROLE_MODERATOR
