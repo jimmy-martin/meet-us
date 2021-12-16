@@ -20,7 +20,6 @@ class EventController extends AbstractController
     public function browse(EventRepository $eventRepository): Response
     {
         return $this->render('backoffice/events/browse.html.twig', [
-            'controller_name' => 'EventController',
             'events' => $eventRepository->findAll(),
         ]);
     }
@@ -30,9 +29,7 @@ class EventController extends AbstractController
      */
     public function read(Event $event): Response
     {
-        // TODO
         return $this->render('backoffice/events/read.html.twig', [
-            'controller_name' => 'EventController',
             'event' => $event,
         ]);
     }
@@ -66,7 +63,7 @@ class EventController extends AbstractController
      */
     public function delete(EntityManagerInterface $manager, Event $event): Response
     {
-        // TODO
+        // TODO: token csrf
         $manager->remove($event);
         $manager->flush();
 

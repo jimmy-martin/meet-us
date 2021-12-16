@@ -28,7 +28,6 @@ class CategoryController extends AbstractController
      */
     public function browse(CategoryRepository $categoryRepository): Response
     {
-        // TODO
         return $this->render('backoffice/categories/browse.html.twig', [
             'categories' => $categoryRepository->findAll(),
         ]);
@@ -39,9 +38,7 @@ class CategoryController extends AbstractController
      */
     public function read(Category $category): Response
     {
-        // TODO
         return $this->render('backoffice/categories/read.html.twig', [
-            'controller_name' => 'CategoryController',
             'category' => $category,
         ]);
     }
@@ -104,10 +101,14 @@ class CategoryController extends AbstractController
      */
     public function delete(EntityManagerInterface $manager, Category $category): Response
     {
+        // TODO: token csrf
         $manager->remove($category);
         $manager->flush();
+<<<<<<< HEAD
         
         $this->addFlash('message', 'La catégorie a bien été supprimé');
+=======
+>>>>>>> c4a8c61c15030645c97f68d6a6276e4cbaad6a06
 
         return $this->redirectToRoute('backoffice_categories_browse', [
         ]);
