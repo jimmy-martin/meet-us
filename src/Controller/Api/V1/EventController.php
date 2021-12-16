@@ -7,6 +7,7 @@ use App\Entity\Event;
 use App\Form\EventOnlineType;
 use App\Form\EventType;
 use App\Repository\EventRepository;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,7 +16,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
- *@Route("/api/v1/events", name="api_v1_events", requirements={"id"="\d+"})
+ * @Route("/api/v1/events", name="api_v1_events_", requirements={"id"="\d+"})
  */
 class EventController extends AbstractController
 {
@@ -31,6 +32,7 @@ class EventController extends AbstractController
      */
     public function browse(Request $request, EventRepository $eventRepository): Response
     {
+        // TODO: voir comment utiliser la query string dans l'annotation directement
         // If there is a limit or a category id in the query string, I adapt my sql query
         $limit = $request->query->get('limit');
         $categoryId = $request->query->get('category');
@@ -123,7 +125,7 @@ class EventController extends AbstractController
     /**
      * @Route("", name="add", methods={"POST"})
      */
-    public function add(EventRepository $eventRepository, Request $request): Response
+    public function add(UserRepository $userRepository, EventRepository $eventRepository, Request $request): Response
     {
         $event = new Event();
 
@@ -149,6 +151,7 @@ class EventController extends AbstractController
         $form->submit($jsonArray, false);
 
         if ($form->isValid()) {
+            $event->setAuthor($this->getUser());
             // add the event author as a member
             $event->addMember($event->getAuthor());
 
@@ -184,7 +187,13 @@ class EventController extends AbstractController
         // control if the event author is the user who want to edit the event
         $this->denyAccessUnlessGranted('EVENT_EDIT', $event);
 
-        $form = $this->createForm(EventType::class, $event, ['csrf_protection' => false]);
+        // TODO: mettre les valeurs par défaut du formulaire d'un event physique si l'événement passe en ligne
+
+        if ($event->getIsOnline() === true) {
+            $form = $this->createForm(EventOnlineType::class, $event, ['csrf_protection' => false]);
+        } else {
+            $form = $this->createForm(EventType::class, $event, ['csrf_protection' => false]);
+        }
 
         $json = $request->getContent();
         $jsonArray = json_decode($json, true);

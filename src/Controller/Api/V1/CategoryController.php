@@ -28,6 +28,7 @@ class CategoryController extends AbstractController
      */
     public function browse(Request $request, CategoryRepository $categoryRepository): Response
     {
+        // TODO: voir comment utiliser la query string dans l'annotation directement
         $limit = $request->query->get('limit');
 
         if ($limit) {

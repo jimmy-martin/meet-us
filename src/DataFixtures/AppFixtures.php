@@ -48,7 +48,7 @@ class AppFixtures extends Fixture
             $event->setTitle('Titre : ' . $index);
             $event->setDescription("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam egestas bibendum ipsum, a blandit tellus aliquet eu. Sed ac odio non odio posuere auctor. Donec lobortis egestas aliquam. Duis venenatis.");
             $event->setPicture('event_placeholder.png');
-            $event->setDate(new \DateTimeImmutable());
+            $event->setDate(new \DateTimeImmutable('+1 week'));
             $event->setAddress($index . ' rue des fixtures');
             $event->setZipcode($index < 10 ? 7500 . $index : 750 . $index);
             $event->setCity('Paris');
