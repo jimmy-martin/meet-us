@@ -16,7 +16,11 @@
             <th>Email</th>
             <th>Rôles</th>
             <th>Nom complet</th>
-            <th>-</th>
+
+            {% if is_granted('USER_TOGGLE_ROLE', app.user) %}
+                <th>-</th>
+            {% endif %}
+
             <th>-</th>
             <th>Actions</th>
         </tr>
@@ -29,19 +33,23 @@
                 <td>{{ user.email }}</td>
                 <td>{{ user.roles ? user.roles | json_encode : '' }}</td>
                 <td>{{ user.fullname }}</td>
-                {# N'afficher ce bouton que si je suis admin #}
-                <td>
-                    <a
-                            href="{{ path('backoffice_users_toggle_role_moderator', {id : user.id}) }}"
-                            class="btn btn-warning"
-                            onclick="return confirm('Êtes-vous sûre de vouloir passer cet utilisateur en modérateur ?')">
-                        {% if 'ROLE_MODERATOR' in user.roles | json_encode %}
-                            Enlever rôle modérateur
-                        {% else %}
-                            Donner rôle modérateur
-                        {% endif %}
-                    </a>
-                </td>
+
+                {% if is_granted('USER_TOGGLE_ROLE', app.user) %}
+                    {# N'afficher ce bouton que si je suis admin #}
+                    <td>
+                        <a
+                                href="{{ path('backoffice_users_toggle_role_moderator', {id : user.id}) }}"
+                                class="btn btn-warning"
+                                onclick="return confirm('Êtes-vous sûre de vouloir passer cet utilisateur en modérateur ?')">
+                            {% if 'ROLE_MODERATOR' in user.roles | json_encode %}
+                                Enlever rôle modérateur
+                            {% else %}
+                                Donner rôle modérateur
+                            {% endif %}
+                        </a>
+                    </td>
+                {% endif %}
+
                 <td>
                     <a href="{{ path('backoffice_users_toggle_activate', {id:user.id}) }}"
                        class="btn btn-{{ user.isActivate ? 'danger' : 'success' }}">

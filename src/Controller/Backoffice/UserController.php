@@ -42,8 +42,8 @@ class UserController extends AbstractController
      */
     public function toggleRoleModerator(EntityManagerInterface $manager, User $user)
     {
-
-        // TODO: vérifier que l'utilisateur qui donnes les rôles soit un admin
+        // we passed the connected user as subject just because the voter verify if the subject is an instace of App\Entity\User
+        $this->denyAccessUnlessGranted('USER_TOGGLE_ROLE', $this->getUser());
 
         if (in_array('ROLE_MODERATOR', $user->getRoles())) {
 
