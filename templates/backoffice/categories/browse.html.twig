@@ -1,18 +1,22 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello CategoryController!{% endblock %}
+{% block title %}
+    {{ parent() }} - Catégories
+{% endblock %}
 
 {% block body %}
-
-    <h1 class="text-center">Liste des Categories</h1>
+    <div class="text-center">
+        <h1>Liste des catégories</h1>
+        <a href="{{ path('backoffice_categories_add') }}" class="btn btn-primary">Ajouter une catégorie</a>
+    </div>
 
     <table class="table table-hover">
         <thead>
         <tr>
             <th scope="col">ID</th>
-            <th scope="col">Name</th>
-            <th scope="col">Picture</th>
-            <th scope="col"></th>
+            <th scope="col">Nom</th>
+            <th scope="col">Image</th>
+            <th scope="col">Actions</th>
         </tr>
         </thead>
         <tbody>
@@ -22,13 +26,18 @@
                 <td>{{ category.name }}</td>
                 <td>{{ category.picture }}</td>
                 <td>
-                    <a href="{{ path('backoffice_categories_read', {id: category.id}) }}" class="fs-4"
-                    ><i class="fa fa-eye" aria-hidden="true"></i></a>
-                    <a href="{{ path('backoffice_categories_edit', {id: category.id}) }}" class="fs-4"
-                    ><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+                    <a href="{{ path('backoffice_categories_read', {id: category.id}) }}" class="btn btn-primary">
+                        <i class="fa fa-eye" aria-hidden="true"></i>
+                    </a>
+                    <a href="{{ path('backoffice_categories_edit', {id: category.id}) }}" class="btn btn-light">
+                        <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                    </a>
                     <form action="{{ path('backoffice_categories_delete', {id: category.id}) }}" class="d-inline"
                           method="post">
-                        <button class="btn btn-link p-0 mb-2 fs-4"><i class="fa fa-trash" aria-hidden="true"></i>
+                        <button class="btn btn-danger ">
+                            <i class="fa fa-trash" aria-hidden="true">
+
+                            </i>
                         </button>
                         <input type="hidden" name="_token" value="{{ csrf_token('delete_categories' ~ category.id) }}">
                         <input type="hidden" name="_method" value="delete">

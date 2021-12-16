@@ -8,10 +8,10 @@
         <h1>Modifier une catégorie</h1>
     </div>
 
-{{ form_start(form) }}
+    {{ form_start(form) }}
     {{ form_row(form.name) }}
     {{ form_row(form.picture) }}
-    <button>Modifier</button>
-{{ form_end(form) }}
+    <button class="btn btn-success">Modifier</button>
+    {{ form_end(form) }}
 
 {% endblock %}

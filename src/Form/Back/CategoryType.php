@@ -13,8 +13,14 @@ class CategoryType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('name')
-            ->add('picture')
+            ->add('name', null, [
+                'label' => 'Nom',
+            ])
+            ->add('picture', null, [
+                'label' => 'Image',
+                'required' => false,
+                'empty_data' => 'category_placeholder.png',
+            ])
         ;
     }
 
