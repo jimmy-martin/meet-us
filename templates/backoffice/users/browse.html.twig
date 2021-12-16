@@ -1,49 +1,53 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello UserController!{% endblock %}
+{% block title %}
+    {{ parent() }} - Utilisateurs
+{% endblock %}
 
 {% block body %}
- <div>
-    <h1 class = "text-center">Liste des Utilisateurs</h1>
-</div>
+    <div>
+        <h1 class="text-center">Liste des utilisateurs</h1>
+    </div>
 
-<table class="table table-hover">
-  <thead>
-    <tr>
-      <th>ID</th>
-      <th>email</th>
-      <th>roles</th>
-      <th>firstname</th>
-      <th>lastname</th>
-      <th>-</th>
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Email</th>
+            <th>Rôles</th>
+            <th>Nom complet</th>
+            <th>-</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
 
-    {% for user in users %}
-        <tr class="table-{{ cycle(['dark', 'default'], loop.index) }}">
-            <th>{{ user.id }}</th>
-            <td>{{ user.email }}</td>
-            <td>{{ user.roles ? user.roles|json_encode : ''}}</td>
-            <td>{{ user.firstname}}</td>
-            <td>{{ user.lastname}}</td>
-            <td> 
-              <a href="{{ path('backoffice_users_toggle_activate', {id:user.id}) }}" class="btn btn-{{user.isActivate ? 'primary' : 'danger' }} p-0 mb-2 fs-4"> 
-                {{user.isActivate ? 'débannir' : 'bannir' }}
-              </a>
-            </td>
-             <td>
-              <a href="{{ path('backoffice_users_read', {id: user.id}) }}" class="fs-4"
-                ><i class="fa fa-eye" aria-hidden="true"></i></a>
-
-              <form action="{{ path('backoffice_users_delete', {id: user.id}) }}" class="d-inline" method="post">
-                <button class="btn btn-link p-0 mb-2 fs-4"><i class="fa fa-trash" aria-hidden="true"></i></button>
-                <input type="hidden" name="_method" value="delete">
-              </form>
-            </td>
-        </tr>    
-    {% endfor %}
-  </tbody>
-</table>
+        {% for user in users %}
+            <tr class="table-{{ cycle(['dark', 'default'], loop.index) }}">
+                <th>{{ user.id }}</th>
+                <td>{{ user.email }}</td>
+                <td>{{ user.roles ? user.roles | json_encode : '' }}</td>
+                <td>{{ user.fullname }}</td>
+                <td>
+                    <a href="{{ path('backoffice_users_toggle_activate', {id:user.id}) }}"
+                       class="btn btn-{{ user.isActivate ? 'danger' : 'success' }}">
+                        {{ user.isActivate ? 'Bannir' : 'Débannir' }}
+                    </a>
+                </td>
+                <td>
+                    <a href="{{ path('backoffice_users_read', {id: user.id}) }}" class="btn btn-primary">
+                        <i class="fa fa-eye" aria-hidden="true"></i>
+                    </a>
+                    {# TODO: bouton de modif quand le compte nous appartient #}
+                    <form action="{{ path('backoffice_users_delete', {id: user.id}) }}" class="d-inline" method="post">
+                        <button class="btn btn-danger">
+                            <i class="fa fa-trash" aria-hidden="true"></i>
+                        </button>
+                        <input type="hidden" name="_method" value="delete">
+                    </form>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
 {% endblock %}

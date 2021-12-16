@@ -35,6 +35,8 @@ class UserController extends AbstractController
         ]);
     }
 
+    // TODO: permettre l'édition d'un compte quand il appartient a l'utilisateur connecté au backoffice
+
     /**
      * @Route("/{id}/delete", name="delete")
      */
