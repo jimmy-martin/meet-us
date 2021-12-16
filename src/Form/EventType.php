@@ -106,12 +106,6 @@ class EventType extends AbstractType
                 'constraints' => [
                     new NotBlank(),
                 ],
-            ])
-
-            ->add('author', null, [
-                'constraints' => [
-                    new NotBlank(),
-                ],
             ]);
     }
 

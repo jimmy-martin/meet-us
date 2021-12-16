@@ -21,7 +21,7 @@ class UserVoter extends Voter
     {
         // replace with your own logic
         // https://symfony.com/doc/current/security/voters.html
-        return in_array($attribute, ['USER_EDIT', 'USER_DELETE'])
+        return in_array($attribute, ['USER_EDIT', 'USER_DELETE', 'USER_TOGGLE_ROLE'])
             && $subject instanceof \App\Entity\User;
     }
 
@@ -39,13 +39,13 @@ class UserVoter extends Voter
 
         // ... (check conditions and return true to grant permission) ...
         switch ($attribute) {
-            case 'USER_EDIT':
+            case 'USER_EDIT' :
                 // control if the connected user is the user that is modified
                 if ($user->getId() === $subject->getId()) {
                     return true;
                 }
                 break;
-            case 'USER_DELETE':
+            case 'USER_DELETE' :
                 // control if the connected user is the user that is deleted
                 if ($user->getId() === $subject->getId()) {
                     return true;

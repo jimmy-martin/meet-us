@@ -14,7 +14,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 class Event
 {
     /**
-     * @Groups({"event_browse", "user_read", "event_read", "favorite_browse", "favorite_read"})
+     * @Groups({"event_browse", "user_read", "event_read", "favorite_browse", "favorite_read", "user_read"})
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
@@ -22,7 +22,7 @@ class Event
     private $id;
 
     /**
-     * @Groups({"event_browse", "user_read", "event_read", "favorite_browse", "favorite_read"})
+     * @Groups({"event_browse", "user_read", "event_read", "favorite_browse", "favorite_read", "user_read"})
      * @ORM\Column(type="string", length=255)
      */
     private $title;
@@ -40,7 +40,7 @@ class Event
     private $picture;
 
     /**
-     * @Groups({"event_browse", "event_read", "favorite_browse", "favorite_read"})
+     * @Groups({"event_browse", "event_read", "favorite_browse", "favorite_read", "user_read"})
      * @ORM\Column(type="datetime_immutable")
      */
     private $date;
@@ -70,11 +70,13 @@ class Event
     private $country;
 
     /**
+     * @Groups({"event_read"})
      * @ORM\Column(type="decimal", precision=8, scale=6, nullable=true)
      */
     private $latitude;
 
     /**
+     * @Groups({"event_read"})
      * @ORM\Column(type="decimal", precision=9, scale=6, nullable=true)
      */
     private $longitude;
@@ -115,7 +117,7 @@ class Event
     private $category;
 
     /**
-     * @Groups({"event_read"})
+     * @Groups({"event_browse", "event_read"})
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="createdEvents")
      * @ORM\JoinColumn(nullable=false)
      */

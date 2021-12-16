@@ -1,0 +1,76 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {{ parent() }} - Utilisateurs
+{% endblock %}
+
+{% block body %}
+    <div>
+        <h1 class="text-center">Liste des utilisateurs</h1>
+    </div>
+
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Email</th>
+            <th>Rôles</th>
+            <th>Nom complet</th>
+
+            {% if is_granted('USER_TOGGLE_ROLE', app.user) %}
+                <th>-</th>
+            {% endif %}
+
+            <th>-</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        {% for user in users %}
+            <tr class="table-{{ cycle(['dark', 'default'], loop.index) }}">
+                <th>{{ user.id }}</th>
+                <td>{{ user.email }}</td>
+                <td>{{ user.roles ? user.roles | json_encode : '' }}</td>
+                <td>{{ user.fullname }}</td>
+
+                {% if is_granted('USER_TOGGLE_ROLE', app.user) %}
+                    {# N'afficher ce bouton que si je suis admin #}
+                    <td>
+                        <a
+                                href="{{ path('backoffice_users_toggle_role_moderator', {id : user.id}) }}"
+                                class="btn btn-warning"
+                                onclick="return confirm('Êtes-vous sûre de vouloir passer cet utilisateur en modérateur ?')">
+                            {% if 'ROLE_MODERATOR' in user.roles | json_encode %}
+                                Enlever rôle modérateur
+                            {% else %}
+                                Donner rôle modérateur
+                            {% endif %}
+                        </a>
+                    </td>
+                {% endif %}
+
+                <td>
+                    <a href="{{ path('backoffice_users_toggle_activate', {id:user.id}) }}"
+                       class="btn btn-{{ user.isActivate ? 'danger' : 'success' }}">
+                        {{ user.isActivate ? 'Bannir' : 'Débannir' }}
+                    </a>
+                </td>
+                <td>
+                    <a href="{{ path('backoffice_users_read', {id: user.id}) }}" class="btn btn-primary">
+                        <i class="fa fa-eye" aria-hidden="true"></i>
+                    </a>
+                    {# TODO: bouton de modif quand le compte nous appartient #}
+                    <form action="{{ path('backoffice_users_delete', {id: user.id}) }}" class="d-inline" method="post"
+                          onsubmit="return confirm('Êtes-vous sûre de vouloir supprimer cet utilisateur ?')">
+                        <button class="btn btn-danger">
+                            <i class="fa fa-trash" aria-hidden="true"></i>
+                        </button>
+                        <input type="hidden" name="_method" value="delete">
+                    </form>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
+use phpDocumentor\Reflection\Types\Boolean;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -16,7 +17,7 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     /**
-     * @Groups({"user_browse", "user_read", "event_read", "favorite_browse"})
+     * @Groups({"user_browse", "user_read", "event_read", "favorite_browse", "event_browse"})
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
@@ -112,6 +113,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\Column(type="datetime_immutable", nullable=true)
      */
     private $updatedAt;
+    
+    /**
+     * @Groups({"user_read"})
+     * @ORM\Column(type="boolean", options={"default"=true})
+     */
+    protected $isActivate;
+
 
     /**
      * @Groups({"user_read"})
@@ -373,6 +381,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    public function getIsActivate(): ?bool
+    {
+        return $this->isActivate;
+    }
+
+    public function setIsActivate(bool $isActivate): self
+    {
+        $this->isActivate = $isActivate;
+
+        return $this;
+    }
+
     /**
      * @return Collection|Event[]
      */
@@ -463,7 +483,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @Groups({"event_read", "favorite_browse"})
+     * @Groups({"event_read", "favorite_browse", "event_browse"})
      */
     public function getFullName()
     {

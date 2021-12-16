@@ -19,6 +19,8 @@ class AppFixtures extends Fixture
         $admin->setPassword('$2y$13$6i5TZvMJBqr7S21K08QdQec672Gc04/lYQjK21wmPMHDfbiajwAL.'); // mdp = test
         $admin->setFirstname('admin');
         $admin->setLastname('oclock');
+        $admin->setIsActivate(1);
+
 
         $manager->persist($admin);
 
@@ -28,6 +30,8 @@ class AppFixtures extends Fixture
         $user->setPassword('$2y$13$6i5TZvMJBqr7S21K08QdQec672Gc04/lYQjK21wmPMHDfbiajwAL.'); // mdp = test
         $user->setFirstname('user');
         $user->setLastname('oclock');
+        $user->setIsActivate(1);
+
 
         $manager->persist($user);
 
@@ -44,7 +48,7 @@ class AppFixtures extends Fixture
             $event->setTitle('Titre : ' . $index);
             $event->setDescription("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam egestas bibendum ipsum, a blandit tellus aliquet eu. Sed ac odio non odio posuere auctor. Donec lobortis egestas aliquam. Duis venenatis.");
             $event->setPicture('event_placeholder.png');
-            $event->setDate(new \DateTimeImmutable());
+            $event->setDate(new \DateTimeImmutable('+1 week'));
             $event->setAddress($index . ' rue des fixtures');
             $event->setZipcode($index < 10 ? 7500 . $index : 750 . $index);
             $event->setCity('Paris');
