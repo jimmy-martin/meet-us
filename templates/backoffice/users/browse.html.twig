@@ -15,6 +15,7 @@
       <th>roles</th>
       <th>firstname</th>
       <th>lastname</th>
+      <th>-</th>
       <th></th>
     </tr>
   </thead>
@@ -26,11 +27,15 @@
             <td>{{ user.roles ? user.roles|json_encode : ''}}</td>
             <td>{{ user.firstname}}</td>
             <td>{{ user.lastname}}</td>
+            <td> 
+              <a href="{{ path('backoffice_users_toggle_activate', {id:user.id}) }}" class="btn btn-{{user.isActivate ? 'primary' : 'danger' }} p-0 mb-2 fs-4"> 
+                {{user.isActivate ? 'débannir' : 'bannir' }}
+              </a>
+            </td>
              <td>
               <a href="{{ path('backoffice_users_read', {id: user.id}) }}" class="fs-4"
                 ><i class="fa fa-eye" aria-hidden="true"></i></a>
-              <a href="{{ path('backoffice_users_edit', {id: user.id}) }}" class="fs-4"
-                ><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+
               <form action="{{ path('backoffice_users_delete', {id: user.id}) }}" class="d-inline" method="post">
                 <button class="btn btn-link p-0 mb-2 fs-4"><i class="fa fa-trash" aria-hidden="true"></i></button>
                 <input type="hidden" name="_method" value="delete">
