@@ -38,6 +38,30 @@ class UserController extends AbstractController
     // TODO: permettre l'édition d'un compte quand il appartient a l'utilisateur connecté au backoffice
 
     /**
+     * @Route("/{id}/toggle-role-moderator", name="toggle_role_moderator")
+     */
+    public function toggleRoleModerator(EntityManagerInterface $manager, User $user)
+    {
+
+        // TODO: vérifier que l'utilisateur qui donnes les rôles soit un admin
+
+        if (in_array('ROLE_MODERATOR', $user->getRoles())) {
+
+            $user->setRoles([]);
+
+        } else {
+
+            $user->setRoles(['ROLE_MODERATOR']);
+
+        }
+
+        $manager->flush();
+
+        return $this->redirectToRoute('backoffice_users_browse');
+
+    }
+
+    /**
      * @Route("/{id}/delete", name="delete")
      */
     public function delete(EntityManagerInterface $manager, User $user): Response
