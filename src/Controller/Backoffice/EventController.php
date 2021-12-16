@@ -30,7 +30,10 @@ class EventController extends AbstractController
     public function browse(EventRepository $eventRepository): Response
     {
         return $this->render('backoffice/events/browse.html.twig', [
-            'events' => $eventRepository->findAll(),
+            'events' => $eventRepository->findBy(
+                [],
+                ['createdAt' => 'DESC']
+            ),
         ]);
     }
 
