@@ -79,8 +79,6 @@ class EventController extends AbstractController
         ]);
     }
 
-   
-
     /**
      * @Route("/{id}/delete", name="delete", methods={"DELETE"})
      */

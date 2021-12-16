@@ -48,7 +48,6 @@ class CategoryController extends AbstractController
      */
     public function add(Request $request): Response
     {
-        // TODO
         $category = new Category();
 
         $form = $this->createForm(CategoryType::class, $category);
@@ -56,15 +55,14 @@ class CategoryController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
             $this->manager->persist($category);
             $this->manager->flush();
 
-            $this->addFlash('message', 'La catégorie a bien été ajoutée');
+            $this->addFlash('success', 'La catégorie a bien été ajoutée.');
 
             return $this->redirectToRoute('backoffice_categories_browse');
         }
-
-        
 
         return $this->render('backoffice/categories/add.html.twig', [
             'form' => $form->createView(),
@@ -74,10 +72,8 @@ class CategoryController extends AbstractController
     /**
      * @Route("/{id}/edit", name="edit")
      */
-    public function edit(Request $request, Category $category, EntityManagerInterface $manager): Response
+    public function edit(Request $request, Category $category): Response
     {
-        // TODO
-
         $form = $this->createForm(CategoryType::class, $category);
 
         $form->handleRequest($request);
@@ -85,35 +81,37 @@ class CategoryController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->manager->flush();
 
-            $this->addFlash('message', 'La catégorie a bien été modifiée');
+            $this->addFlash('success', 'La catégorie a bien été modifiée.');
 
             return $this->redirectToRoute('backoffice_categories_browse');
         }
 
-        
+
         return $this->render('backoffice/categories/edit.html.twig', [
+            'category' => $category,
             'form' => $form->createView(),
         ]);
     }
 
     /**
-     * @Route("/{id}/delete", name="delete")
+     * @Route("/{id}/delete", name="delete", methods={"DELETE"})
      */
-    public function delete(EntityManagerInterface $manager, Category $category, Request $request): Response
+    public function delete(Category $category, Request $request): Response
     {
-        // TODO: token csrf
-         $token = $request->request->get('_token');
+        $token = $request->request->get('_token');
 
+        if ($this->isCsrfTokenValid('delete_categories' . $category->getId(), $token)) {
 
-        if ($this->isCsrfTokenValid('delete_categor' . $category->getId(), $token)) {
-            $manager = $this->getDoctrine()->getManager();
-            $manager->remove($category);
-            $manager->flush();
-            $this->addFlash('message', 'La catégorie a bien été supprimé');
+            $this->manager->remove($category);
+            $this->manager->flush();
+
+            $this->addFlash('success', 'La catégorie a bien été supprimée.');
+
+            return $this->redirectToRoute('backoffice_categories_browse');
         }
-        $this->addFlash('message', 'Problème');
 
-        return $this->redirectToRoute('backoffice_categories_browse', [
-        ]);
+        $this->addFlash('danger', 'La catégorie n\'a pas bien été supprimée.');
+
+        return $this->redirectToRoute('backoffice_categories_browse');
     }
 }
