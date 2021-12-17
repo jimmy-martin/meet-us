@@ -6,6 +6,7 @@ use App\Entity\Event;
 use App\Form\Back\EventOnlineType;
 use App\Form\Back\EventType;
 use App\Repository\EventRepository;
+use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -68,7 +69,11 @@ class EventController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $event->setUpdatedAt(new \DateTimeImmutable());
+            if ($event->getPicture() === null) {
+                $event->setPicture('event_placeholder.png');
+            }
+
+            $event->setUpdatedAt(new DateTimeImmutable());
             $this->manager->flush();
 
             $this->addFlash('success', 'L\'évènement ' . $event->getTitle() . ' a bien été modifié.');

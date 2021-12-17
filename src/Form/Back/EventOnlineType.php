@@ -10,6 +10,7 @@ use Symfony\Component\Validator\Constraints\GreaterThanOrEqual;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\NotNull;
+use Vich\UploaderBundle\Form\Type\VichImageType;
 
 class EventOnlineType extends AbstractType
 {
@@ -36,10 +37,10 @@ class EventOnlineType extends AbstractType
                     ])
                 ],
             ])
-            ->add('picture', null, [
+            ->add('pictureFile', VichImageType::class, [
                 'label' => 'Image',
                 'required' => false,
-                'empty_data' => 'event_placeholder.png',
+                'allow_delete' => false,
             ])
             ->add('date', null, [
                 'label' => 'Date de l\'évènement',
