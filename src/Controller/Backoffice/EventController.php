@@ -6,7 +6,9 @@ use App\Entity\Event;
 use App\Form\Back\EventOnlineType;
 use App\Form\Back\EventType;
 use App\Repository\EventRepository;
+use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -27,13 +29,16 @@ class EventController extends AbstractController
     /**
      * @Route("", name="browse")
      */
-    public function browse(EventRepository $eventRepository): Response
+    public function browse(EventRepository $eventRepository, PaginatorInterface $paginator, Request $request): Response
     {
+        $events = $paginator->paginate(
+            $eventRepository->findBy([], ['createdAt' => 'DESC']), /* query NOT result */
+            $request->query->getInt('page', 1), /*page number*/
+            5 /*limit per page*/
+        );
+
         return $this->render('backoffice/events/browse.html.twig', [
-            'events' => $eventRepository->findBy(
-                [],
-                ['createdAt' => 'DESC']
-            ),
+            'events' => $events
         ]);
     }
 
@@ -68,7 +73,11 @@ class EventController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $event->setUpdatedAt(new \DateTimeImmutable());
+            if ($event->getPicture() === null) {
+                $event->setPicture('event_placeholder.png');
+            }
+
+            $event->setUpdatedAt(new DateTimeImmutable());
             $this->manager->flush();
 
             $this->addFlash('success', 'L\'évènement ' . $event->getTitle() . ' a bien été modifié.');

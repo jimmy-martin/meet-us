@@ -244,8 +244,16 @@ class EventController extends AbstractController
      */
     public function addMember(Event $event)
     {
-        // control if event max members limit is not already reached and if user is not already a member
+        // control if event max members limit is not already reached
         $this->denyAccessUnlessGranted('EVENT_ADD_MEMBER', $event);
+
+        foreach ($event->getMembers() as $member) {
+            if ($this->getUser()->getId() === $member->getId()) {
+                return $this->json([
+                    'message' => 'Already a member.',
+                ], 403);
+            }
+        }
 
         $event->addMember($this->getUser());
         $this->manager->flush();
@@ -260,8 +268,11 @@ class EventController extends AbstractController
      */
     public function removeMember(Event $event)
     {
-        // control if the event author is not the member we want to remove
-        $this->denyAccessUnlessGranted('EVENT_REMOVE_MEMBER', $event);        
+        if ($this->getUser() === $event->getAuthor()) {
+            return $this->json([
+                'message' => 'U cannot remove the author as a member',
+            ], 403);
+        }
 
         $event->removeMember($this->getUser());
         $this->manager->flush();

@@ -6,6 +6,7 @@ use App\Entity\Category;
 use App\Form\Back\CategoryType;
 use App\Repository\CategoryRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -26,10 +27,16 @@ class CategoryController extends AbstractController
     /**
      * @Route("", name="browse")
      */
-    public function browse(CategoryRepository $categoryRepository): Response
+    public function browse(CategoryRepository $categoryRepository, PaginatorInterface $paginator, Request $request): Response
     {
+        $categories = $paginator->paginate(
+            $categoryRepository->findAll(),
+            $request->query->getInt('page', 1),
+            7
+        );
+
         return $this->render('backoffice/categories/browse.html.twig', [
-            'categories' => $categoryRepository->findAll(),
+            'categories' => $categories,
         ]);
     }
 
@@ -55,6 +62,10 @@ class CategoryController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+            if ($category->getPicture() === null) {
+                $category->setPicture('category_placeholder.png');
+            }
 
             $this->manager->persist($category);
             $this->manager->flush();
