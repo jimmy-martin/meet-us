@@ -8,6 +8,7 @@ use App\Form\Back\EventType;
 use App\Repository\EventRepository;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -28,13 +29,16 @@ class EventController extends AbstractController
     /**
      * @Route("", name="browse")
      */
-    public function browse(EventRepository $eventRepository): Response
+    public function browse(EventRepository $eventRepository, PaginatorInterface $paginator, Request $request): Response
     {
+        $events = $paginator->paginate(
+            $eventRepository->findBy([], ['createdAt' => 'DESC']), /* query NOT result */
+            $request->query->getInt('page', 1), /*page number*/
+            5 /*limit per page*/
+        );
+
         return $this->render('backoffice/events/browse.html.twig', [
-            'events' => $eventRepository->findBy(
-                [],
-                ['createdAt' => 'DESC']
-            ),
+            'events' => $events
         ]);
     }
 
