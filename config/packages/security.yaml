@@ -51,14 +51,14 @@ security:
   access_control:
     # - { path: ^/admin, roles: ROLE_ADMIN }
     # - { path: ^/profile, roles: ROLE_USER }
-    - { path: ^/(login|logout),       roles: PUBLIC_ACCESS }
-    - { path: ^/api/v1/users/favorites, roles: IS_AUTHENTICATED_FULLY }
-    - { path: ^/api/v1/users, roles: PUBLIC_ACCESS, methods: [ POST ] }
-    - { path: ^/api/v1/events/(past|incoming), roles: IS_AUTHENTICATED_FULLY, methods: [ GET ] }
-    - { path: ^/api/v1/(events|categories), roles: PUBLIC_ACCESS, methods: [ GET ] }
-    - { path: ^/api/login, roles: PUBLIC_ACCESS }
-    - { path: ^/api,       roles: IS_AUTHENTICATED_FULLY }
-    - { path: ^/,       roles: ROLE_MODERATOR }
+    - { path: ^/(login|logout),       roles: PUBLIC_ACCESS, requires_channel: '%env(SECURE_SCHEME)%' }
+    - { path: ^/api/v1/users/favorites, roles: IS_AUTHENTICATED_FULLY, requires_channel: '%env(SECURE_SCHEME)%' }
+    - { path: ^/api/v1/users, roles: PUBLIC_ACCESS, methods: [ POST ], requires_channel: '%env(SECURE_SCHEME)%' }
+    - { path: ^/api/v1/events/(past|incoming), roles: IS_AUTHENTICATED_FULLY, methods: [ GET ], requires_channel: '%env(SECURE_SCHEME)%' }
+    - { path: ^/api/v1/(events|categories), roles: PUBLIC_ACCESS, methods: [ GET ], requires_channel: '%env(SECURE_SCHEME)%' }
+    - { path: ^/api/login, roles: PUBLIC_ACCESS, requires_channel: '%env(SECURE_SCHEME)%' }
+    - { path: ^/api,       roles: IS_AUTHENTICATED_FULLY, requires_channel: '%env(SECURE_SCHEME)%' }
+    - { path: ^/,       roles: ROLE_MODERATOR, requires_channel: '%env(SECURE_SCHEME)%' }
 
   role_hierarchy:
     ROLE_ADMIN: ROLE_MODERATOR
