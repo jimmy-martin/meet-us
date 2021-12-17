@@ -28,6 +28,11 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
         $this->urlGenerator = $urlGenerator;
     }
 
+    public function supports(Request $request): bool
+    {
+        return $request->isMethod('POST') && $this->getLoginUrl($request) === $request->getRequestUri();
+    }
+
     public function authenticate(Request $request): Passport
     {
         $email = $request->request->get('_username', '');
