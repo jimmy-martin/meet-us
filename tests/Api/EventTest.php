@@ -73,15 +73,10 @@ class EventTest extends WebTestCase
         $this->assertResponseStatusCodeSame(401);
     }
 
-    /**
-     * @dataProvider publicGetUrlList
-     */
-    public function testWhileAuthenticated($publicGetUrlList): void
+    public function testOtherUrlsWhileAuthenticated() :void
     {
         $client = MainTest::createAuthenticatedClient('admin@gmail.com', 'test');
         $client->insulate(true);
-        $client->request('GET', $publicGetUrlList);
-        $this->assertResponseIsSuccessful();
 
         // GET
         $client->request('GET', '/api/v1/events/past');
@@ -142,7 +137,17 @@ class EventTest extends WebTestCase
 
         $client->request('DELETE', '/api/v1/events/' . $newOnlineEventId);
         $this->assertResponseStatusCodeSame(204);
+    }
 
+    /**
+     * @dataProvider publicGetUrlList
+     */
+    public function testGetUrlsWhileAuthenticated($publicGetUrlList): void
+    {
+        $client = MainTest::createAuthenticatedClient('admin@gmail.com', 'test');
+        $client->insulate(true);
+        $client->request('GET', $publicGetUrlList);
+        $this->assertResponseIsSuccessful();
     }
 
     public function publicGetUrlList(): array
