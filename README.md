@@ -37,6 +37,13 @@ Après ces lignes de commandes ci-dessus, vous aurez une base de données avec d
 php bin/console lexik:jwt:generate-keypair --skip-if-exists
 ```
 
+- Pour les tests, il faut générer d'autres clés ainsi (mettre la passphrase à `pass`):
+  
+```bash
+openssl genrsa -out config/jwt/private-test.pem -aes256 4096
+openssl rsa -pubout -in config/jwt/private-test.pem -out config/jwt/public-test.pem
+```
+
 - Il vous suffit désormais de lancer votre serveur php :
 
 ```bash
