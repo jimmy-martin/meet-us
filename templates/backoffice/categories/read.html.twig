@@ -9,5 +9,6 @@
     </div>
     <p> ID de la catégorie : {{ category.id }} </p>
     <p> Photo de la catégorie : {{ category.picture }} </p>
+    <img src="{{ asset('uploads/categories/') }}{{ category.picture }}" alt="...">
 
 {% endblock %}

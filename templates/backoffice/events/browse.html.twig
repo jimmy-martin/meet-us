@@ -15,6 +15,7 @@
             <th scope="col">ID</th>
             <th scope="col">Titre</th>
             <th scope="col">Date</th>
+            <th scope="col">Créateur</th>
             <th scope="col">Nb max. participants</th>
             <th scope="col">Archivé</th>
             <th scope="col">Type</th>
@@ -29,6 +30,7 @@
                 <th scope="row">{{ event.id }}</th>
                 <td>{{ event.title }}</td>
                 <td>{{ event.date|date('Y-m-d H:i') }}</td>
+                <td>{{ event.author.fullname }}</td>
                 <td>{{ event.maxMembers }}</td>
                 <td>{{ event.isArchived ? 'Archivé' : 'Non archivé' }}</td>
                 <td>{{ event.isOnline ? 'En ligne' : 'Présentiel' }}</td>
@@ -55,4 +57,8 @@
         {% endfor %}
         </tbody>
     </table>
+
+    <div class="navigation">
+        {{ knp_pagination_render(events) }}
+    </div>
 {% endblock %}

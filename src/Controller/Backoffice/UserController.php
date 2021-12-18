@@ -5,6 +5,7 @@ namespace App\Controller\Backoffice;
 use App\Entity\User;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -18,10 +19,16 @@ class UserController extends AbstractController
     /**
      * @Route("", name="browse")
      */
-    public function browse(UserRepository $userRepository): Response
+    public function browse(UserRepository $userRepository, PaginatorInterface $paginator, Request $request): Response
     {
+        $users = $paginator->paginate(
+            $userRepository->findAll(),
+            $request->query->getInt('page', 1),
+            7
+        );
+
         return $this->render('backoffice/users/browse.html.twig', [
-            'users' => $userRepository->findAll(),
+            'users' => $users,
         ]);
     }
 

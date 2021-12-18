@@ -17,10 +17,11 @@
                     <a class="nav-link" href="{{ path('backoffice_users_browse') }}">Utilisateurs</a>
                 </li>
             </ul>
-            <form class="d-flex">
-                <input class="form-control me-sm-2" type="text" placeholder="Rechercher">
-                <button class="btn btn-secondary my-2 my-sm-0" type="submit">Rechercher</button>
-            </form>
+            <a href="{{ path('app_logout') }}" class="btn btn-primary">Se déconnecter</a>
+{#            <form class="d-flex">#}
+{#                <input class="form-control me-sm-2" type="text" placeholder="Rechercher">#}
+{#                <button class="btn btn-secondary my-2 my-sm-0" type="submit">Rechercher</button>#}
+{#            </form>#}
         </div>
     </div>
 </nav>

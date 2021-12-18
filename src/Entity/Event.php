@@ -6,10 +6,13 @@ use App\Repository\EventRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
  * @ORM\Entity(repositoryClass=EventRepository::class)
+ * @Vich\Uploadable
  */
 class Event
 {
@@ -32,6 +35,34 @@ class Event
      * @ORM\Column(type="text")
      */
     private $description;
+
+    /**
+     * @Vich\UploadableField(mapping="event_image", fileNameProperty="picture")
+     * @var File|null
+     */
+    private $pictureFile;
+
+    /**
+     * @return File|null
+     */
+    public function getPictureFile(): ?File
+    {
+        return $this->pictureFile;
+    }
+
+    /**
+     * @param File|null $pictureFile
+     */
+    public function setPictureFile(?File $pictureFile): void
+    {
+        $this->pictureFile = $pictureFile;
+
+        if (null !== $pictureFile) {
+            // It is required that at least one field changes if you are using doctrine
+            // otherwise the event listeners won't be called and the file is lost
+            $this->title = $this->title;
+        }
+    }
 
     /**
      * @Groups({"event_browse", "event_read", "favorite_browse"})

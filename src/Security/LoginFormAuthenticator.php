@@ -28,6 +28,11 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
         $this->urlGenerator = $urlGenerator;
     }
 
+    public function supports(Request $request): bool
+    {
+        return $request->isMethod('POST') && $this->getLoginUrl($request) === $request->getRequestUri();
+    }
+
     public function authenticate(Request $request): Passport
     {
         $email = $request->request->get('email', '');
@@ -49,6 +54,7 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
             return new RedirectResponse($targetPath);
         }
 
+        // For example:
         return new RedirectResponse($this->urlGenerator->generate('backoffice_home'));
     }
 
