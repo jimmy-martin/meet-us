@@ -2,6 +2,8 @@
 
 namespace App\Controller\Backoffice;
 
+use App\Repository\EventRepository;
+use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,9 +17,26 @@ class HomeController extends AbstractController
     /**
      * @Route("", name="home")
      */
-    public function index(): Response
+    public function index(EventRepository $eventRepository, UserRepository $userRepository): Response
     {
-        return $this->render('backoffice/home/index.html.twig');
+        // EVENTS STATS
+        $newEventsThisWeek = count($eventRepository->findNewlyCreatedEventsPastSevenDays());
+        $newEventsThisMonth = count($eventRepository->findCreatedThisMonth());
+
+        // USERS STATS
+        $newUsersThisWeek = count($userRepository->findNewlySubscribedUsersPastSevenDays());
+        $newUsersThisMonth = count($userRepository->findCreatedThisMonth());
+
+
+        return $this->render('backoffice/home/index.html.twig', [
+            // EVENTS STATS
+            'newEventsThisWeek' => $newEventsThisWeek,
+            'newEventsThisMonth' => $newEventsThisMonth,
+
+            // USERS STATS
+            'newUsersThisWeek' => $newUsersThisWeek,
+            'newUsersThisMonth' => $newUsersThisMonth,
+        ]);
     }
 
     /**
