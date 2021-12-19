@@ -8,9 +8,9 @@
 
     <!-- Copyright -->
     <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2)">
-        © 2020 Copyright :
+        © {{ 'now' | date('Y') }} Copyright :
         {% set textColor = app.session.get('theme') == 'darkly' or app.session.get('theme') is null ? 'white' : 'black' %}
-        <a class="text-{{ textColor }}" href="#">Meet Us</a>
+        <a class="text-{{ textColor }}" href="https://meet-us.surge.sh">Meet Us</a>
         <a href="{{ path('backoffice_toggle_theme') }}" class="ms-2 btn btn-primary">
             {{ textColor == 'white' ? 'Light Mode' : 'Dark Mode' }}
         </a>
