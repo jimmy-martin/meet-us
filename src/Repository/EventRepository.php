@@ -16,9 +16,26 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class EventRepository extends ServiceEntityRepository
 {
+    private $date;
+    private $monthDate;
+    private $yearDate;
+    private $firstDayOfMonthDate;
+    private $lastDayOfMonthDate;
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Event::class);
+
+        $this->date = new \DateTime();
+
+        $this->monthDate = $this->date->format('m');
+        $this->yearDate = $this->date->format('Y');
+
+        $firstDayOfMonth = mktime(0, 0, 0, $this->monthDate, 0, $this->yearDate);
+        $this->firstDayOfMonthDate = date('Y-m-d', $firstDayOfMonth);
+
+        $lastDayOfMonth = mktime(0, 0, 0, $this->monthDate + 1, 0, $this->yearDate);
+        $this->lastDayOfMonthDate = date('Y-m-d', $lastDayOfMonth);
     }
 
     /**
@@ -26,20 +43,10 @@ class EventRepository extends ServiceEntityRepository
      */
     public function findCreatedThisMonth()
     {
-        $date = new DateTime();
-        $dateMonth = $date->format('m');
-        $dateYear = $date->format('Y');
-
-        $firstDayOfMonth = mktime(0, 0, 0, $dateMonth, 0, $dateYear);
-        $firstDayOfMonthDate = date('Y-m-d', $firstDayOfMonth);
-
-        $lastDayOfMonth = mktime(0, 0, 0, $dateMonth + 1, 0, $dateYear);
-        $lastDayOfMonthDate = date('Y-m-d', $lastDayOfMonth);
-
         return $this->createQueryBuilder('e')
             ->andWhere('e.createdAt BETWEEN :firstDayOfMonth AND :lastDayOfMonth')
-            ->setParameter(':firstDayOfMonth', $firstDayOfMonthDate)
-            ->setParameter(':lastDayOfMonth', $lastDayOfMonthDate)
+            ->setParameter(':firstDayOfMonth', $this->firstDayOfMonthDate)
+            ->setParameter(':lastDayOfMonth', $this->lastDayOfMonthDate)
             ->getQuery()
             ->getResult();
     }
@@ -47,7 +54,7 @@ class EventRepository extends ServiceEntityRepository
     /**
      * Return events that have been created the last 7 days
      */
-    public function findNewlyCreatedEventsPastSevenDays()
+    public function findCreatedPastSevenDays()
     {
         return $this->createQueryBuilder('e')
             ->andWhere('e.createdAt > :todayMinusSevenDays')

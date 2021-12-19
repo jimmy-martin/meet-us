@@ -20,11 +20,11 @@ class HomeController extends AbstractController
     public function index(EventRepository $eventRepository, UserRepository $userRepository): Response
     {
         // EVENTS STATS
-        $newEventsThisWeek = count($eventRepository->findNewlyCreatedEventsPastSevenDays());
+        $newEventsThisWeek = count($eventRepository->findCreatedPastSevenDays());
         $newEventsThisMonth = count($eventRepository->findCreatedThisMonth());
 
         // USERS STATS
-        $newUsersThisWeek = count($userRepository->findNewlySubscribedUsersPastSevenDays());
+        $newUsersThisWeek = count($userRepository->findCreatedPastSevenDays());
         $newUsersThisMonth = count($userRepository->findCreatedThisMonth());
 
 
