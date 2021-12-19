@@ -8,6 +8,7 @@ use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
+use function get_class;
 
 /**
  * @method User|null find($id, $lockMode = null, $lockVersion = null)
@@ -17,9 +18,20 @@ use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
  */
 class UserRepository extends ServiceEntityRepository implements PasswordUpgraderInterface
 {
+    private $firstDayOfMonth;
+    private $lastDayOfMonth;
+    private $firstDayOfWeek;
+    private $lastDayOfWeek;
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, User::class);
+
+        $this->firstDayOfMonth = date('Y-m-d', strtotime('first day of this month'));
+        $this->lastDayOfMonth = date('Y-m-d', strtotime('last day of this month'));
+
+        $this->firstDayOfWeek = date('Y-m-d', strtotime('monday this week'));
+        $this->lastDayOfWeek = date('Y-m-d', strtotime('sunday this week'));
     }
 
     /**
@@ -28,12 +40,38 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     public function upgradePassword(PasswordAuthenticatedUserInterface $user, string $newHashedPassword): void
     {
         if (!$user instanceof User) {
-            throw new UnsupportedUserException(sprintf('Instances of "%s" are not supported.', \get_class($user)));
+            throw new UnsupportedUserException(sprintf('Instances of "%s" are not supported.', get_class($user)));
         }
 
         $user->setPassword($newHashedPassword);
         $this->_em->persist($user);
         $this->_em->flush();
+    }
+
+    /**
+     * Return users that have been created this month
+     */
+    public function findCreatedThisMonth()
+    {
+        return $this->createQueryBuilder('u')
+            ->andWhere('u.createdAt BETWEEN :firstDayOfMonth AND :lastDayOfMonth')
+            ->setParameter(':firstDayOfMonth', $this->firstDayOfMonth)
+            ->setParameter(':lastDayOfMonth', $this->lastDayOfMonth)
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * Return users that have been created the last 7 days
+     */
+    public function findCreatedThisWeek()
+    {
+        return $this->createQueryBuilder('u')
+            ->andWhere('u.createdAt BETWEEN :firstDayOfWeek AND :lastDayOfWeek')
+            ->setParameter(':firstDayOfWeek', $this->firstDayOfWeek)
+            ->setParameter(':lastDayOfWeek', $this->lastDayOfWeek)
+            ->getQuery()
+            ->getResult();
     }
 
     // /**

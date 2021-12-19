@@ -3,6 +3,8 @@
 namespace App\Repository;
 
 use App\Entity\Event;
+use DateTime;
+use DateTimeImmutable;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -14,9 +16,46 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class EventRepository extends ServiceEntityRepository
 {
+    private $firstDayOfMonth;
+    private $lastDayOfMonth;
+    private $firstDayOfWeek;
+    private $lastDayOfWeek;
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Event::class);
+
+        $this->firstDayOfMonth = date('Y-m-d', strtotime('first day of this month'));
+        $this->lastDayOfMonth = date('Y-m-d', strtotime('last day of this month'));
+
+        $this->firstDayOfWeek = date('Y-m-d', strtotime('monday this week'));
+        $this->lastDayOfWeek = date('Y-m-d', strtotime('sunday this week'));
+    }
+
+    /**
+     * Return events that have been created this month
+     */
+    public function findCreatedThisMonth()
+    {
+        return $this->createQueryBuilder('e')
+            ->andWhere('e.createdAt BETWEEN :firstDayOfMonth AND :lastDayOfMonth')
+            ->setParameter(':firstDayOfMonth', $this->firstDayOfMonth)
+            ->setParameter(':lastDayOfMonth', $this->lastDayOfMonth)
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * Return events that have been created the last 7 days
+     */
+    public function findCreatedThisWeek()
+    {
+        return $this->createQueryBuilder('e')
+            ->andWhere('e.createdAt BETWEEN :firstDayOfWeek AND :lastDayOfWeek')
+            ->setParameter(':firstDayOfWeek', $this->firstDayOfWeek)
+            ->setParameter(':lastDayOfWeek', $this->lastDayOfWeek)
+            ->getQuery()
+            ->getResult();
     }
 
     /**
@@ -28,7 +67,7 @@ class EventRepository extends ServiceEntityRepository
             ->andWhere('e.category = :categoryId')
             ->setParameter(':categoryId', $categoryId)
             ->andWhere('e.date > :today')
-            ->setParameter(':today', new \DateTimeImmutable())
+            ->setParameter(':today', new DateTimeImmutable())
             ->andWhere('e.isArchived = 0')
             ->orderBy('e.date', 'ASC')
             ->setMaxResults($limit)
@@ -45,7 +84,7 @@ class EventRepository extends ServiceEntityRepository
             ->andWhere('e.title LIKE :keyword')
             ->setParameter(':keyword', "%$keyword%")
             ->andWhere('e.date > :today')
-            ->setParameter(':today', new \DateTimeImmutable())
+            ->setParameter(':today', new DateTimeImmutable())
             ->andWhere('e.isArchived = 0')
             ->orderBy('e.date', 'ASC')
             ->setMaxResults($limit)
@@ -55,7 +94,7 @@ class EventRepository extends ServiceEntityRepository
 
     /**
      * @return Event[] Returns an array of Event objects that are not archived
-     * 
+     *
      * findByActive(?int $limit) equals to findByActive(int $limit = null)
      */
     public function findByActive(int $limit = null)
@@ -63,7 +102,7 @@ class EventRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('e')
             ->andWhere('e.isArchived = 0')
             ->andWhere('e.date > :today')
-            ->setParameter(':today', new \DateTimeImmutable())
+            ->setParameter(':today', new DateTimeImmutable())
             ->orderBy('e.date', 'ASC')
             ->setMaxResults($limit)
             ->getQuery()
@@ -80,7 +119,7 @@ class EventRepository extends ServiceEntityRepository
             ->andWhere('m.id = :userId')
             ->setParameter(':userId', $userId)
             ->andWhere('e.date < :today')
-            ->setParameter(':today', new \DateTimeImmutable())
+            ->setParameter(':today', new DateTimeImmutable())
             ->orderBy('e.date', 'DESC')
             ->setMaxResults($limit)
             ->getQuery()
@@ -97,7 +136,7 @@ class EventRepository extends ServiceEntityRepository
             ->andWhere('m.id = :userId')
             ->setParameter(':userId', $userId)
             ->andWhere('e.date > :today')
-            ->setParameter(':today', new \DateTimeImmutable())
+            ->setParameter(':today', new DateTimeImmutable())
             ->orderBy('e.date', 'ASC')
             ->setMaxResults($limit)
             ->getQuery()
@@ -113,7 +152,7 @@ class EventRepository extends ServiceEntityRepository
             ->andWhere('e.category = :eventCategory')
             ->setParameter(':eventCategory', $event->getCategory())
             ->andWhere('e.date > :today')
-            ->setParameter(':today', new \DateTimeImmutable())
+            ->setParameter(':today', new DateTimeImmutable())
             ->andWhere('e.id != :eventId')
             ->setParameter(':eventId', $event->getId())
             ->orderBy('e.date', 'ASC')

@@ -29,9 +29,9 @@
 
 <body>
 {% if is_granted('ROLE_MODERATOR') %}
-{% include "backoffice/partials/_nav.html.twig" %}
+    {% include "backoffice/partials/_nav.html.twig" %}
 {% endif %}
-<div class="container">
+<div class="container-fluid">
     {% for label, messages in app.flashes %}
         {% for message in messages %}
             <div class="mt-3 alert alert-dismissible alert-{{ label }} text-center" role="alert">
@@ -41,12 +41,10 @@
         {% endfor %}
     {% endfor %}
 
-    <div class="row">
-        {% block body %}{% endblock %}
-    </div>
+    {% block body %}{% endblock %}
 </div>
 {% if is_granted('ROLE_MODERATOR') %}
-{% include 'backoffice/partials/_footer.html.twig' %}
+    {% include 'backoffice/partials/_footer.html.twig' %}
 {% endif %}
 </body>
 </html>
