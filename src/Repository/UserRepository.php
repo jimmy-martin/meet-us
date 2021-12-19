@@ -18,26 +18,20 @@ use function get_class;
  */
 class UserRepository extends ServiceEntityRepository implements PasswordUpgraderInterface
 {
-    private $date;
-    private $monthDate;
-    private $yearDate;
-    private $firstDayOfMonthDate;
-    private $lastDayOfMonthDate;
+    private $firstDayOfMonth;
+    private $lastDayOfMonth;
+    private $firstDayOfWeek;
+    private $lastDayOfWeek;
 
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, User::class);
 
-        $this->date = new \DateTime();
+        $this->firstDayOfMonth = date('Y-m-d', strtotime('first day of this month'));
+        $this->lastDayOfMonth = date('Y-m-d', strtotime('last day of this month'));
 
-        $this->monthDate = $this->date->format('m');
-        $this->yearDate = $this->date->format('Y');
-
-        $firstDayOfMonth = mktime(0, 0, 0, $this->monthDate, 0, $this->yearDate);
-        $this->firstDayOfMonthDate = date('Y-m-d', $firstDayOfMonth);
-
-        $lastDayOfMonth = mktime(0, 0, 0, $this->monthDate + 1, 0, $this->yearDate);
-        $this->lastDayOfMonthDate = date('Y-m-d', $lastDayOfMonth);
+        $this->firstDayOfWeek = date('Y-m-d', strtotime('monday this week'));
+        $this->lastDayOfWeek = date('Y-m-d', strtotime('sunday this week'));
     }
 
     /**
@@ -61,8 +55,8 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     {
         return $this->createQueryBuilder('u')
             ->andWhere('u.createdAt BETWEEN :firstDayOfMonth AND :lastDayOfMonth')
-            ->setParameter(':firstDayOfMonth', $this->firstDayOfMonthDate)
-            ->setParameter(':lastDayOfMonth', $this->lastDayOfMonthDate)
+            ->setParameter(':firstDayOfMonth', $this->firstDayOfMonth)
+            ->setParameter(':lastDayOfMonth', $this->lastDayOfMonth)
             ->getQuery()
             ->getResult();
     }
@@ -70,11 +64,12 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     /**
      * Return users that have been created the last 7 days
      */
-    public function findCreatedPastSevenDays()
+    public function findCreatedThisWeek()
     {
         return $this->createQueryBuilder('u')
-            ->andWhere('u.createdAt > :todayMinusSevenDays')
-            ->setParameter(':todayMinusSevenDays', new \DateTimeImmutable('-7 days'))
+            ->andWhere('u.createdAt BETWEEN :firstDayOfWeek AND :lastDayOfWeek')
+            ->setParameter(':firstDayOfWeek', $this->firstDayOfWeek)
+            ->setParameter(':lastDayOfWeek', $this->lastDayOfWeek)
             ->getQuery()
             ->getResult();
     }
