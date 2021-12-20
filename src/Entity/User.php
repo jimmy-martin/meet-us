@@ -484,6 +484,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
+     * @Groups({"user_browse"})
+     */
+    public function getCreatedEventsCount()
+    {
+        return $this->createdEvents->count();
+    }
+
+    /**
      * @Groups({"event_read", "favorite_browse", "event_browse"})
      */
     public function getFullName()

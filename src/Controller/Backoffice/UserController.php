@@ -24,10 +24,10 @@ class UserController extends AbstractController
         $users = $paginator->paginate(
             $userRepository->findAll(),
             $request->query->getInt('page', 1),
-            7
+            8
         );
 
-        return $this->render('backoffice/users/browse.html.twig', [
+        return $this->render('backoffice/users/browse_test.html.twig', [
             'users' => $users,
         ]);
     }
