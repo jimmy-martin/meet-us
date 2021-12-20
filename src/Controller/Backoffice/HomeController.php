@@ -5,6 +5,7 @@ namespace App\Controller\Backoffice;
 use App\Repository\EventRepository;
 use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -17,29 +18,45 @@ class HomeController extends AbstractController
     /**
      * @Route("", name="home")
      */
-    public function index(EventRepository $eventRepository, UserRepository $userRepository): Response
+    public function index(EventRepository $eventRepository, UserRepository $userRepository, Request $request): Response
     {
+        // EVENTS STATS
+        $newlyCreatedEvents = count($eventRepository->findCreatedThisWeek());
+        $events = count($eventRepository->findHappensThisWeek());
+
+        // USERS STATS
+        $newlyCreatedUsers = count($userRepository->findCreatedThisWeek());
+
+        $interval = $request->query->get('interval');
+
+        if ($interval === 'daily') {
+            // EVENTS STATS
+            $newlyCreatedEvents = count($eventRepository->findCreatedToday());
+            $events = count($eventRepository->findHappensToday());
+
+            // USERS STATS
+            $newlyCreatedUsers = count($userRepository->findCreatedToday());
+        } else if ($interval === 'monthly') {
+            // EVENTS STATS
+            $newlyCreatedEvents = count($eventRepository->findCreatedThisMonth());
+            $events = count($eventRepository->findHappensThisMonth());
+
+            // USERS STATS
+            $newlyCreatedUsers = count($userRepository->findCreatedThisMonth());
+        }
+
         // TODO: afficher le nombre d'évènements rejoints par un utilisateur
         // TODO: moyenne d'évènements créés et d'évènements rejoints
         // TODO: savoir combien d'organisateurs rejoignent un évènement
 
-        // EVENTS STATS
-        $newEventsThisWeek = count($eventRepository->findCreatedThisWeek());
-        $newEventsThisMonth = count($eventRepository->findCreatedThisMonth());
-
-        // USERS STATS
-        $newUsersThisWeek = count($userRepository->findCreatedThisWeek());
-        $newUsersThisMonth = count($userRepository->findCreatedThisMonth());
-
-
         return $this->render('backoffice/home/index.html.twig', [
+            'interval' => $interval,
             // EVENTS STATS
-            'newEventsThisWeek' => $newEventsThisWeek,
-            'newEventsThisMonth' => $newEventsThisMonth,
+            'newlyCreatedEvents' => $newlyCreatedEvents,
+            'events' => $events,
 
             // USERS STATS
-            'newUsersThisWeek' => $newUsersThisWeek,
-            'newUsersThisMonth' => $newUsersThisMonth,
+            'newlyCreatedUsers' => $newlyCreatedUsers,
         ]);
     }
 
