@@ -73,6 +73,7 @@ class UserController extends AbstractController
      */
     public function delete(EntityManagerInterface $manager, User $user): Response
     {
+        // TODO: ajouter protection csrf
         $manager->remove($user);
         $manager->flush();
 

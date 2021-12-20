@@ -32,7 +32,7 @@ class CategoryController extends AbstractController
         $categories = $paginator->paginate(
             $categoryRepository->findAll(),
             $request->query->getInt('page', 1),
-            7
+            8
         );
 
         return $this->render('backoffice/categories/browse.html.twig', [
@@ -111,7 +111,7 @@ class CategoryController extends AbstractController
     {
         $token = $request->request->get('_token');
 
-        if ($this->isCsrfTokenValid('delete_categories' . $category->getId(), $token)) {
+        if ($this->isCsrfTokenValid('delete_categories_' . $category->getId(), $token)) {
 
             $this->manager->remove($category);
             $this->manager->flush();
