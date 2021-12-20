@@ -58,11 +58,13 @@
                                         </a>
 
                                         {#                                        USER EDIT #}
-                                        {#                                        <a class="btn btn-warning" #}
-                                        {#                                           href="{{ path('backoffice_users_edit', {id : user.id}) }}" #}
-                                        {#                                           data-bs-toggle="tooltip" data-bs-placement="top" title="Modifier"> #}
-                                        {#                                            <i class="fa fa-pencil-square-o" aria-hidden="true"></i> #}
-                                        {#                                        </a> #}
+                                        {% if app.user == user %}
+                                            <a class="btn btn-warning"
+                                               href="#"
+                                               data-bs-toggle="tooltip" data-bs-placement="top" title="Modifier">
+                                                <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                            </a>
+                                        {% endif %}
                                         <form action="{{ path('backoffice_users_delete', {id : user.id}) }}"
                                               class="d-inline"
                                               method="post"
