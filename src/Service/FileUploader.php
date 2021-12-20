@@ -17,6 +17,13 @@ class FileUploader
         $this->slugger = $slugger;
     }
 
+    /**
+     * Upload a file in the folder of your choice in public/uploads
+     *
+     * @param UploadedFile $file
+     * @param string $subDirectory
+     * @return string
+     */
     public function upload(UploadedFile $file, string $subDirectory)
     {
         $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
