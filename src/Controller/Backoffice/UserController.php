@@ -27,7 +27,7 @@ class UserController extends AbstractController
             8
         );
 
-        return $this->render('backoffice/users/browse_test.html.twig', [
+        return $this->render('backoffice/users/browse.html.twig', [
             'users' => $users,
         ]);
     }
