@@ -30,7 +30,9 @@ class HomeController extends AbstractController
         $interval = $request->query->get('interval');
 
         if ($interval === 'daily') {
-            // TODO
+            // EVENTS STATS
+            $newlyCreatedEvents = count($eventRepository->findCreatedToday());
+            $events = count($eventRepository->findHappensToday());
         } else if ($interval === 'monthly') {
             // EVENTS STATS
             $newlyCreatedEvents = count($eventRepository->findCreatedThisMonth());
