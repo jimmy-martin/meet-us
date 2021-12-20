@@ -1,6 +1,8 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello EventController!{% endblock %}
+{% block title %}
+    {{ parent() }} - {{ event.title | capitalize }}
+{% endblock %}
 
 {% block body %}
     <div>
@@ -18,5 +20,7 @@
     <p> Date de création de l'évènement : {{ event.createdAt|date('Y-m-d H:i') }} </p>
     <p> Dernière mise à jour de l'évènement : {{ event.updatedAt|date('Y-m-d H:i') }} </p>
     <img src="{{ asset('uploads/events/') ~ event.picture }}" alt="">
+
+    <a class="btn btn-primary" href="{{ path('backoffice_events_edit', {id: event.id}) }}">Modifier l'évènement</a>
 
 {% endblock %}

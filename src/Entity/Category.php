@@ -54,7 +54,7 @@ class Category
         if (null !== $pictureFile) {
             // It is required that at least one field changes if you are using doctrine
             // otherwise the event listeners won't be called and the file is lost
-            $this->name = $this->name;
+            $this->updatedAt = new \DateTimeImmutable();
         }
     }
 
@@ -68,6 +68,11 @@ class Category
      * @ORM\OneToMany(targetEntity=Event::class, mappedBy="category")
      */
     private $events;
+
+    /**
+     * @ORM\Column(type="datetime_immutable", nullable=true)
+     */
+    private $updatedAt;
 
     public function __construct()
     {
@@ -144,5 +149,17 @@ class Category
     public function getEventsCount()
     {
         return $this->events->count();
+    }
+
+    public function getUpdatedAt(): ?\DateTimeImmutable
+    {
+        return $this->updatedAt;
+    }
+
+    public function setUpdatedAt(?\DateTimeImmutable $updatedAt): self
+    {
+        $this->updatedAt = $updatedAt;
+
+        return $this;
     }
 }
