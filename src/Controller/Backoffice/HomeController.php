@@ -19,6 +19,10 @@ class HomeController extends AbstractController
      */
     public function index(EventRepository $eventRepository, UserRepository $userRepository): Response
     {
+        // TODO: afficher le nombre d'évènements rejoints par un utilisateur
+        // TODO: moyenne d'évènements créés et d'évènements rejoints
+        // TODO: savoir combien d'organisateurs rejoignent un évènement
+
         // EVENTS STATS
         $newEventsThisWeek = count($eventRepository->findCreatedThisWeek());
         $newEventsThisMonth = count($eventRepository->findCreatedThisMonth());
