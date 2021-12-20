@@ -18,6 +18,7 @@ use function get_class;
  */
 class UserRepository extends ServiceEntityRepository implements PasswordUpgraderInterface
 {
+    private $today;
     private $firstDayOfMonth;
     private $lastDayOfMonth;
     private $firstDayOfWeek;
@@ -26,6 +27,8 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, User::class);
+
+        $this->today = date('Y-m-d', strtotime('today'));
 
         $this->firstDayOfMonth = date('Y-m-d', strtotime('first day of this month'));
         $this->lastDayOfMonth = date('Y-m-d', strtotime('last day of this month'));
@@ -72,6 +75,24 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->setParameter(':lastDayOfWeek', $this->lastDayOfWeek)
             ->getQuery()
             ->getResult();
+    }
+
+    /**
+     * Return users that have been created today
+     */
+    public function findCreatedToday()
+    {
+        $users = $this->findAll();
+
+        $usersCreatedToday = [];
+
+        foreach ($users as $user) {
+            if ($user->getCreatedAt()->format('Y-m-d') === $this->today) {
+                $usersCreatedToday[] = $user;
+            }
+        }
+
+        return $usersCreatedToday;
     }
 
     // /**

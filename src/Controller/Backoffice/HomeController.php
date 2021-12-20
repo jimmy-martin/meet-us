@@ -33,6 +33,9 @@ class HomeController extends AbstractController
             // EVENTS STATS
             $newlyCreatedEvents = count($eventRepository->findCreatedToday());
             $events = count($eventRepository->findHappensToday());
+
+            // USERS STATS
+            $newlyCreatedUsers = count($userRepository->findCreatedToday());
         } else if ($interval === 'monthly') {
             // EVENTS STATS
             $newlyCreatedEvents = count($eventRepository->findCreatedThisMonth());
