@@ -34,7 +34,7 @@ class EventController extends AbstractController
         $events = $paginator->paginate(
             $eventRepository->findBy([], ['createdAt' => 'DESC']), /* query NOT result */
             $request->query->getInt('page', 1), /*page number*/
-            5 /*limit per page*/
+            8 /*limit per page*/
         );
 
         return $this->render('backoffice/events/browse.html.twig', [
