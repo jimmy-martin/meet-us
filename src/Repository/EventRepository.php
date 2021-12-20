@@ -46,12 +46,38 @@ class EventRepository extends ServiceEntityRepository
     }
 
     /**
-     * Return events that have been created the last 7 days
+     * Return events that have been created this week
      */
     public function findCreatedThisWeek()
     {
         return $this->createQueryBuilder('e')
             ->andWhere('e.createdAt BETWEEN :firstDayOfWeek AND :lastDayOfWeek')
+            ->setParameter(':firstDayOfWeek', $this->firstDayOfWeek)
+            ->setParameter(':lastDayOfWeek', $this->lastDayOfWeek)
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * Return events that happened or will happen this month
+     */
+    public function findHappensThisMonth()
+    {
+        return $this->createQueryBuilder('e')
+            ->andWhere('e.date BETWEEN :firstDayOfMonth AND :lastDayOfMonth')
+            ->setParameter(':firstDayOfMonth', $this->firstDayOfMonth)
+            ->setParameter(':lastDayOfMonth', $this->lastDayOfMonth)
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * Return events that happened or will happen this week
+     */
+    public function findHappensThisWeek()
+    {
+        return $this->createQueryBuilder('e')
+            ->andWhere('e.date BETWEEN :firstDayOfWeek AND :lastDayOfWeek')
             ->setParameter(':firstDayOfWeek', $this->firstDayOfWeek)
             ->setParameter(':lastDayOfWeek', $this->lastDayOfWeek)
             ->getQuery()
