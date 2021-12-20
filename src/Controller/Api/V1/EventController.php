@@ -11,14 +11,12 @@ use App\Repository\UserRepository;
 use App\Service\ApiImageUploader;
 use App\Service\FileUploader;
 use App\Service\UploadedBase64File;
-use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\String\Slugger\SluggerInterface;
 
 /**
  * @Route("/api/v1/events", name="api_v1_events_", requirements={"id"="\d+"})
@@ -235,7 +233,7 @@ class EventController extends AbstractController
         $form->submit($jsonArray, false);
 
         if ($form->isValid()) {
-            $event->setUpdatedAt(new DateTimeImmutable());
+            $event->setUpdatedAt(new \DateTimeImmutable());
             $this->manager->flush();
 
             $recommendedEvents = $eventRepository->findRecommendedEvents($event);
