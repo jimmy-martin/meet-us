@@ -5,6 +5,7 @@ namespace App\Controller\Backoffice;
 use App\Entity\Category;
 use App\Form\Back\CategoryType;
 use App\Repository\CategoryRepository;
+use App\Service\FileUploader;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -32,7 +33,7 @@ class CategoryController extends AbstractController
         $categories = $paginator->paginate(
             $categoryRepository->findAll(),
             $request->query->getInt('page', 1),
-            7
+            8
         );
 
         return $this->render('backoffice/categories/browse.html.twig', [
@@ -64,7 +65,7 @@ class CategoryController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
 
             if ($category->getPicture() === null) {
-                $category->setPicture('category_placeholder.png');
+                $category->setPicture('category_placeholder.jpg');
             }
 
             $this->manager->persist($category);
@@ -72,7 +73,7 @@ class CategoryController extends AbstractController
 
             $this->addFlash('success', 'La catégorie a bien été ajoutée.');
 
-            return $this->redirectToRoute('backoffice_categories_browse');
+            return $this->redirectToRoute('backoffice_categories_read', ['id' => $category->getId()]);
         }
 
         return $this->render('backoffice/categories/add.html.twig', [
@@ -94,7 +95,7 @@ class CategoryController extends AbstractController
 
             $this->addFlash('success', 'La catégorie a bien été modifiée.');
 
-            return $this->redirectToRoute('backoffice_categories_browse');
+            return $this->redirectToRoute('backoffice_categories_read', ['id' => $category->getId()]);
         }
 
 
@@ -111,7 +112,7 @@ class CategoryController extends AbstractController
     {
         $token = $request->request->get('_token');
 
-        if ($this->isCsrfTokenValid('delete_categories' . $category->getId(), $token)) {
+        if ($this->isCsrfTokenValid('delete_categories_' . $category->getId(), $token)) {
 
             $this->manager->remove($category);
             $this->manager->flush();

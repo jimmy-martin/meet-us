@@ -4,7 +4,7 @@ namespace App\Form;
 
 use App\Entity\Event;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
@@ -12,7 +12,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\GreaterThan;
 use Symfony\Component\Validator\Constraints\GreaterThanOrEqual;
 use Symfony\Component\Validator\Constraints\NotNull;
-use Symfony\Component\Validator\Constraints\Type;
 
 class EventType extends AbstractType
 {
@@ -39,10 +38,9 @@ class EventType extends AbstractType
                 ],
             ])
 
-            ->add('picture', null, [
-                'required' => false,
-                'empty_data' => 'event_placeholder.png',
-            ])
+//            ->add('picture', FileType::class, [
+//                'required' => false,
+//            ])
 
             ->add('date', null, [
                 'widget' => 'single_text',

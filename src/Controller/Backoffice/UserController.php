@@ -24,7 +24,7 @@ class UserController extends AbstractController
         $users = $paginator->paginate(
             $userRepository->findAll(),
             $request->query->getInt('page', 1),
-            7
+            8
         );
 
         return $this->render('backoffice/users/browse.html.twig', [
@@ -73,6 +73,7 @@ class UserController extends AbstractController
      */
     public function delete(EntityManagerInterface $manager, User $user): Response
     {
+        // TODO: ajouter protection csrf
         $manager->remove($user);
         $manager->flush();
 

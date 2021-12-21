@@ -1,21 +1,26 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello EventController!{% endblock %}
+{% block title %}
+    {{ parent() }} - {{ event.title | capitalize }}
+{% endblock %}
 
 {% block body %}
-<div>
-    <h1>Détail de l'évènement {{event.title}}</h1>
-</div>
+    <div>
+        <h1>{{ event.title }}</h1>
+    </div>
 
-<p> ID de l'évènement : {{event.id}} </p>
-<p> Titre de l'évènement : {{event.title}} </p>
-<p> Photo de l'évènement : {{event.picture}} </p>
-<p> Date de l'évènement : {{event.date|date('Y-m-d H:i')}} </p>
-<p> Adresse de l'évènement : {{event.address}} {{event.zipcode}} {{event.city}} {{event.country}} </p>
-<p> Limite de participant de l'évènement : {{event.maxMembers}} </p>
-<p> Archive de l'évènement : {{event.isArchived}} </p>
-<p> Publication de l'évènement : {{event.isOnline}} </p>
-<p> Date de création de l'évènement : {{event.createdAt|date('Y-m-d H:i')}} </p>
-<p> Dernière mise à jour de l'évènement : {{event.updatedAt|date('Y-m-d H:i')}} </p>
+    <p> ID de l'évènement : {{ event.id }} </p>
+    <p> Titre de l'évènement : {{ event.title }} </p>
+    <p> Photo de l'évènement : {{ event.picture }} </p>
+    <p> Date de l'évènement : {{ event.date|date('Y-m-d H:i') }} </p>
+    <p> Adresse de l'évènement : {{ event.address }} {{ event.zipcode }} {{ event.city }} {{ event.country }} </p>
+    <p> Limite de participant de l'évènement : {{ event.maxMembers }} </p>
+    <p> Archive de l'évènement : {{ event.isArchived }} </p>
+    <p> Publication de l'évènement : {{ event.isOnline }} </p>
+    <p> Date de création de l'évènement : {{ event.createdAt|date('Y-m-d H:i') }} </p>
+    <p> Dernière mise à jour de l'évènement : {{ event.updatedAt|date('Y-m-d H:i') }} </p>
+    <img src="{{ asset('uploads/events/') ~ event.picture }}" alt="">
+
+    <a class="btn btn-primary" href="{{ path('backoffice_events_edit', {id: event.id}) }}">Modifier l'évènement</a>
 
 {% endblock %}

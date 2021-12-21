@@ -8,6 +8,9 @@ use App\Form\EventOnlineType;
 use App\Form\EventType;
 use App\Repository\EventRepository;
 use App\Repository\UserRepository;
+use App\Service\ApiImageUploader;
+use App\Service\FileUploader;
+use App\Service\UploadedBase64File;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -99,7 +102,7 @@ class EventController extends AbstractController
         // this is how we get the connected user
         $user = $this->getUser();
         $userId = $user->getId();
-        
+
         $userIncomingEvents = $eventRepository->findIncomingEvents($userId, $limit);
 
         return $this->json($userIncomingEvents, 200, [], [
@@ -125,7 +128,7 @@ class EventController extends AbstractController
     /**
      * @Route("", name="add", methods={"POST"})
      */
-    public function add(UserRepository $userRepository, EventRepository $eventRepository, Request $request): Response
+    public function add(ApiImageUploader $apiImageUploader, EventRepository $eventRepository, Request $request): Response
     {
         $event = new Event();
 
@@ -144,9 +147,24 @@ class EventController extends AbstractController
             $form = $this->createForm(EventType::class, $event, ['csrf_protection' => false]);
         }
 
-
         $json = $request->getContent();
+
         $jsonArray = json_decode($json, true);
+
+        if (isset($jsonArray['picture'])) {
+            // Get picture infos
+            $imageName = $jsonArray['picture']['name'];
+            $imageBase64Value = $jsonArray['picture']['value'];
+
+            $newImageName = $apiImageUploader->uploadBase64Image($imageName, $imageBase64Value, '/events');
+
+            $event->setPicture($newImageName);
+
+            // After the image uploads, we remove the picture field in the json datas
+            unset($jsonArray['picture']);
+        } else {
+            $event->setPicture('event_placeholder.jpg');
+        }
 
         $form->submit($jsonArray, false);
 
@@ -182,7 +200,7 @@ class EventController extends AbstractController
     /**
      * @Route("/{id}", name="edit", methods={"PUT", "PATCH"})
      */
-    public function edit(Event $event, EventRepository $eventRepository, Request $request): Response
+    public function edit(ApiImageUploader $apiImageUploader, Event $event, EventRepository $eventRepository, Request $request): Response
     {
         // control if the event author is the user who want to edit the event
         $this->denyAccessUnlessGranted('EVENT_EDIT', $event);
@@ -197,6 +215,20 @@ class EventController extends AbstractController
 
         $json = $request->getContent();
         $jsonArray = json_decode($json, true);
+
+        if (isset($jsonArray['picture'])) {
+
+            // Get picture infos
+            $imageName = $jsonArray['picture']['name'];
+            $imageBase64Value = $jsonArray['picture']['value'];
+
+            $newImageName = $apiImageUploader->uploadBase64Image($imageName, $imageBase64Value, '/events');
+
+            $event->setPicture($newImageName);
+
+            // After the image uploads, we remove the picture field in the json datas
+            unset($jsonArray['picture']);
+        }
 
         $form->submit($jsonArray, false);
 

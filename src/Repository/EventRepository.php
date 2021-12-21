@@ -16,6 +16,7 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class EventRepository extends ServiceEntityRepository
 {
+    private $today;
     private $firstDayOfMonth;
     private $lastDayOfMonth;
     private $firstDayOfWeek;
@@ -24,6 +25,8 @@ class EventRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Event::class);
+
+        $this->today = date('Y-m-d', strtotime('today'));
 
         $this->firstDayOfMonth = date('Y-m-d', strtotime('first day of this month'));
         $this->lastDayOfMonth = date('Y-m-d', strtotime('last day of this month'));
@@ -46,7 +49,7 @@ class EventRepository extends ServiceEntityRepository
     }
 
     /**
-     * Return events that have been created the last 7 days
+     * Return events that have been created this week
      */
     public function findCreatedThisWeek()
     {
@@ -56,6 +59,68 @@ class EventRepository extends ServiceEntityRepository
             ->setParameter(':lastDayOfWeek', $this->lastDayOfWeek)
             ->getQuery()
             ->getResult();
+    }
+
+    /**
+     * Return events that have been created today
+     */
+    public function findCreatedToday()
+    {
+        $events = $this->findAll();
+
+        $createdTodayEvents = [];
+
+        foreach ($events as $event) {
+            if ($event->getCreatedAt()->format('Y-m-d') === $this->today) {
+                $createdTodayEvents[] = $event;
+            }
+        }
+
+        return $createdTodayEvents;
+    }
+
+    /**
+     * Return events that happened or will happen this month
+     */
+    public function findHappensThisMonth()
+    {
+        return $this->createQueryBuilder('e')
+            ->andWhere('e.date BETWEEN :firstDayOfMonth AND :lastDayOfMonth')
+            ->setParameter(':firstDayOfMonth', $this->firstDayOfMonth)
+            ->setParameter(':lastDayOfMonth', $this->lastDayOfMonth)
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * Return events that happened or will happen this week
+     */
+    public function findHappensThisWeek()
+    {
+        return $this->createQueryBuilder('e')
+            ->andWhere('e.date BETWEEN :firstDayOfWeek AND :lastDayOfWeek')
+            ->setParameter(':firstDayOfWeek', $this->firstDayOfWeek)
+            ->setParameter(':lastDayOfWeek', $this->lastDayOfWeek)
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * Return events that happened or will happen today
+     */
+    public function findHappensToday()
+    {
+        $events = $this->findAll();
+
+        $todayEvents = [];
+
+        foreach ($events as $event) {
+            if ($event->getDate()->format('Y-m-d') === $this->today) {
+                $createdTodayEvents[] = $event;
+            }
+        }
+
+        return $todayEvents;
     }
 
     /**

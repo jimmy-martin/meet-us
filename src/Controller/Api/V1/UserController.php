@@ -5,6 +5,7 @@ namespace App\Controller\Api\V1;
 use App\Entity\User;
 use App\Form\UserType;
 use App\Repository\UserRepository;
+use App\Service\ApiImageUploader;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -47,7 +48,7 @@ class UserController extends AbstractController
     /**
      * @Route("", name="add", methods={"POST"})
      */
-    public function add(Request $request, UserPasswordHasherInterface $passwordHasher): Response
+    public function add(ApiImageUploader $apiImageUploader, Request $request, UserPasswordHasherInterface $passwordHasher): Response
     {
         $user = new User();
 
@@ -55,6 +56,21 @@ class UserController extends AbstractController
 
         $json = $request->getContent();
         $jsonArray = json_decode($json, true);
+
+        if (isset($jsonArray['picture'])) {
+            // Get picture infos
+            $imageName = $jsonArray['picture']['name'];
+            $imageBase64Value = $jsonArray['picture']['value'];
+
+            $newImageName = $apiImageUploader->uploadBase64Image($imageName, $imageBase64Value, '/users');
+
+            $user->setAvatar($newImageName);
+
+            // After the image uploads, we remove the picture field in the json datas
+            unset($jsonArray['picture']);
+        } else {
+            $user->setAvatar('user_placeholder.png');
+        }
 
         $form->submit($jsonArray);
 
@@ -91,7 +107,7 @@ class UserController extends AbstractController
     /**
      * @Route("", name="edit", methods={"PUT", "PATCH"})
      */
-    public function edit(UserRepository $userRepository, Request $request): Response
+    public function edit(ApiImageUploader $apiImageUploader, UserRepository $userRepository, Request $request): Response
     {
         $user = $userRepository->find($this->getUser()->getId());
         // TODO: permettre de modifier son mot de passe 
@@ -102,6 +118,19 @@ class UserController extends AbstractController
 
         $json = $request->getContent();
         $jsonArray = json_decode($json, true);
+
+        if (isset($jsonArray['picture'])) {
+            // Get picture infos
+            $imageName = $jsonArray['picture']['name'];
+            $imageBase64Value = $jsonArray['picture']['value'];
+
+            $newImageName = $apiImageUploader->uploadBase64Image($imageName, $imageBase64Value, '/users');
+
+            $user->setAvatar($newImageName);
+
+            // After the image uploads, we remove the picture field in the json datas
+            unset($jsonArray['picture']);
+        }
 
         $form->submit($jsonArray, false);
 

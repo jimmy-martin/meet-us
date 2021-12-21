@@ -68,9 +68,9 @@ class UserType extends AbstractType
                                 ])
                             ]
                         ])
-                        ->add('avatar', null, [
-                            'required' => false,
-                        ])
+//                        ->add('avatar', null, [
+//                            'required' => false,
+//                        ])
                         ->add('address', null, [
                             'required' => false,
                             'constraints' => [

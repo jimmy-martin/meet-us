@@ -6,7 +6,6 @@ use Doctrine\ORM\Mapping as ORM;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
-use phpDocumentor\Reflection\Types\Boolean;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -481,6 +480,19 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getJoinedEventsCount()
     {
         return $this->joinedEvents->count();
+    }
+
+    /**
+     * @Groups({"user_browse"})
+     */
+    public function getCreatedEventsCount()
+    {
+        return $this->createdEvents->count();
+    }
+
+    public function getFavoriteEventsCount()
+    {
+        return $this->favoriteEvents->count();
     }
 
     /**
