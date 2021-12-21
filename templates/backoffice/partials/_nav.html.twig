@@ -1,5 +1,5 @@
 {% set textColor = app.session.get('theme') == 'darkly' or app.session.get('theme') is null ? 'white' : 'black' %}
-<nav class="navbar navbar-expand-lg navbar-light bg-dark">
+<nav class="navbar navbar-expand-lg navbar-light bg-dark mb-3">
     <div class="container-fluid">
         <a class="text-{{ textColor }} navbar-brand" href="{{ path('backoffice_home') }}">Meet Us</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor03"

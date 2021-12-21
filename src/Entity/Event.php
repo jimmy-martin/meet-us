@@ -66,7 +66,7 @@ class Event
 
     /**
      * @Groups({"event_browse", "event_read", "favorite_browse"})
-     * @ORM\Column(type="string", length=255, options={"default"="event_placeholder.png"})
+     * @ORM\Column(type="string", length=255, options={"default"="event_placeholder.jpg"})
      */
     private $picture;
 

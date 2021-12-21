@@ -34,7 +34,7 @@ class EventController extends AbstractController
         $events = $paginator->paginate(
             $eventRepository->findBy([], ['createdAt' => 'DESC']), /* query NOT result */
             $request->query->getInt('page', 1), /*page number*/
-            5 /*limit per page*/
+            8 /*limit per page*/
         );
 
         return $this->render('backoffice/events/browse.html.twig', [
@@ -47,7 +47,7 @@ class EventController extends AbstractController
      */
     public function read(Event $event): Response
     {
-        return $this->render('backoffice/events/read.html.twig', [
+        return $this->render('backoffice/events/read_test.html.twig', [
             'event' => $event,
         ]);
     }
@@ -74,7 +74,7 @@ class EventController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
 
             if ($event->getPicture() === null) {
-                $event->setPicture('event_placeholder.png');
+                $event->setPicture('event_placeholder.jpg');
             }
 
             $event->setUpdatedAt(new DateTimeImmutable());

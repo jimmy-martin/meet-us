@@ -39,7 +39,7 @@ class AppFixtures extends Fixture
         for ($index = 1; $index <= 10; $index++) {
             $category = new Category();
             $category->setName('catégorie ' . $index);
-            $category->setPicture('category_placeholder.png');
+            $category->setPicture('category_placeholder.jpg');
             $manager->persist($category);
         }
 
@@ -47,7 +47,7 @@ class AppFixtures extends Fixture
             $event = new Event();
             $event->setTitle('Titre : ' . $index);
             $event->setDescription("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam egestas bibendum ipsum, a blandit tellus aliquet eu. Sed ac odio non odio posuere auctor. Donec lobortis egestas aliquam. Duis venenatis.");
-            $event->setPicture('event_placeholder.png');
+            $event->setPicture('event_placeholder.jpg');
             $event->setDate(new \DateTimeImmutable('+1 week'));
             $event->setAddress($index . ' rue des fixtures');
             $event->setZipcode($index < 10 ? 7500 . $index : 750 . $index);
