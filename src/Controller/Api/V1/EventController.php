@@ -151,7 +151,7 @@ class EventController extends AbstractController
 
         $jsonArray = json_decode($json, true);
 
-        if (isset($jsonArray['picture'])) {
+        if (array_key_exists('picture', $jsonArray)) {
             // Get picture infos
             $imageName = $jsonArray['picture']['name'];
             $imageBase64Value = $jsonArray['picture']['value'];
@@ -216,7 +216,7 @@ class EventController extends AbstractController
         $json = $request->getContent();
         $jsonArray = json_decode($json, true);
 
-        if (isset($jsonArray['picture'])) {
+        if (array_key_exists('picture', $jsonArray)) {
 
             // Get picture infos
             $imageName = $jsonArray['picture']['name'];

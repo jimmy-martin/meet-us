@@ -47,7 +47,7 @@ class EventController extends AbstractController
      */
     public function read(Event $event): Response
     {
-        return $this->render('backoffice/events/read_test.html.twig', [
+        return $this->render('backoffice/events/read.html.twig', [
             'event' => $event,
         ]);
     }
