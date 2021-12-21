@@ -37,7 +37,7 @@
 				Nombre d'évènements rejoints :
 				{{ user.joinedEventsCount - user.createdEventsCount }}
 			</p>
-            <p>
+			<p>
 				Nombre d'évènements mis en favoris :
 				{{ user.favoriteEventsCount }}
 			</p>
@@ -58,21 +58,25 @@
 				Email :
 				<a href="mailto:{{ user.email }}">{{ user.email }}</a>
 			</p>
-			<p>
-				Portable :
-				{{ user.phoneNumber }}
-			</p>
+			{% if user.phoneNumber %}
+				<p>
+					Portable :
+					{{ user.phoneNumber }}
+				</p>
+			{% endif %}
 			<p>
 				Avatar :
 				{{ user.avatar }}
 			</p>
-			<p>
-				Adresse de l'utilisateur :
-				{{user.address}},
-				{{user.zipcode}}
-				{{user.city}},
-				{{user.country}}
-			</p>
+			{% if user.address %}
+				<p>
+					Adresse de l'utilisateur :
+					{{user.address}},
+					{{user.zipcode}}
+					{{user.city}},
+					{{user.country}}
+				</p>
+			{% endif %}
 			<p>
 				Créé le :
 				{{ user.createdAt|date('d/m/Y') }}
