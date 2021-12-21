@@ -1,21 +1,90 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello UserController!{% endblock %}
+{% block title %}
+	{{ parent() }}
+	-
+	{{ user.firstname | capitalize }}
+	{{ user.lastname | capitalize }}
+{% endblock %}
 
 {% block body %}
- <div>
-    <h1>Détail de l'utilisateur numero {{user.id}}</h1>
-</div>
+	<div class="col-12 text-center mb-3">
+		<div>
+			<h1>
+				{{ user.firstname | capitalize}}
+				{{ user.lastname | capitalize }}</h1>
+		</div>
 
-<p> Nom de l'utilisateur : {{ user.firstname}} {{ user.lastname }} </p>
-<p> Role de l'utilisateur : {{ user.roles ? user.roles|json_encode : ''}} </p>
-<p> Mail de l'utilisateur : {{ user.email }} </p>
-<p> Téléphone de l'utilisateur : {{ user.phoneNumber }} </p>
-<p> Photo de l'utilisateur : {{ user.avatar }} </p>
-<p> Adresse de l'utilisateur : {{user.address}} {{user.zipcode}} {{user.city}} {{user.country}} </p>
-<p> Date de création de l'utilisateur : {{ user.createdAt|date('Y-m-d H:i') }} </p>
-<p> Date de mise à jour de l'utilisateur : {{ user.updatedAt|date('Y-m-d H:i') }} </p>
-<p> Mail de l'utilisateur : {{ user.email }} </p>
-<p> Situation de l'utilisateur : {{ user.isActivate }} </p>
+		<img class="rounded-circle z-depth-2" alt="avatar de {{ user.fullname }}" src="{{ asset('uploads/users/' ~ user.avatar) }}" data-holder-rendered="true">
+
+	</div>
+	<div class="row text-center">
+
+		<div class="col-12 col-md-6">
+			<p>
+				ID :
+				{{ user.id }}
+			</p>
+			<p>
+				Rôles :
+				{{ user.roles ? user.roles|json_encode : ''}}
+			</p>
+			<p>
+				Nombre d'évènements créés :
+				{{ user.createdEventsCount }}
+			</p>
+			<p>
+				Nombre d'évènements rejoints :
+				{{ user.joinedEventsCount - user.createdEventsCount }}
+			</p>
+            <p>
+				Nombre d'évènements mis en favoris :
+				{{ user.favoriteEventsCount }}
+			</p>
+			<p>
+				{% if is_granted('USER_TOGGLE_ROLE', app.user)%}
+					<a href="{{ path('backoffice_users_toggle_role_moderator', {id : user.id}) }}" class="btn btn-info" onclick="return confirm('Êtes-vous sûre de vouloir passer cet utilisateur en modérateur ?')" data-bs-toggle="tooltip" data-bs-placement="top">
+						{% if is_granted('ROLE_MODERATOR') %}
+							Enlever rôle modérateur
+						{% else %}
+							Donner rôle modérateur
+						{% endif %}
+					</a>
+				{% endif %}
+			</p>
+		</div>
+		<div class="col-12 col-md-6">
+			<p>
+				Email :
+				<a href="mailto:{{ user.email }}">{{ user.email }}</a>
+			</p>
+			<p>
+				Portable :
+				{{ user.phoneNumber }}
+			</p>
+			<p>
+				Avatar :
+				{{ user.avatar }}
+			</p>
+			<p>
+				Adresse de l'utilisateur :
+				{{user.address}},
+				{{user.zipcode}}
+				{{user.city}},
+				{{user.country}}
+			</p>
+			<p>
+				Créé le :
+				{{ user.createdAt|date('d/m/Y') }}
+			</p>
+			{% if user.updatedAt %}
+				<p>
+					Dernière mise à jour le :
+					{{ user.updatedAt|date('d/m/Y') }}
+				</p>
+			{% endif %}
+		</div>
+	</div>
+
 
 {% endblock %}

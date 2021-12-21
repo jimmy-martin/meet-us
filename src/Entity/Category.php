@@ -60,7 +60,7 @@ class Category
 
     /**
      * @Groups({"category_browse", "event_read", "category_read"})
-     * @ORM\Column(type="string", length=255, options={"default"="category_placeholder.png"})
+     * @ORM\Column(type="string", length=255, options={"default"="category_placeholder.jpg"})
      */
     private $picture;
 

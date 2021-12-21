@@ -163,7 +163,7 @@ class EventController extends AbstractController
             // After the image uploads, we remove the picture field in the json datas
             unset($jsonArray['picture']);
         } else {
-            $event->setPicture('event_placeholder.png');
+            $event->setPicture('event_placeholder.jpg');
         }
 
         $form->submit($jsonArray, false);

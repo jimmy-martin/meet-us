@@ -65,7 +65,7 @@ class CategoryController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
 
             if ($category->getPicture() === null) {
-                $category->setPicture('category_placeholder.png');
+                $category->setPicture('category_placeholder.jpg');
             }
 
             $this->manager->persist($category);
