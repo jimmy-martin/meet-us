@@ -1,26 +1,80 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-    {{ parent() }} - {{ event.title | capitalize }}
+	{{ parent() }}
+	-
+	{{ event.title | capitalize }}
 {% endblock %}
 
 {% block body %}
-    <div>
-        <h1>{{ event.title }}</h1>
-    </div>
+	<div class="col-12 text-center mb-3">
+		<div>
+			<h1>{{ event.title }}</h1>
+		</div>
 
-    <p> ID de l'évènement : {{ event.id }} </p>
-    <p> Titre de l'évènement : {{ event.title }} </p>
-    <p> Photo de l'évènement : {{ event.picture }} </p>
-    <p> Date de l'évènement : {{ event.date|date('Y-m-d H:i') }} </p>
-    <p> Adresse de l'évènement : {{ event.address }} {{ event.zipcode }} {{ event.city }} {{ event.country }} </p>
-    <p> Limite de participant de l'évènement : {{ event.maxMembers }} </p>
-    <p> Archive de l'évènement : {{ event.isArchived }} </p>
-    <p> Publication de l'évènement : {{ event.isOnline }} </p>
-    <p> Date de création de l'évènement : {{ event.createdAt|date('Y-m-d H:i') }} </p>
-    <p> Dernière mise à jour de l'évènement : {{ event.updatedAt|date('Y-m-d H:i') }} </p>
-    <img src="{{ asset('uploads/events/') ~ event.picture }}" alt="">
+		<img class="rounded z-depth-2" alt="image de {{ event.title }}" src="{{ asset('uploads/events/' ~ event.picture) }}" data-holder-rendered="true">
 
-    <a class="btn btn-primary" href="{{ path('backoffice_events_edit', {id: event.id}) }}">Modifier l'évènement</a>
+	</div>
+	<div class="row text-center">
+
+		<div class="col-12 col-md-6">
+			<p>
+				ID :
+				{{ event.id }}
+			</p>
+			<p>
+				Nombre de participants / nombre de participants max. :
+				{{ event.membersCount }}
+				/
+				{{ event.maxMembers }}
+			</p>
+			<p>
+				Date :
+				{{ event.date | date('d/m/Y') }}
+			</p>
+			<p>
+				Créateur :
+				<a href="{{ path('backoffice_users_read', {id: event.author.id}) }}">{{ event.author.firstname | capitalize }}
+					{{ event.author.lastname | capitalize }}</a>
+			</p>
+			<p>
+				Catégorie :
+				{{ event.category.name | capitalize }}
+			</p>
+		</div>
+		<div class="col-12 col-md-6">
+			{% if event.isOnline %}
+				<p>
+					En ligne
+				</p>
+			{% else %}
+				<p>
+					En présentiel
+				</p>
+				<p>
+					Adresse :
+					{{ event.address }}, {{ event.zipcode }} {{ event.city }}, {{ event.country }}
+				</p>
+			{% endif %}
+
+			<p>
+				Créé le :
+				{{ event.createdAt|date('d/m/Y') }}
+			</p>
+			{% if event.updatedAt %}
+				<p>
+					Dernière mise à jour le :
+					{{ event.updatedAt|date('d/m/Y') }}
+				</p>
+			{% endif %}
+			<p>
+				{% if event.isArchived %}
+					Archivé
+				{% else %}
+					Non archivé
+				{% endif %}
+			</p>
+		</div>
+	</div>
 
 {% endblock %}
