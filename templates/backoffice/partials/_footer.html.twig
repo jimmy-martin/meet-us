@@ -1,5 +1,6 @@
 <!-- Footer -->
-<footer class="text-center">
+{# I do this to fix the footer on bottom when we are in the backoffice home page because there is not enough content #}
+<footer class="text-center {{ app.request.get('_route') == 'backoffice_home' ? 'fixed-bottom' : '' }}">
     <!-- Grid container -->
     <div class="container p-4">
 
